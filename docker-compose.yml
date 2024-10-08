@@ -1,0 +1,23 @@
+
+
+services:
+  container:
+    build: ./
+    container_name: Clinic-Square-Frontend
+    ports:
+      - "5173:5173"
+      - "3000:3000"
+      - "5555:5555"
+    volumes:
+      - ./:/app
+      - node_modules:/app/node_modules
+    restart: on-failure
+    tty: true
+
+
+volumes:
+  node_modules:
+    driver: local # Define the driver and options under the volume name
+    driver_opts:
+      type: none
+      o: bind
