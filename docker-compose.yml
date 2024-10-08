@@ -1,9 +1,11 @@
-
+volumes:
+  node_modules:
+    driver: local # Define the driver and options under the volume name
 
 services:
   container:
     build: ./
-    container_name: Clinic-Square-Frontend
+    container_name: clinic-square-frontend
     ports:
       - "5173:5173"
       - "3000:3000"
@@ -15,9 +17,3 @@ services:
     tty: true
 
 
-volumes:
-  node_modules:
-    driver: local # Define the driver and options under the volume name
-    driver_opts:
-      type: none
-      o: bind
