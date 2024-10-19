@@ -42,7 +42,7 @@ const TopNavBar = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="shrink-0 sm:hidden"
+            className="shrink-0 md:hidden"
           >
             <Menu className="h-4 w-4" />
             <span className="sr-only">Toggle navigation menu</span>
@@ -65,7 +65,7 @@ const TopNavBar = () => {
               Home
             </Link>
             <Link
-              href="#"
+            href="/doctor/reservations-history"
               className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
             >
               <History className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -75,7 +75,7 @@ const TopNavBar = () => {
               </Badge> */}
             </Link>
             <Link
-              href="#"
+              href="/doctor/my-schedule"
               className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
             >
               <CalendarCheck className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -116,7 +116,8 @@ const TopNavBar = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <Link href='/doctor/profile'>  <DropdownMenuItem> Profile
+            </DropdownMenuItem></Link>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Logout</DropdownMenuItem>

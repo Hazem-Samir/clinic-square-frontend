@@ -14,12 +14,13 @@ import {
   CreditCard,
   Activity,
 } from "lucide-react"
-import TableCom from "@/components/Table";
-import Table1 from "@/components/Table1";
 
-export default function learn() {
+import ReservationsTable from "@/components/ReservationsTable";
+
+export default function Home() {
   return (
     <>
+    <BlurFade delay={0}  inView>
       <main className="flex flex-1 flex-col gap-2 p-2 sm:gap-4 sm:p-4 md:gap-8 md:p-8">
         <div className="grid gap-2 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <Revenue />
@@ -49,8 +50,9 @@ export default function learn() {
             </CardContent>
           </Card>
         </div>
-        <Table1 />
+        <ReservationsTable />
       </main>
+      </BlurFade>
     </>
   );
 }

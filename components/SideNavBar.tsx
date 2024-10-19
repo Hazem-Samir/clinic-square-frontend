@@ -17,7 +17,7 @@ import { Badge } from "@/components/ui/badge"
 
 const SideNavBar = () => {
   return (
-    <div className="hidden border-r bg-muted/40 sm:block">
+    <div className="hidden border-r bg-muted/40 md:block">
       <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-12 sm:h-14 items-center border-b px-2 sm:px-4 lg:h-[60px] lg:px-6">
           <Link href="/" className="flex items-center gap-2 font-semibold">
@@ -35,7 +35,7 @@ const SideNavBar = () => {
               Home
             </Link>
             <Link
-              href="#"
+              href="/doctor/reservations-history"
               className="flex items-center gap-3 rounded-lg px-2 sm:px-3 py-1 sm:py-2 text-muted-foreground transition-all hover:text-primary"
             >
               <History className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -45,7 +45,7 @@ const SideNavBar = () => {
               </Badge> */}
             </Link>
             <Link
-              href="#"
+                  href="/doctor/my-schedule"
               className="flex items-center gap-3 rounded-lg px-2 sm:px-3 py-1 sm:py-2 text-muted-foreground transition-all hover:text-primary"
             >
               <CalendarCheck className="h-3 w-3 sm:h-4 sm:w-4" />

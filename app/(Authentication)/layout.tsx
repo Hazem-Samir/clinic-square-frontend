@@ -2,7 +2,7 @@ import BlurFade from "@/components/ui/blur-fade";
 import TopNavBar from "@/components/TopNavBar";
 import SideNavBar from "@/components/SideNavBar";
 
-export default function DoctorLayout({
+export default function AuthLayout({
       children, // will be a page or nested layout
     }: {
       children: React.ReactNode
@@ -10,17 +10,13 @@ export default function DoctorLayout({
       return (
         <html lang="en">
         <body>  
-        <BlurFade delay={0} className="mt-1 grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]" inView>
+        <BlurFade delay={0} className="flex min-h-screen w-full" inView>
         {/* <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]"> */}
     
-          
-    <SideNavBar />
-    <div className="flex flex-col">
-      <TopNavBar/>
+       
       
       {children}
-      </div>
-      {/* </div> */}
+    
                   </BlurFade>
                   </body>
                   </html>
