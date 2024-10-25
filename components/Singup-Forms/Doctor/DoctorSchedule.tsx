@@ -22,10 +22,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import toast, { Toaster } from 'react-hot-toast';
 
 import {  DoctorValue, DoctorScheduleSchema, DoctorScheduleValue } from "@/schema/Doctor"
-import { onSignupSubmit } from "@/utils/SignupHandlers"
+import { FormDataHandler, onSignupSubmit } from "@/utils/AuthHandlers"
 import { DaysOfWeek } from "@/schema/Essentials"
+import Spinner from "@/components/Spinner"
 
 
 interface IProps {
@@ -36,6 +38,7 @@ interface IProps {
 
 export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
 
+  const [isLoading,SetIsLoading]=useState(false);
 
   const form = useForm<DoctorScheduleValue>({
     resolver: zodResolver(DoctorScheduleSchema),
@@ -59,20 +62,39 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
 
 
 
-  const onSubmit = (data: DoctorScheduleValue) => {
-    // console.log(prevData);
-    // console.log(data);
-    onSignupSubmit({data:{...prevData,schedule:{...data}},role:'doctor'})
-    // Handle form submission
-  };
+
+  const onSubmitHandler=async (data:DoctorScheduleValue)=>{
+    // console.log("aaaaa")
+    SetIsLoading(true);
+    const AllData={...prevData,role,schedule:{...data}}
+    const formData=FormDataHandler(AllData);
+    const res= await onSignupSubmit(formData);
+    SetIsLoading(false);
+    if(res.success){  
+      toast.success(res.message,{
+        duration: 2000,
+        position: 'bottom-center',
+      });
+    }
+    else {
+      res.message.forEach((err:string) => toast.error( err || 'An unexpected error occurred.',{
+     duration: 2000,
+     position: 'bottom-center',
+   }))
+      // res.error.forEach((err:string) => toast.error(err.msg || err || 'An unexpected error occurred.',{
+      //   duration: 2000,
+      //   position: 'bottom-center',
+      // }))
+    }
+  }
 
   return (
-    <>  <Button type="button" variant="ghost" onClick={onBack}>
+    <>  <Button disabled={isLoading} type="button" variant="ghost" onClick={onBack}>
     <ArrowLeft className="mr-2 h-4 w-4" />
     Back
   </Button>
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmitHandler)} className="space-y-6">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold">Set Schedule</h1>
           <p className="text-balance text-muted-foreground">
@@ -89,7 +111,7 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
               <div className="flex justify-between items-center">
                 <h3 className="font-bold">Day {index + 1}</h3>
                 {fields.length>1?
-                <Button type="button" variant="destructive" size="sm" onClick={() => remove(index)}>
+                <Button disabled={isLoading} type="button" variant="destructive" size="sm" onClick={() => remove(index)}>
                   Remove Day
                 </Button>:null}
               </div>
@@ -101,7 +123,7 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Select Day</FormLabel>
-                      <Select 
+                      <Select disabled={isLoading} 
                         onValueChange={(value) => {
                           field.onChange(value);
                           setAvailableDays(prev => prev.filter(day => day !== value));
@@ -109,7 +131,7 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
                         value={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger disabled={isLoading} >
                             <SelectValue placeholder="Select Day" />
                           </SelectTrigger>
                         </FormControl>
@@ -133,7 +155,7 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
                     <FormItem>
                       <FormLabel>Start Time</FormLabel>
                       <FormControl>
-                        <Input {...field} type="time" />
+                        <Input disabled={isLoading} {...field} type="time" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -147,7 +169,7 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
                     <FormItem>
                       <FormLabel>End Time</FormLabel>
                       <FormControl>
-                        <Input {...field} type="time" />
+                        <Input disabled={isLoading} {...field} type="time" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -161,7 +183,7 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
                     <FormItem>
                       <FormLabel>Patient Limit</FormLabel>
                       <FormControl>
-                        <Input {...field} type="number" min={1} />
+                        <Input disabled={isLoading} {...field} type="number" min={1} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -172,6 +194,7 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
           ))}
 
           <Button
+          disabled={isLoading}
             type="button"
             variant="outline"
             onClick={() => {
@@ -191,15 +214,16 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
               <FormItem>
                 <FormLabel>Session Cost</FormLabel>
                 <FormControl>
-                  <Input {...field} type="number" min={0} step={0.01} />
+                  <Input disabled={isLoading} {...field} type="number" min={0} step={0.01} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <Button type="submit" className="w-full">
-            Complete Sign Up
+          <Button disabled={isLoading} type="submit" className="w-full">
+          {isLoading? <Spinner />: 'Complete Sign Up'}
+            
           </Button>
         </div>
         <div className="text-center text-sm">
@@ -210,6 +234,8 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
         </div>
       </form>
     </Form>
+    <Toaster />
+
     </>
   );
 }

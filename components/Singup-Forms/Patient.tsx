@@ -36,8 +36,11 @@ import {
 } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 import { PatientSchema, PatientValue,  } from "@/schema/Patient"
-import { onSignupSubmit } from "@/utils/SignupHandlers"
+import { CreateFormData, FormDataHandler, onSignupSubmit } from "@/utils/AuthHandlers"
 import SetSchedule from "./Lab/LabSchedule"
+import toast, { Toaster } from 'react-hot-toast';
+import Spinner from "../Spinner"
+import { useRouter } from "next/navigation"
 
 
 
@@ -56,7 +59,8 @@ export default function Patient({ role ,onBack}: IProps) {
   const [images, setImages] = useState<Iimages>({profilePic:null});
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
- 
+ const router=useRouter();
+  const [isLoading,SetIsLoading]=useState(false);
 
 
   const handleProfilePicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,24 +74,45 @@ export default function Patient({ role ,onBack}: IProps) {
   const signupForm = useForm<PatientValue>({
     resolver: zodResolver(PatientSchema),
     defaultValues: {
-      addresses: [" "],
-      phone: [" "],
+      address: [" "],
+      phoneNumbers: [" "],
     },
   })
   const { fields:AddressFields, append:AddressAppend, remove:AddressRemove } = useFieldArray({
     control: signupForm.control,
-    name: "addresses",
+    name: "address",
   })
 
   const { fields:PhoneFields, append:PhoneAppend, remove:PhoneRemove } = useFieldArray({
     control: signupForm.control,
-    name: "phone",
+    name: "phoneNumbers",
   })
 
 
-    const onSubmitHandler=(data:PatientValue)=>{
+    const onSubmitHandler=async (data:PatientValue)=>{
       console.log(data);
-      onSignupSubmit({data,role})
+      SetIsLoading(true);
+      data['role']=role;
+      const formData=FormDataHandler(data);
+      const res= await onSignupSubmit(formData);
+      SetIsLoading(false);
+      if(res.success){
+        toast.success(res.message,{
+          duration: 2000,
+          position: 'bottom-center',
+        });
+        router.push('/login');
+      }
+      else {
+        res.message.forEach((err:string) => toast.error( err || 'An unexpected error occurred.',{
+       duration: 2000,
+       position: 'bottom-center',
+     }))
+        // res.error.forEach((err:string) => toast.error(err.msg || err || 'An unexpected error occurred.',{
+        //   duration: 2000,
+        //   position: 'bottom-center',
+        // }))
+      }
     }
 
   const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i);
@@ -104,7 +129,7 @@ export default function Patient({ role ,onBack}: IProps) {
 
   return (
     <>
-    <Button type="button" variant="ghost" onClick={onBack}>
+    <Button disabled={isLoading} type="button" variant="ghost" onClick={onBack}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back
           </Button>
@@ -168,6 +193,7 @@ export default function Patient({ role ,onBack}: IProps) {
           </FormLabel>
               <FormControl>
                 <Input
+                disabled={isLoading}
                   type="file"
                   accept="image/*"
                   id="profilePic"
@@ -192,7 +218,7 @@ export default function Patient({ role ,onBack}: IProps) {
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Hazem Samir" />
+                    <Input disabled={isLoading} {...field} placeholder="Hazem Samir" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -223,7 +249,7 @@ export default function Patient({ role ,onBack}: IProps) {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input {...field} type="email" placeholder="m@example.com" />
+                  <Input disabled={isLoading} {...field} type="email" placeholder="m@example.com" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -236,7 +262,7 @@ export default function Patient({ role ,onBack}: IProps) {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" />
+                  <Input disabled={isLoading} {...field} type="password" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -249,7 +275,7 @@ export default function Patient({ role ,onBack}: IProps) {
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" />
+                  <Input disabled={isLoading} {...field} type="password" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -263,11 +289,11 @@ export default function Patient({ role ,onBack}: IProps) {
                 <FormLabel>Gender</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger  disabled={isLoading}>
                       <SelectValue placeholder="Select a gender" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent >
                     <SelectItem value="male">Male</SelectItem>
                     <SelectItem value="female">Female</SelectItem>
                   </SelectContent>
@@ -279,7 +305,7 @@ export default function Patient({ role ,onBack}: IProps) {
     
           <FormField
             control={signupForm.control}
-            name="DateOfBirth"
+            name="dateOfBirth"
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Date of birth</FormLabel>
@@ -287,6 +313,7 @@ export default function Patient({ role ,onBack}: IProps) {
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
+                      disabled={isLoading}
                         variant={"outline"}
                         className={cn(
                           "w-full pl-3 text-left font-normal",
@@ -309,10 +336,10 @@ export default function Patient({ role ,onBack}: IProps) {
                           value={year.toString()}
                           onValueChange={(value) => setYear(parseInt(value))}
                         >
-                          <SelectTrigger className="w-[120px]">
+                          <SelectTrigger disabled={isLoading} className="w-[120px]">
                             <SelectValue placeholder="Year" />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent >
                             {years.map((y) => (
                               <SelectItem key={y} value={y.toString()}>
                                 {y}
@@ -322,6 +349,7 @@ export default function Patient({ role ,onBack}: IProps) {
                         </Select>
                         <div className="flex items-center">
                           <Button
+                          disabled={isLoading}
                             variant="outline"
                             size="icon"
                             onClick={() => setMonth((prev) => (prev === 0 ? 11 : prev - 1))}
@@ -362,7 +390,7 @@ export default function Patient({ role ,onBack}: IProps) {
                               size="sm"
                               onClick={() => {
                                 field.onChange(date);
-                                signupForm.setValue("DateOfBirth", date);
+                                signupForm.setValue("dateOfBirth", date);
                               }}
                               className={cn(
                                 "h-8 w-8 p-0 font-normal",
@@ -391,19 +419,19 @@ export default function Patient({ role ,onBack}: IProps) {
                 <FormField 
                  key={field.id} 
                   control={signupForm.control}
-                  name={`phone[${index}]`}
+                  name={`phoneNumbers[${index}]`}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>  <div className="flex justify-between items-center">
                   <h3 className="font-bold">{index>0?`Phone Number ${index + 1}`:`Phone Number`}</h3>
                   {index > 0 && (
-                    <Button type="button" variant="destructive" size="xs" className="p-1 text-xs" onClick={() => PhoneRemove(index)}>
+                    <Button disabled={isLoading} type="button" variant="destructive" size="xs" className="p-1 text-xs" onClick={() => PhoneRemove(index)}>
                       Remove Number
                     </Button>
                   )}
                 </div></FormLabel>
                       <FormControl>
-                      <Input {...field} type="tel" placeholder="(123) 456-7890" />
+                      <Input disabled={isLoading} {...field} type="tel" placeholder="(123) 456-7890" />
                         {/* <Input  {...field} value={field.value} placeholder="123 street"/> */}
                       </FormControl>
                       <FormMessage />
@@ -414,6 +442,7 @@ export default function Patient({ role ,onBack}: IProps) {
              
             ))}
             <Button
+            disabled={isLoading}
               type="button"
               variant="outline"
               size="sm"
@@ -426,20 +455,20 @@ export default function Patient({ role ,onBack}: IProps) {
                   <FormField 
                    key={field.id} 
                     control={signupForm.control}
-                    name={`addresses[${index}]`}
+                    name={`address[${index}]`}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>  <div className="flex justify-between items-center">
                     <h3 className="font-bold">{index>0?`Address ${index + 1}`:`Address`}
                     </h3>
                     {index > 0 && (
-                      <Button type="button" variant="destructive" size="xs" className="p-1 text-xs" onClick={() => AddressRemove(index)}>
+                      <Button disabled={isLoading} type="button" variant="destructive" size="xs" className="p-1 text-xs" onClick={() => AddressRemove(index)}>
                         Remove Address
                       </Button>
                     )}
                   </div></FormLabel>
                         <FormControl>
-                          <Input  {...field} value={field.value} placeholder="123 street"/>
+                          <Input disabled={isLoading} {...field} value={field.value} placeholder="123 street"/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -453,14 +482,15 @@ export default function Patient({ role ,onBack}: IProps) {
                 variant="outline"
                 size="sm"
                 onClick={() => AddressAppend("")}
+                disabled={isLoading}
               >
                 Add Another Address
               </Button>  
 
                
 
-          <Button type="submit" className="w-full">
-            Sign Up
+          <Button   disabled={isLoading} type="submit" className="w-full">
+          {isLoading? <Spinner />: 'Sign Up'}
           </Button>
         </div>
         <div className="text-center text-sm">
@@ -470,7 +500,9 @@ export default function Patient({ role ,onBack}: IProps) {
           </Link>
         </div>
       </form>
-    </Form></>
+    </Form>
+    <Toaster />
+    </>
  
   )
 }

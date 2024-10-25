@@ -1,6 +1,6 @@
 import * as z from "zod"
 
-import { ImageHandler } from "@/utils/SignupHandlers";
+import { ImageHandler } from "@/utils/AuthHandlers";
 
 
     export const PharmacySchema = z.object({
@@ -9,10 +9,10 @@ import { ImageHandler } from "@/utils/SignupHandlers";
       }).optional(),
       name: z.string().min(3, "Name is required"),
       email: z.string().email("Invalid email address"),
-      phone:z.array(z.string().regex(/^\d{11}$/, "Phone number must be 11 digits")).nonempty({
+      phoneNumbers:z.array(z.string().regex(/^\d{11}$/, "Phone number must be 11 digits")).nonempty({
         message: "At least one phone is required",
       }),
-      addresses: z.array(z.string().min(5, "Address cannot be below 5 characters")).nonempty({
+      address: z.array(z.string().min(5, "Address cannot be below 5 characters")).nonempty({
         message: "At least one address is required",
       }),
       

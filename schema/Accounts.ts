@@ -1,7 +1,7 @@
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
-import { ImageHandler } from "@/utils/SignupHandlers";
+import { ImageHandler } from "@/utils/AuthHandlers";
 export interface ISignUpData {
   data: Accounts;
   role:String;

@@ -36,9 +36,10 @@ import {
 } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 import { PharmacySchema, PharmacyValue } from "@/schema/Pharmacy"
-import { onSignupSubmit } from "@/utils/SignupHandlers"
-import SetSchedule from "./Lab/LabSchedule"
-import DoctorSchedule from "./Lab/LabSchedule"
+import { FormDataHandler, onSignupSubmit } from "@/utils/AuthHandlers"
+
+import toast, { Toaster } from 'react-hot-toast';
+import Spinner from "../Spinner"
 
 
 
@@ -53,6 +54,7 @@ interface Iimages{
 }
 export default function Pharmacy({ role ,onBack}: IProps) {
  
+  const [isLoading,SetIsLoading]=useState(false);
 
   const [images, setImages] = useState<Iimages>({profilePic:null,license:[]});
 
@@ -76,30 +78,50 @@ export default function Pharmacy({ role ,onBack}: IProps) {
   const signupForm = useForm<PharmacyValue>({
     resolver: zodResolver(PharmacySchema),
     defaultValues: {
-      addresses: [" "],
-      phone: [" "],
+      address: [" "],
+      phoneNumbers: [" "],
     },
   })
 
   const { fields:AddressFields, append:AddressAppend, remove:AddressRemove } = useFieldArray({
     control: signupForm.control,
-    name: "addresses",
+    name: "address",
   })
 
   const { fields:PhoneFields, append:PhoneAppend, remove:PhoneRemove } = useFieldArray({
     control: signupForm.control,
-    name: "phone",
+    name: "phoneNumbers",
   })
 
 
 
-    const onSubmitHandler=(data:PharmacyValue)=>{
-      onSignupSubmit({data,role});
+  const onSubmitHandler=async (data:PharmacyValue)=>{
+    SetIsLoading(true);
+    data['role']=role;
+    const formData=FormDataHandler(data);
+    const res= await onSignupSubmit(formData);
+    SetIsLoading(false);
+    if(res.success){
+      toast.success(res.message,{
+        duration: 2000,
+        position: 'bottom-center',
+      });
     }
+    else {
+      res.message.forEach((err:string) => toast.error( err || 'An unexpected error occurred.',{
+     duration: 2000,
+     position: 'bottom-center',
+   }))
+      // res.error.forEach((err:string) => toast.error(err.msg || err || 'An unexpected error occurred.',{
+      //   duration: 2000,
+      //   position: 'bottom-center',
+      // }))
+    }
+  }
 
   return (
     <>
-    <Button type="button" variant="ghost" onClick={onBack}>
+    <Button   disabled={isLoading} type="button" variant="ghost" onClick={onBack}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back
           </Button>
@@ -163,6 +185,7 @@ export default function Pharmacy({ role ,onBack}: IProps) {
           </FormLabel>
               <FormControl>
                 <Input
+                  disabled={isLoading}
                   type="file"
                   accept="image/*"
                   id="profilePic"
@@ -187,7 +210,7 @@ export default function Pharmacy({ role ,onBack}: IProps) {
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Hazem Samir" />
+                    <Input   disabled={isLoading} {...field} placeholder="Hazem Samir" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -218,7 +241,7 @@ export default function Pharmacy({ role ,onBack}: IProps) {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input {...field} type="email" placeholder="m@example.com" />
+                  <Input   disabled={isLoading} {...field} type="email" placeholder="m@example.com" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -231,7 +254,7 @@ export default function Pharmacy({ role ,onBack}: IProps) {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" />
+                  <Input   disabled={isLoading} {...field} type="password" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -244,7 +267,7 @@ export default function Pharmacy({ role ,onBack}: IProps) {
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" />
+                  <Input   disabled={isLoading} {...field} type="password" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -261,19 +284,19 @@ export default function Pharmacy({ role ,onBack}: IProps) {
                 <FormField 
                  key={field.id} 
                   control={signupForm.control}
-                  name={`phone[${index}]`}
+                  name={`phoneNumbers[${index}]`}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>  <div className="flex justify-between items-center">
                   <h3 className="font-bold">{index>0?`Phone Number ${index + 1}`:`Phone Number`}</h3>
                   {index > 0 && (
-                    <Button type="button" variant="destructive" size="xs" className="p-1 text-xs" onClick={() => PhoneRemove(index)}>
+                    <Button  disabled={isLoading} type="button" variant="destructive" size="xs" className="p-1 text-xs" onClick={() => PhoneRemove(index)}>
                       Remove Number
                     </Button>
                   )}
                 </div></FormLabel>
                       <FormControl>
-                      <Input {...field} type="tel" placeholder="(123) 456-7890" />
+                      <Input   disabled={isLoading} {...field} type="tel" placeholder="(123) 456-7890" />
                         {/* <Input  {...field} value={field.value} placeholder="123 street"/> */}
                       </FormControl>
                       <FormMessage />
@@ -288,6 +311,7 @@ export default function Pharmacy({ role ,onBack}: IProps) {
               variant="outline"
               size="sm"
               onClick={() => PhoneAppend("")}
+              disabled={isLoading}
             >
               Add Another Phone Number
             </Button>
@@ -296,20 +320,20 @@ export default function Pharmacy({ role ,onBack}: IProps) {
                   <FormField 
                    key={field.id} 
                     control={signupForm.control}
-                    name={`addresses[${index}]`}
+                    name={`address[${index}]`}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>  <div className="flex justify-between items-center">
                     <h3 className="font-bold">{index>0?`Address ${index + 1}`:`Address`}
                     </h3>
                     {index > 0 && (
-                      <Button type="button" variant="destructive" size="xs" className="p-1 text-xs" onClick={() => AddressRemove(index)}>
+                      <Button   disabled={isLoading} type="button" variant="destructive" size="xs" className="p-1 text-xs" onClick={() => AddressRemove(index)}>
                         Remove Address
                       </Button>
                     )}
                   </div></FormLabel>
                         <FormControl>
-                          <Input  {...field} value={field.value} placeholder="123 street"/>
+                          <Input   disabled={isLoading} {...field} value={field.value} placeholder="123 street"/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -323,6 +347,7 @@ export default function Pharmacy({ role ,onBack}: IProps) {
                 variant="outline"
                 size="sm"
                 onClick={() => AddressAppend("")}
+                disabled={isLoading}
               >
                 Add Another Address
               </Button>  
@@ -352,7 +377,7 @@ export default function Pharmacy({ role ,onBack}: IProps) {
                     </div>
            <ScrollBar orientation="horizontal" />
                     </ScrollArea  >
-                    <Button type="button" variant="outline" size="sm" className="text-xs sm:text-sm ">
+                    <Button   disabled={isLoading} type="button" variant="outline" size="sm" className="text-xs sm:text-sm ">
                 <FormLabel htmlFor="license" className="flex w-full h-full items-center" >
                  
                     <PlusCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
@@ -361,6 +386,7 @@ export default function Pharmacy({ role ,onBack}: IProps) {
                   </Button> 
                     <FormControl>
                       <Input
+                      disabled={isLoading}
                       multiple
                         type="file"
                         accept="image/*"
@@ -382,8 +408,9 @@ export default function Pharmacy({ role ,onBack}: IProps) {
             />
                
 
-          <Button type="submit" className="w-full">
-            Sign Up
+          <Button   disabled={isLoading} type="submit" className="w-full">
+          {isLoading? <Spinner />: 'Sign Up'}
+
           </Button>
         </div>
         <div className="text-center text-sm">
@@ -393,7 +420,9 @@ export default function Pharmacy({ role ,onBack}: IProps) {
           </Link>
         </div>
       </form>
-    </Form></>
+    </Form>
+    <Toaster />
+    </>
   
  
   )

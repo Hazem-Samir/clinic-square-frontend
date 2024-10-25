@@ -22,7 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import {   userTypeSchema, userTypeValue } from "@/schema/Essentials"
-import { onSignupSubmit } from "@/utils/SignupHandlers"
+import { onSignupSubmit } from "@/utils/AuthHandlers"
 import Pateint from "@/components/Singup-Forms/Pateint"
 import Doctor from "@/components/Singup-Forms/Doctor/Doctor"
 import { ArrowLeft } from "lucide-react"
@@ -33,7 +33,7 @@ import Pharmacy from "@/components/Singup-Forms/Pharmacy"
 
 
 
-export default function Signup() {
+export default function SignupPage() {
   const [step, setStep] = useState(1);
   // const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
 

@@ -1,6 +1,7 @@
 import BlurFade from "@/components/ui/blur-fade";
 import TopNavBar from "@/components/TopNavBar";
 import SideNavBar from "@/components/SideNavBar";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function AuthLayout({
       children, // will be a page or nested layout
@@ -16,7 +17,7 @@ export default function AuthLayout({
        
       
       {children}
-    
+      {/* <Toaster /> */}
                   </BlurFade>
                   </body>
                   </html>

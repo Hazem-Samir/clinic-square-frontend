@@ -1,14 +1,14 @@
 import * as z from "zod"
-import { DoctorValue } from "./Doctor";
+import { DoctorScheduleValue, DoctorValue } from "./Doctor";
 import { PatientValue } from "./Patient";
 import { LabValue } from "./Lab";
 import { PharmacyValue } from "./Pharmacy";
 
-
+type Doctor={DoctorValue:DoctorValue,role:string,schedule:DoctorScheduleValue}
 export type Accounts = PatientValue| DoctorValue| LabValue | PharmacyValue
 export interface ISignUpData {
   data: Accounts;
-  role:String;
+
 }
 
 export const DaysOfWeek=[
@@ -27,7 +27,7 @@ export const userTypeSchema = z.object({
     })
     
 
-
+   export  const SERVER_URL = process.env.AUTH_SERVER_URL || 'https://clinic-square-apis.onrender.com/api/v1';
 
 
     export const DaySchema = z.object({
