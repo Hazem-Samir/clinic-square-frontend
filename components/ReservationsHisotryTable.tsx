@@ -59,7 +59,7 @@ export default function ReservationsHistoryTable() {
                   {reservation.email}
                 </p>
               </div>
-              <div className="ml-auto font-medium">
+              <div className="ltr:ml-auto rtl:mr-auto font-medium">
                 <MedicalDetails size="sm" />
               </div>
             </div>

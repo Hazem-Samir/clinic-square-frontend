@@ -36,8 +36,9 @@ import {
 } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 import { LabSchema, LabValue } from "@/schema/Lab"
-import { onSignupSubmit } from "@/utils/SignupHandlers"
+import { onSignupSubmit } from "@/utils/AuthHandlers"
 import SetSchedule from "./LabSchedule"
+import LabSchedule from "./LabSchedule"
 
 
 
@@ -77,19 +78,19 @@ export default function Lab({ role ,onBack}: IProps) {
   const signupForm = useForm<LabValue>({
     resolver: zodResolver(LabSchema),
     defaultValues: {
-      addresses: [" "],
-      phone: [" "],
+      address: [" "],
+      phoneNumbers: [" "],
     },
   })
 
   const { fields:AddressFields, append:AddressAppend, remove:AddressRemove } = useFieldArray({
     control: signupForm.control,
-    name: "addresses",
+    name: "address",
   })
 
   const { fields:PhoneFields, append:PhoneAppend, remove:PhoneRemove } = useFieldArray({
     control: signupForm.control,
-    name: "phone",
+    name: "phoneNumbers",
   })
 
 
@@ -240,7 +241,7 @@ export default function Lab({ role ,onBack}: IProps) {
                 <FormField 
                  key={field.id} 
                   control={signupForm.control}
-                  name={`phone[${index}]`}
+                  name={`phoneNumbers[${index}]`}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>  <div className="flex justify-between items-center">
@@ -275,7 +276,7 @@ export default function Lab({ role ,onBack}: IProps) {
                   <FormField 
                    key={field.id} 
                     control={signupForm.control}
-                    name={`addresses[${index}]`}
+                    name={`address[${index}]`}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>  <div className="flex justify-between items-center">
@@ -375,7 +376,7 @@ export default function Lab({ role ,onBack}: IProps) {
     </Form></>)
   :
 
-  <SetSchedule role={role} onBack={handleBack} prevData={LabData}/>
+  <LabSchedule role={role} onBack={handleBack} prevData={LabData}/>
  
   )
 }

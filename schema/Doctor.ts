@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { ImageHandler } from "@/utils/SignupHandlers";
+import { ImageHandler } from "@/utils/AuthHandlers";
 import { DaySchema } from "./Essentials";
 
 
@@ -10,17 +10,20 @@ import { DaySchema } from "./Essentials";
       }).optional(),
       name: z.string().min(3, "Name is required"),
       email: z.string().email("Invalid email address"),
-      phone:z.array(z.string().regex(/^\d{11}$/, "Phone number must be 11 digits")).nonempty({
+      phoneNumbers:z.array(z.string().regex(/^\d{11}$/, "Phone number must be 11 digits")).nonempty({
         message: "At least one phone is required",
       }),
-      addresses: z.array(z.string().min(5, "Address cannot be below 5 characters")).nonempty({
+      address: z.array(z.string().min(5, "Address cannot be below 5 characters")).nonempty({
         message: "At least one address is required",
       }),
       
       gender: z.enum(["male", "female"], {
         required_error: "Please select a gender",
       }),
-      DateOfBirth: z.date({
+      specialization: z.enum(["Dermatologist", "Psycholigist"], {
+        required_error: "Please select a Specialiaztion",
+      }),
+      dateOfBirth: z.date({
         required_error: "Date of birth is required",
       }),
       license: z.array(z.custom<File>(ImageHandler, {

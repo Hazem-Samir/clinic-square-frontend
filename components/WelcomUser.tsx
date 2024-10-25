@@ -1,7 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { FadeText } from "@/components/ui/fade-text";
+import { getUser } from "@/lib/auth";
 
-export async function WelcomeUser() {
+interface IProps {
+  name: string
+}
+
+export async function WelcomeUser({name=''}:IProps) {
+
   return (
  
 
@@ -11,7 +17,7 @@ export async function WelcomeUser() {
       framerProps={{
         show: { transition: { delay: 0 } },
       }}
-      text={`Welcome, Dr.Ahmed`}
+      text={`Welcome, ${name}`}
     />
     
 

@@ -15,6 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { PlusCircle, X } from "lucide-react"
 import BlurFade from "@/components/ui/blur-fade"
+import ProtectedRoute from "@/components/ProtectedRoute"
 
 interface UserData {
   name: string
@@ -88,6 +89,7 @@ export default function UserProfile() {
   }
 
   return (
+    <ProtectedRoute allowedRoles={['doctor']}>
     <BlurFade delay={0} inView>
       <main className="flex flex-col min-h-screen p-4 sm:p-6 md:p-8">
         <div className="container mx-auto flex-grow">
@@ -243,5 +245,6 @@ export default function UserProfile() {
         </div>
       </main>
     </BlurFade>
+    </ProtectedRoute>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   Avatar,
   AvatarFallback,
@@ -23,25 +23,85 @@ import {
 } from "@/components/ui/popover"
 import { format, addDays } from "date-fns"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { getToken } from "@/lib/auth"
+import { shortName } from "@/lib/utils"
+import { PatientValue } from "@/schema/Patient"
+import { EndReservationValues } from "@/schema/DoctorReservation"
 
-// Mock data for demonstration
-const mockReservations = Array(20).fill(null).map((_, index) => ({
-  id: index + 1,
-  name: `User ${index + 1}`,
-  email: `user${index + 1}@email.com`,
-  avatar: `/avatars/0${(index % 5) + 1}.png`,
-}))
+interface IReservations
+{
+createdAt: string;
+
+date:string;
+
+doctor:string;
+id:string;
+updatedAt:string;
+patient:PatientValue;
+report:EndReservationValues;
+}
+
+const getReservations = async (limit:number,page: number, date: string) => {
+  const token = getToken();
+  console.log("token", token);
+  console.log(date)
+  const queryParams = new URLSearchParams({
+    limit: limit.toString(),
+    page: page.toString(),
+    date: date,
+  }).toString();
+  const response = await fetch(`/api/doctor/reservations?${queryParams}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch reservations');
+  }
+
+  const res = await response.json();
+  console.log(res);
+  return res;
+}
 
 export default function ReservationsTable() {
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 5
-  const totalPages = Math.ceil(mockReservations.length / itemsPerPage)
+  const [numberOfPages, SetNumberOfPages] = useState(0)
+  const [reservations, setReservations] = useState<IReservations[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const paginatedReservations = mockReservations.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  )
+  const fetchReservations = async () => {
+    try {
+      setIsLoading(true);
+      const {data} = await getReservations(5,currentPage,  format(selectedDate, 'yyyy-MM-dd'));
+      console.log("data",data.data)
+      setReservations(data.data);
+      setCurrentPage(data.paginationResult.currentPage)
+      SetNumberOfPages(data.paginationResult.numberOfPages)
+      setError(null);
+    } catch (err) {
+      setError('Failed to fetch reservations. Please try again later.');
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    
+
+    fetchReservations();
+  }, [currentPage, selectedDate]);
+
+
+  const handleReservationUpdate = () => {
+    fetchReservations();
+  }
+
 
   const getDayOptions = () => {
     const options = []
@@ -94,45 +154,55 @@ export default function ReservationsTable() {
         </div>
       </CardHeader>
       <CardContent className="grid gap-4 sm:gap-8">
-        {paginatedReservations.map((reservation) => (
-          <div key={reservation.id} className="flex items-center gap-2 sm:gap-4">
-            <Avatar className="max-[350px]:hidden sm:h-9 sm:w-9">
-              <AvatarImage src={reservation.avatar} alt="Avatar" />
-              <AvatarFallback>{reservation.name.slice(0, 2).toUpperCase()}</AvatarFallback>
-            </Avatar>
-            <div className="grid gap-0.5 sm:gap-1">
-              <p className="text-xs sm:text-sm font-medium leading-none">{reservation.name}</p>
-              <p className="max-[400px]:hidden text-xs sm:text-sm text-muted-foreground">
-                {reservation.email}
-              </p>
+        {isLoading ? (
+          <div className="text-center">Loading reservations...</div>
+        ) : error ? (
+          <div className="text-center text-red-500">{error}</div>
+        ) : reservations.length === 0 ? (
+          <div className="text-center">No reservations found.</div>
+        ) : (
+          reservations.map((reservation) => (
+            <div key={reservation.id} className="flex items-center gap-2 sm:gap-4">
+              <Avatar className="max-[350px]:hidden sm:h-9 sm:w-9">
+                <AvatarImage src={reservation.patient.profilePic} alt="Avatar" />
+                <AvatarFallback>{shortName(reservation.patient.name)}</AvatarFallback>
+              </Avatar>
+              <div className="grid gap-0.5 sm:gap-1">
+                <p className="text-xs sm:text-sm font-medium leading-none">{reservation.patient.name}</p>
+                <p className="max-[400px]:hidden text-xs sm:text-sm text-muted-foreground">
+                  Phone: {reservation.patient.phoneNumbers.join(", ")}
+                </p>
+              </div>
+              <div className="ltr:ml-auto rtl:mr-auto font-medium">
+                <ShowReservation size="sm" patient={reservation.patient}  onReservationUpdate={handleReservationUpdate} RID={reservation.id}/>
+              </div>
             </div>
-            <div className="ml-auto font-medium">
-              <ShowReservation size="sm" />
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </CardContent>
-      <div className="flex justify-center items-center p-4 gap-4">
-        <Button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-          size="icon"
-          variant="outline"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
-        <span className="text-sm font-medium">
-          {currentPage} / {totalPages}
-        </span>
-        <Button
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-          disabled={currentPage === totalPages}
-          size="icon"
-          variant="outline"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </div>
+      {!isLoading && !error && reservations.length > 0 && (
+        <div className="flex justify-center items-center p-4 gap-4">
+          <Button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            size="icon"
+            variant="outline"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-sm font-medium">
+            {currentPage} / {numberOfPages}
+          </span>
+          <Button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, numberOfPages))}
+            disabled={currentPage === numberOfPages}
+            size="icon"
+            variant="outline"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
     </Card>
   )
 }

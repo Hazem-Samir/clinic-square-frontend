@@ -33,8 +33,21 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
+import { cookies } from 'next/headers'; // Import cookies function from Next.js
+import { shortName } from "@/lib/utils"
+import LanguageSwitcherIcon from "./LanguageSwitcherIcon"
 
 const TopNavBar = () => {
+
+  const cookieStore = cookies();
+  const userCookie = cookieStore.get('user'); // Assuming the user info is stored in 'user' cookie
+  
+  // Extract the user name if the cookie exists
+let user;
+  if (userCookie) {
+     user = JSON.parse(userCookie.value); // Parse cookie if it's stored as a JSON object
+     // Get the name from the user object
+  }
   return (
     <header className="flex h-12 sm:h-14 items-center gap-1 border-b bg-muted/40 px-2 sm:px-4 lg:h-[60px] lg:px-6">
       <Sheet>
@@ -100,15 +113,16 @@ const TopNavBar = () => {
       </Sheet>
       <div className="flex-1" />
       <div className="flex items-center justify-between w-full">
-        <WelcomeUser />
+        <WelcomeUser name={user.name} />
         <div className="flex items-center">
+          <LanguageSwitcherIcon />
           <ModeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="rounded-full">
                 <Avatar className="h-6 w-6 sm:h-8 sm:w-8">
-                  <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarImage src={user? user.profilePic : "https://github.com/shadcn.png"} alt={user? user.name : "@shadcn"} />
+                  <AvatarFallback>{shortName(user.name)}</AvatarFallback>
                 </Avatar>
                 <span className="sr-only">Toggle user menu</span>
               </Button>

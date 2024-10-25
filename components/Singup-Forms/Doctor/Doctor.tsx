@@ -36,9 +36,9 @@ import {
 } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 import { DoctorSchema, DoctorValue } from "@/schema/Doctor"
-import { onSignupSubmit } from "@/utils/SignupHandlers"
-import SetSchedule from "../Lab/LabSchedule"
-import DoctorSchedule from "../Lab/LabSchedule"
+import { onSignupSubmit } from "@/utils/AuthHandlers"
+import DoctorSchedule from "./DoctorSchedule"
+
 
 
 
@@ -79,19 +79,19 @@ export default function Doctor({ role ,onBack}: IProps) {
   const signupForm = useForm<DoctorValue>({
     resolver: zodResolver(DoctorSchema),
     defaultValues: {
-      addresses: [" "],
-      phone: [" "],
+      address: [" "],
+      phoneNumbers: [" "],
     },
   })
 
   const { fields:AddressFields, append:AddressAppend, remove:AddressRemove } = useFieldArray({
     control: signupForm.control,
-    name: "addresses",
+    name: "address",
   })
 
   const { fields:PhoneFields, append:PhoneAppend, remove:PhoneRemove } = useFieldArray({
     control: signupForm.control,
-    name: "phone",
+    name: "phoneNumbers",
   })
 
     const onSubmitHandler=(data:DoctorValue)=>{
@@ -300,7 +300,7 @@ export default function Doctor({ role ,onBack}: IProps) {
           /> */}
           <FormField
             control={signupForm.control}
-            name="DateOfBirth"
+            name="dateOfBirth"
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Date of birth</FormLabel>
@@ -383,7 +383,7 @@ export default function Doctor({ role ,onBack}: IProps) {
                               size="sm"
                               onClick={() => {
                                 field.onChange(date);
-                                signupForm.setValue("DateOfBirth", date);
+                                signupForm.setValue("dateOfBirth", date);
                               }}
                               className={cn(
                                 "h-8 w-8 p-0 font-normal",
@@ -404,14 +404,34 @@ export default function Doctor({ role ,onBack}: IProps) {
               </FormItem>
             )}
           />
-        
+            <FormField
+            control={signupForm.control}
+            name="specialization"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Specialization</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a Specialization" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="Dermatologist">Dermatologist</SelectItem>
+                    <SelectItem value="Psycholigist">Psycholigist</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
     {/* <div className="flex-col space-y-2 sm:flex items-start justify-between"> */}
     {PhoneFields.map((field, index) => (
                 
                 <FormField 
                  key={field.id} 
                   control={signupForm.control}
-                  name={`phone[${index}]`}
+                  name={`phoneNumbers[${index}]`}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>  <div className="flex justify-between items-center">
@@ -446,7 +466,7 @@ export default function Doctor({ role ,onBack}: IProps) {
                   <FormField 
                    key={field.id} 
                     control={signupForm.control}
-                    name={`addresses[${index}]`}
+                    name={`address[${index}]`}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>  <div className="flex justify-between items-center">
