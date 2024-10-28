@@ -1,44 +1,43 @@
 'use client'
 
-import { useState } from 'react'
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { useRouter } from 'next/navigation'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import ShowReservation from "@/components/ShowReservation"
 import SearchBar from "@/components/ui/SearchBar"
-import MedicalDetails from "./MedicalDetails"
-import BlurFade from "./ui/blur-fade"
+import MedicalDetails from "../MedicalDetails"
+import BlurFade from "../ui/blur-fade"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { EndReservationValues } from '@/schema/DoctorReservation'
+import { shortName } from '@/lib/utils'
 
-// Mock data for demonstration
-const mockReservations = Array(20).fill(null).map((_, index) => ({
-  id: index + 1,
-  name: `User ${index + 1}`,
-  email: `user${index + 1}@email.com`,
-  avatar: `/avatars/0${(index % 5) + 1}.png`,
-}))
+type Reservation = {
+  id: number
+  name: string
+  email: string
+  avatar: string
+}
 
-export default function ReservationsHistoryTable() {
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 5
-  const totalPages = Math.ceil(mockReservations.length / itemsPerPage)
+type IProps = {
+  reservations: EndReservationValues[];
+  currentPage: number
+  totalPages: number
+}
 
-  const paginatedReservations = mockReservations.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  )
+export default function ReservationsHistoryTable({ 
+  reservations, 
+  currentPage, 
+  totalPages
+}: IProps) {
+  const router = useRouter()
+
+  const handlePageChange = (newPage: number) => {
+    console.log(newPage)
+    router.push(`reservations-history?page=${newPage}`)
+  }
+  console.log(reservations)
 
   return (
-    <BlurFade delay={0} inView>
       <Card>
         <CardHeader>
           <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-2 sm:gap-0">
@@ -47,27 +46,27 @@ export default function ReservationsHistoryTable() {
           </div>
         </CardHeader>
         <CardContent className="grid gap-4 sm:gap-8">
-          {paginatedReservations.map((reservation) => (
+          {reservations.map((reservation) => (
             <div key={reservation.id} className="flex items-center gap-2 sm:gap-4">
               <Avatar className="max-[350px]:hidden sm:h-9 sm:w-9">
-                <AvatarImage src={reservation.avatar} alt="Avatar" />
-                <AvatarFallback>{reservation.name.slice(0, 2).toUpperCase()}</AvatarFallback>
+                <AvatarImage src={reservation.patient.profilePic} alt="Avatar" />
+                <AvatarFallback>{shortName(reservation.patient.name).toUpperCase()}</AvatarFallback>
               </Avatar>
               <div className="grid gap-0.5 sm:gap-1">
-                <p className="text-xs sm:text-sm font-medium leading-none">{reservation.name}</p>
+                <p className="text-xs sm:text-sm font-medium leading-none">{reservation.patient.name}</p>
                 <p className="max-[400px]:hidden text-xs sm:text-sm text-muted-foreground">
-                  {reservation.email}
+                Phone: {reservation.patient.phoneNumbers.join(", ")}
                 </p>
               </div>
               <div className="ltr:ml-auto rtl:mr-auto font-medium">
-                <MedicalDetails size="sm" />
+                <MedicalDetails size="sm"  reservation={reservation}/>
               </div>
             </div>
           ))}
         </CardContent>
         <div className="flex justify-center items-center p-4 gap-4">
           <Button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
             size="icon"
             variant="outline"
@@ -78,7 +77,7 @@ export default function ReservationsHistoryTable() {
             {currentPage} / {totalPages}
           </span>
           <Button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
             size="icon"
             variant="outline"
@@ -87,6 +86,5 @@ export default function ReservationsHistoryTable() {
           </Button>
         </div>
       </Card>
-    </BlurFade>
   )
 }

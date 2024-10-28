@@ -130,7 +130,7 @@ let user;
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <Link href='/doctor/profile'>  <DropdownMenuItem> Profile
+              <Link href='/doctor/profile' >  <DropdownMenuItem className="cursor-pointer"> Profile
             </DropdownMenuItem></Link>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />

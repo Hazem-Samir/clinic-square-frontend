@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { CalendarDays } from "lucide-react"
-import ShowReservation from "@/components/ShowReservation"
 import SearchBar from "@/components/ui/SearchBar"
 import {
   Popover,
@@ -27,6 +26,8 @@ import { getToken } from "@/lib/auth"
 import { shortName } from "@/lib/utils"
 import { PatientValue } from "@/schema/Patient"
 import { EndReservationValues } from "@/schema/DoctorReservation"
+import { useRouter } from 'next/navigation'
+import ShowReservation from "./ShowReservation"
 
 interface IReservations
 {
@@ -41,68 +42,42 @@ patient:PatientValue;
 report:EndReservationValues;
 }
 
-const getReservations = async (limit:number,page: number, date: string) => {
-  const token = getToken();
-  console.log("token", token);
-  console.log(date)
-  const queryParams = new URLSearchParams({
-    limit: limit.toString(),
-    page: page.toString(),
-    date: date,
-  }).toString();
-  const response = await fetch(`/api/doctor/reservations?${queryParams}`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch reservations');
-  }
-
-  const res = await response.json();
-  console.log(res);
-  return res;
+interface  IProps {
+  reservations: EndReservationValues[];
+  currentPage: number;
+  totalPages: number;
+  currentDate?: string;
 }
 
-export default function ReservationsTable() {
-  const [selectedDate, setSelectedDate] = useState(new Date())
-  const [currentPage, setCurrentPage] = useState(1)
-  const [numberOfPages, SetNumberOfPages] = useState(0)
-  const [reservations, setReservations] = useState<IReservations[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+export default function ReservationsTable({reservations,currentPage,totalPages,currentDate}:IProps) {
+  // const [currentPage, setCurrentPage] = useState(1)
+  // const [numberOfPages, SetNumberOfPages] = useState(0)
+  // const [reservations, setReservations] = useState<IReservations[]>([])
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
-  const fetchReservations = async () => {
-    try {
-      setIsLoading(true);
-      const {data} = await getReservations(5,currentPage,  format(selectedDate, 'yyyy-MM-dd'));
-      console.log("data",data.data)
-      setReservations(data.data);
-      setCurrentPage(data.paginationResult.currentPage)
-      SetNumberOfPages(data.paginationResult.numberOfPages)
-      setError(null);
-    } catch (err) {
-      setError('Failed to fetch reservations. Please try again later.');
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
-  useEffect(() => {
+
+
+  const handlePageChange = (newPage: number) => {
+    console.log(newPage)
+    setIsLoading(true);
     
-
-    fetchReservations();
-  }, [currentPage, selectedDate]);
-
-
-  const handleReservationUpdate = () => {
-    fetchReservations();
+    router.push(`doctor?page=${newPage}&date=${currentDate}`)
+    setIsLoading(false);
   }
 
+  const handleDateChange = (date:Date) => {
 
+    const newDate=format(date,"yyyy MM dd")
+    console.log("dddd",newDate)
+    setIsLoading(true);
+    
+    router.push(`doctor?page=${currentPage}&date=${newDate}`)
+    setIsLoading(false);
+  }
+  
   const getDayOptions = () => {
     const options = []
     const today = new Date()
@@ -132,14 +107,14 @@ export default function ReservationsTable() {
                   <CalendarDays className="h-4 w-4" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="end">
+              <PopoverContent disabled={isLoading} className="w-auto p-0" align="end">
                 <div className="flex flex-col">
                   {dayOptions.map((option) => (
                     <Button
                       key={option.value}
                       variant="ghost"
                       className="justify-start font-normal"
-                      onClick={() => setSelectedDate(new Date(option.value))}
+                      onClick={() => handleDateChange(new Date(option.value))}
                     >
                       {option.fullLabel}
                     </Button>
@@ -148,7 +123,7 @@ export default function ReservationsTable() {
               </PopoverContent>
             </Popover>
             <div className="text-sm font-medium">
-              {format(selectedDate, 'MMM d')}
+              {currentDate? format(new Date(currentDate), 'MMM d'):<h1>SHIT</h1>}
             </div>
           </div>
         </div>
@@ -165,7 +140,7 @@ export default function ReservationsTable() {
             <div key={reservation.id} className="flex items-center gap-2 sm:gap-4">
               <Avatar className="max-[350px]:hidden sm:h-9 sm:w-9">
                 <AvatarImage src={reservation.patient.profilePic} alt="Avatar" />
-                <AvatarFallback>{shortName(reservation.patient.name)}</AvatarFallback>
+                <AvatarFallback>{shortName(reservation.patient.name).toUpperCase()}</AvatarFallback>
               </Avatar>
               <div className="grid gap-0.5 sm:gap-1">
                 <p className="text-xs sm:text-sm font-medium leading-none">{reservation.patient.name}</p>
@@ -174,35 +149,35 @@ export default function ReservationsTable() {
                 </p>
               </div>
               <div className="ltr:ml-auto rtl:mr-auto font-medium">
-                <ShowReservation size="sm" patient={reservation.patient}  onReservationUpdate={handleReservationUpdate} RID={reservation.id}/>
+                <ShowReservation size="sm" patient={reservation.patient} currentPage={currentPage} currentDate={currentDate} RID={reservation.id}/>
               </div>
             </div>
           ))
         )}
       </CardContent>
-      {!isLoading && !error && reservations.length > 0 && (
-        <div className="flex justify-center items-center p-4 gap-4">
+      
+      <div className="flex justify-center items-center p-4 gap-4">
           <Button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
+           onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1||isLoading}
             size="icon"
             variant="outline"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <span className="text-sm font-medium">
-            {currentPage} / {numberOfPages}
+            {currentPage} / {totalPages}
           </span>
           <Button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, numberOfPages))}
-            disabled={currentPage === numberOfPages}
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages||isLoading}
             size="icon"
             variant="outline"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
-      )}
+     
     </Card>
   )
 }

@@ -1,8 +1,11 @@
-import { DashboardPage } from "@/components/DashboardPage";
-import BlurFade from "@/components/ui/blur-fade";
-import Image from "next/image";
-import Revenue from "@/components/Charts/Revenue"
-import Patients from "@/components/Charts/Patients"
+import { Suspense } from 'react'
+import ProtectedRoute from "@/components/ProtectedRoute"
+import { Skeleton } from "@/components/ui/skeleton"
+import { getReservations, getReservationsHistory } from '@/lib/api'
+import ReservationsHistoryTable from '@/components/doctor/ReservationsHisotryTable'
+import BlurFade from '@/components/ui/blur-fade'
+import Revenue from '@/components/Charts/Revenue'
+import Patients from '@/components/Charts/Patients'
 import {
   Card,
   CardContent,
@@ -14,44 +17,28 @@ import {
   CreditCard,
   Activity,
 } from "lucide-react"
-
-import ReservationsTable from "@/components/ReservationsTable";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import { cookies } from "next/headers";
-
-const getReservations = async (limit:number,page: number, date: string) => {
-  const token = getToken();
-  console.log("token", token);
-  console.log(date)
-  const queryParams = new URLSearchParams({
-    limit: limit.toString(),
-    page: page.toString(),
-    date: date,
-  }).toString();
-  const response = await fetch(`/api/doctor/reservations?${queryParams}`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch reservations');
-  }
-
-  const res = await response.json();
-  console.log(res);
-  return res;
+import { format, addDays } from "date-fns"
+import ReservationsTable from '@/components/doctor/ReservationsTable'
+async function ReservationsData({ page,date }: { page: number,date:string }) {
+  const { data: reservations } = await getReservations(5,page,date);
+  return (
+    <ReservationsTable 
+      reservations={reservations.data}
+      currentPage={page}
+      totalPages={reservations.paginationResult.numberOfPages}
+      currentDate={date}
+    />
+  )
 }
 
-
-export default async function Home() {
-
+export default function page({ searchParams }: { searchParams: { page?: string , date?:string } }) {
+  const page = Number(searchParams.page) || 1;
+  // const date =  searchParams.date?.toISOString() || new Date().toISOString()
+  const date = searchParams.date? format(searchParams.date, 'yyyy-MM-dd') : format(new Date().toDateString(),'yyy-MM-dd')
 
   return (
-    <ProtectedRoute allowedRoles={['doctor']}>
-
-    <BlurFade delay={0}  inView>
+    <ProtectedRoute allowedRoles={['doctor']}>  
+       <BlurFade delay={0}  inView>
       <main className="flex flex-1 flex-col gap-2 p-2 sm:gap-4 sm:p-4 md:gap-8 md:p-8">
         <div className="grid gap-2 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <Revenue />
@@ -81,9 +68,12 @@ export default async function Home() {
             </CardContent>
           </Card>
         </div>
-        <ReservationsTable />
+        <Suspense fallback={<Skeleton className="w-full h-[600px]" />}>
+          <ReservationsData page={page} date={date} />
+        </Suspense>
       </main>
       </BlurFade>
+  
     </ProtectedRoute>
-  );
+  )
 }

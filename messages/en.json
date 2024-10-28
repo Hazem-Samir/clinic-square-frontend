@@ -13,24 +13,23 @@
         "addToSchedule": "Add to Schedule",
         "currentSchedule": "Current Schedule",
         "sessionCost": "Session Cost",
-        
         "confirmDeletion": "Confirm Deletion",
         "deleteConfirmation": "Are you sure you want to delete the schedule for {day}?",
         "cancel": "Cancel",
         "delete": "Delete",
         "update": "Update",
-        "updateSchedule": "Update Schedule for {day}",
+        "updateSchedule": "Update Schedule ",
         "setSessionCost": "Set Session Cost",
         "sessionCostLabel": "Session Cost (EGP)",
         "setCost": "Set Cost",
         "days": {
-          "Monday": "Monday",
-          "Tuesday": "Tuesday",
-          "Wednesday": "Wednesday",
-          "Thursday": "Thursday",
-          "Friday": "Friday",
-          "Saturday": "Saturday",
-          "Sunday": "Sunday"
+          "monday": "Monday",
+          "tuesday": "Tuesday",
+          "wednesday": "Wednesday",
+          "thursday": "Thursday",
+          "friday": "Friday",
+          "saturday": "Saturday",
+          "sunday": "Sunday"
         }
       }
     }

@@ -14,8 +14,17 @@
     import { Button } from "@/components/ui/button"
     import { File } from "lucide-react"
     import { ScrollArea } from "@/components/ui/scroll-area"
+import { EndReservationSchema, EndReservationValues } from "@/schema/DoctorReservation"
+import { getAge } from "@/utils/utils"
+import { shortName } from "@/lib/utils"
     
-    export default function MedicalDetails() {
+interface IProps {
+  reservation: EndReservationValues;
+
+}
+
+    export default function MedicalDetails({reservation}:IProps) {
+      console.log(reservation)
       const prescriptions = [
         { name: "Amoxicillin", dose: "500mg" },
         { name: "Ibuprofen", dose: "400mg" },
@@ -46,12 +55,13 @@
               <div className="grid gap-4">
                 <div className="flex flex-col items-center gap-2 mb-4">
                   <Avatar className="h-16 w-16 sm:h-20 sm:w-20">
-                    <AvatarImage src="/placeholder.svg?height=80&width=80" alt="Patient" />
-                    <AvatarFallback>JD</AvatarFallback>
+                          <AvatarImage src={reservation.patient.profilePic} alt="Patient" />
+                <AvatarFallback>{shortName(reservation.patient.name).toUpperCase()}</AvatarFallback>
                   </Avatar>
                   <div className="text-center">
-                    <h2 className="text-lg sm:text-2xl font-bold">John Doe</h2>
-                    <p className="text-sm text-gray-500">Age: 39</p>
+                    <h2 className="text-lg sm:text-2xl font-bold">{reservation.patient.name}</h2>
+                    <p className="text-sm text-gray-500">age: {getAge(reservation.patient.dateOfBirth)}</p>
+                    
                   </div>
                 </div>
                 <div>
@@ -66,22 +76,27 @@
                   </div>
                 </div>
                 <div>
+                  <h3 className="mb-2 text-sm sm:text-lg font-semibold">Diagnosis</h3>
+                  <p className="ml-1 text-sm">{reservation.report.diagnose ? reservation.report.diagnose  : "No Diagnose"}</p>
+                  
+                </div>
+                <div>
                   <h3 className="mb-2 text-sm sm:text-lg font-semibold">Prescriptions</h3>
                   <ul className="space-y-2">
-                    {prescriptions.map((prescription, index) => (
+                    {reservation.report.medicine.length >0 ? (reservation.report.medicine.map((medicine, index) => (
                       <li key={index} className="flex justify-between items-center text-sm">
-                        <span>{prescription.name}</span>
-                        <span className="text-gray-500">{prescription.dose}</span>
+                        <span>{medicine.name}</span>
+                        <span className="text-gray-500">{medicine.dose}</span>
                       </li>
-                    ))}
+                    ))): <p className="ml-1 text-sm">No Medinces</p>}
                   </ul>
                 </div>
                 <div>
                   <h3 className="mb-2 text-sm sm:text-lg font-semibold">Required Tests</h3>
                   <ul className="space-y-1">
-                    {tests.map((test, index) => (
+                    {reservation.report.requestedTests.length >0 ?(reservation.report.requestedTests.map((test, index) => (
                       <li key={index} className="text-sm">{test}</li>
-                    ))}
+                    ))):<p className="ml-1 text-sm">No Tests Requested</p>}
                   </ul>
                 </div>
               </div>

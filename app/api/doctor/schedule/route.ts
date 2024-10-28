@@ -4,6 +4,7 @@ import { SERVER_URL } from '@/schema/Essentials';
 
 
 
+
 export async function GET(request: NextRequest) {
       const authHeader = request.headers.get('Authorization')
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -15,17 +16,10 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({  success: false, message: 'Invalid token' }, { status: 401 })
       }
 
-      const searchParams = request.nextUrl.searchParams
-      const page = parseInt(searchParams.get('page') || '1',10)
-      const limit=parseInt(searchParams.get('limit')||'5',10);
-      const startOfDay = new Date(searchParams.get('date')|| new Date()).toISOString();
-      const endOfDay = new Date(searchParams.get('date')|| new Date()).setHours(23, 59, 59, 999);
-      const endOfDay1=new Date(endOfDay).toISOString();
-    console.log(endOfDay1)
-    console.log(startOfDay)
-    console.log(startOfDay)
+     
+      // console.log(page)
       try {
-        const apiResponse = await fetch(`${SERVER_URL}/doctor/My-Reservations?page=${page}&limit=${limit}&date[gte]=${startOfDay}&date[lte]=${endOfDay1}&state=pending&populate=patient`, {
+        const apiResponse = await fetch(`${SERVER_URL}/doctor/getMe?fields=schedule`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -50,28 +44,14 @@ export async function GET(request: NextRequest) {
         }
       }
       
-      export async function PATCH(request: NextRequest) {
-        const authHeader = request.headers.get('Authorization')
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-          return NextResponse.json({ success: false, message: 'Missing or invalid Authorization header' }, { status: 401 })
-        }
-        
-        const token = authHeader.split(' ')[1];    
-        if (!token) {
-          return NextResponse.json({  success: false, message: 'Invalid token' }, { status: 401 })
-        }
-       
-        const searchParams = request.nextUrl.searchParams
-        const id=searchParams.get('ID');
-        
-        const body = await request.json();
+      export async function POST(request: NextRequest) {
+        try {
+          const body = await request.json();
       
-          try {
-          const apiResponse = await fetch(`${SERVER_URL}/doctor-Reservation/${id}`, {
-            method: 'PATCH',
+          const apiResponse = await fetch(`${SERVER_URL}/doctor/add-day`, {
+            method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify(body),
           });
@@ -83,12 +63,12 @@ export async function GET(request: NextRequest) {
           }
       
           const data = await apiResponse.json();
-
-          return NextResponse.json({ success: true, message: 'Update successful', data });
-          
+          return NextResponse.json({ success: true, message: 'Schedule Added Successfully', data });
+      
         } catch (error: any) {
           console.error('Error:', error.message);
-  
+      
+          // Fallback error handling
           return NextResponse.json({
             success: false,
             message: error.message || 'An unexpected error occurred',

@@ -40,10 +40,39 @@ export const userTypeSchema = z.object({
 
 
     
+    export const HandleTimeFormat=(timestamp:string)=> {
     
+      const date = new Date(timestamp);
+
+      // Function to format time into 12-hour format
+      const formatTimeTo12Hour = (date) => {
+        let hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+    
+        hours = hours % 12;
+        hours = hours ? hours : 12; // If hour is 0, make it 12 (midnight or noon)
+    
+        const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes
+          .toString()
+          .padStart(2, '0')} ${ampm}`;
+        return formattedTime;
+      };
+    
+     return formatTimeTo12Hour(date);
+    
+    }
+    export const ConvertTimeToDate=(time:string)=>{
+      const [hours, minutes] = time.split(":").map(Number);
+      let Time=new Date()
+      Time.setHours(hours);
+      Time.setMinutes(minutes);
+      return Time.toISOString();
+    }
     // Export the schema for use in your form
 
 
     export type userTypeValue =z.infer<typeof userTypeSchema>;
+    export type DayValue =z.infer<typeof DaySchema>;
     
     

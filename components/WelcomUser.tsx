@@ -12,12 +12,12 @@ export async function WelcomeUser({name=''}:IProps) {
  
 
       <FadeText
-      className="text-l font-bold text-black dark:text-white"
+      className="text-xs md:text-l font-bold text-black dark:text-white"
       direction="left"
       framerProps={{
         show: { transition: { delay: 0 } },
       }}
-      text={`Welcome, ${name}`}
+      text={<>Welcome, {name.split(' ')[0]} <span className="hidden md:inline">{name.split(' ')[1]}</span></>}
     />
     
 

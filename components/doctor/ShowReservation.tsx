@@ -26,30 +26,28 @@ import {
 } from "@/components/ui/avatar"
 import { PatientValue } from "@/schema/Patient"
 import { ConsultationSchema, ConsultationValue, EndReservationSchema, EndReservationValues } from "@/schema/DoctorReservation"
-import Spinner from "./Spinner"
+import Spinner from "../Spinner"
 import toast, { Toaster } from 'react-hot-toast';
 import { getToken } from "@/lib/auth"
 import { revalidatePath } from "next/cache"
+import { getAge } from "@/utils/utils"
+import { useRouter } from 'next/navigation'
 
 interface IProps {
   size: string;
   patient: PatientValue;
   RID: string;
-  onReservationUpdate: () => void;
-}
-
-const getAge = (dateOfBirth: string) => {
-  const birth = new Date(dateOfBirth);
-  const today = new Date();
-  return today.getFullYear() - birth.getFullYear();
+  currentPage: number;
+  currentDate?: string;
 }
 
 
 
-export default function ShowReservation({ size = "default", patient,RID,onReservationUpdate }: IProps) {
+
+export default function ShowReservation({ size = "default", patient,RID,currentPage,currentDate }: IProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
+  const router = useRouter()
   const [showEndReservationDialog, setShowEndReservationDialog] = useState(false)
   const [showSetConsultationDialog, setShowSetConsultationDialog] = useState(false)
   // const [treatment, setTreatment] = useState(EndReservationSchema);
@@ -63,7 +61,14 @@ export default function ShowReservation({ size = "default", patient,RID,onReserv
       // consultationDate: null,
     },
   })
-
+  const handleConsultaionModal=()=>{
+    const currentValues = getValues();
+    reset({
+      ...currentValues,
+      consultationDate: null,
+    })
+    setShowSetConsultationDialog(!showSetConsultationDialog)
+  }
 const handleResrvationModal=()=>{
   reset({
     diagnose: "",
@@ -129,7 +134,7 @@ const handleResrvationModal=()=>{
         //   duration: 2000,
         //   position: 'bottom-center',
         // });
-        onReservationUpdate()
+        router.push(`doctor?page=${currentPage}&date=${currentDate}`)
       } else {
         res.message.forEach((err:string) => toast.error( err || 'An unexpected error occurred.',{
           duration: 2000,
@@ -179,7 +184,7 @@ const handleResrvationModal=()=>{
         //   duration: 2000,
         //   position: 'bottom-center',
         // });
-        onReservationUpdate()
+        router.push(`doctor?page=${currentPage}&date=${currentDate}`)
       } else {
         res.message.forEach((err:string) => toast.error( err || 'An unexpected error occurred.',{
           duration: 2000,
@@ -199,7 +204,7 @@ const handleResrvationModal=()=>{
     reset({
       ...currentValues,
       consultationDate: null,
-    })// This will clear only the consultationDate field
+    })
     setShowSetConsultationDialog(false)
   }
   return (
@@ -384,7 +389,7 @@ const handleResrvationModal=()=>{
         </DialogContent>
       </Dialog>
 
-      <Dialog open={showSetConsultationDialog} onOpenChange={setShowSetConsultationDialog}>
+      <Dialog open={showSetConsultationDialog} onOpenChange={handleConsultaionModal}>
         <DialogContent className="w-full sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-lg sm:text-xl">Set New Consultation Date</DialogTitle>
@@ -400,7 +405,7 @@ const handleResrvationModal=()=>{
                 <Input
                 disabled={isLoading}
                   id="consultationDate"
-                  type="datetime-local"
+                  type="date"
                   {...register("consultationDate")}
                   className="col-span-3 text-xs sm:text-sm"
                 />
