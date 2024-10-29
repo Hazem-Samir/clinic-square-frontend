@@ -225,7 +225,7 @@ export default function Login({ role ,onBack}: IProps) {
          
           <div className="text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link href="#" className="underline">
+            <Link href="/signup" className="underline">
               Sign up
             </Link>
           </div>

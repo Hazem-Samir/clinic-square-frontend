@@ -1,5 +1,6 @@
 import { DayValue } from "@/schema/Essentials";
-import { getToken } from "./auth";
+import { getToken, setUser } from "./auth";
+import { ProfileValue } from "@/schema/Profile";
 
 export const addDay = async (data)=>{
       const token = getToken();
@@ -34,10 +35,6 @@ export const addDay = async (data)=>{
           body: formData,
         })
   
-        if (!response.ok) {
-          // return response.message;
-          throw new Error ('Failed to Add Schedule');
-    }
   
     const res = await response.json();
     console.log(res);
@@ -92,3 +89,59 @@ export const addDay = async (data)=>{
         console.error('Error Add Schedule:', error)
       }
     } 
+
+    export const UpdateProfile = async (formData:FormData)=>{
+      const token = getToken();
+      if (token){
+        try {
+          const response = await fetch(`/api/doctor/updateProfile`, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: formData,
+          })
+    
+          if (response.ok) {
+          }
+          
+          const res = await response.json();
+          console.log(res.data)
+          setUser(res.data.data,token);
+      console.log(res);
+      return res;
+        } catch (error) {
+          console.error('Error Add Schedule:', error)
+        }
+      }
+      else {
+        console.error('No Token');
+      }
+    }
+
+    export const UpdatePassword = async (data:ProfileValue)=>{
+      const token = getToken();
+      if (token){
+        try {
+          const response = await fetch(`/api/doctor/updateProfile`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify(data),
+          })
+    
+         
+          
+          const res = await response.json();
+     console.log(res)
+      return res;
+        } catch (error) {
+          console.error('Error Add Schedule:', error)
+        }
+      }
+      else {
+        console.error('No Token');
+      }
+    }

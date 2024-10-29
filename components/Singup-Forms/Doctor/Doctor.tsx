@@ -38,6 +38,7 @@ import { cn } from "@/lib/utils"
 import { DoctorSchema, DoctorValue } from "@/schema/Doctor"
 import { onSignupSubmit } from "@/utils/AuthHandlers"
 import DoctorSchedule from "./DoctorSchedule"
+import { Textarea } from "@/components/ui/textarea"
 
 
 
@@ -225,6 +226,24 @@ export default function Doctor({ role ,onBack}: IProps) {
           )}
         /> */}
           {/* </div> */}
+          <FormField
+            control={signupForm.control}
+            name="about"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>About ME</FormLabel>
+                <FormControl>
+                <Textarea
+                aria-describedby="About field"
+                  placeholder="Tell us about you"
+                  {...field}
+                  className="w-full text-xs sm:text-sm"
+                />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={signupForm.control}
             name="email"
@@ -558,7 +577,7 @@ export default function Doctor({ role ,onBack}: IProps) {
         </div>
         <div className="text-center text-sm">
           Already have an account?{" "}
-          <Link href="#" className="underline">
+          <Link href="/login" className="underline">
             Log in
           </Link>
         </div>

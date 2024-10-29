@@ -28,6 +28,7 @@ import {  LabValue, LabScheduleSchema, LabScheduleValue } from "@/schema/Lab"
 import { FormDataHandler, onSignupSubmit } from "@/utils/AuthHandlers"
 import { DaysOfWeek } from "@/schema/Essentials"
 import Spinner from "@/components/Spinner"
+import { useRouter } from 'next/navigation'
 
 
 interface IProps {
@@ -37,6 +38,7 @@ interface IProps {
 }
 
 export default function LabSchedule({ role ,prevData,onBack}: IProps) {
+  const router = useRouter()
 
   const [isLoading,SetIsLoading]=useState(false);
 
@@ -81,6 +83,7 @@ export default function LabSchedule({ role ,prevData,onBack}: IProps) {
         duration: 2000,
         position: 'bottom-center',
       });
+      router.push("/login");
     }
     else {
       res.message.forEach((err:string) => toast.error( err || 'An unexpected error occurred.',{
@@ -223,7 +226,7 @@ export default function LabSchedule({ role ,prevData,onBack}: IProps) {
         </div>
         <div className="text-center text-sm">
           Already have an account?{" "}
-          <Link href="#" className="underline">
+          <Link href="/login" className="underline">
             Log in
           </Link>
         </div>

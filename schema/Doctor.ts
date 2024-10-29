@@ -10,6 +10,7 @@ import { DaySchema } from "./Essentials";
       }).optional(),
       name: z.string().min(3, "Name is required"),
       email: z.string().email("Invalid email address"),
+      about: z.string().min(5,"About must be at least 5 characters"),
       phoneNumbers:z.array(z.string().regex(/^\d{11}$/, "Phone number must be 11 digits")).nonempty({
         message: "At least one phone is required",
       }),

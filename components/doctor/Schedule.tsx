@@ -18,8 +18,8 @@ import { ConvertTimeToDate, DaySchema, DaysOfWeek, DayValue, HandleTimeFormat } 
 import { DoctorScheduleSchema, DoctorScheduleValue } from "@/schema/Doctor"
 import { FormDataHandler } from "@/utils/AuthHandlers"
 import { addDay, addSchedule, DeleteDay, UpdateCost, UpdateDay } from "@/lib/clientApi"
-import toast, { Toaster } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
+import toast, { Toaster } from 'react-hot-toast'
 import Spinner from "../Spinner"
 
 interface IProps {

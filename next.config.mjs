@@ -5,6 +5,9 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Your existing configurations (if any) go here
+  images: {
+    domains: ['firebasestorage.googleapis.com'],
+  },
 };
 
 export default withNextIntl(nextConfig);

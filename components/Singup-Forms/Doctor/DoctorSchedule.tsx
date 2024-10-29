@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import toast, { Toaster } from 'react-hot-toast';
+import { useRouter } from 'next/navigation'
 
 import {  DoctorValue, DoctorScheduleSchema, DoctorScheduleValue } from "@/schema/Doctor"
 import { FormDataHandler, onSignupSubmit } from "@/utils/AuthHandlers"
@@ -37,6 +38,7 @@ interface IProps {
 }
 
 export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
+  const router = useRouter()
 
   const [isLoading,SetIsLoading]=useState(false);
 
@@ -75,6 +77,7 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
         duration: 2000,
         position: 'bottom-center',
       });
+      router.push("/login");
     }
     else {
       res.message.forEach((err:string) => toast.error( err || 'An unexpected error occurred.',{
@@ -228,7 +231,7 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
         </div>
         <div className="text-center text-sm">
           Already have an account?{" "}
-          <Link href="#" className="underline">
+          <Link href="/login" className="underline">
             Log in
           </Link>
         </div>
