@@ -7,5 +7,5 @@ export function cn(...inputs: ClassValue[]) {
 
 export function shortName (name:String){
  let newName= name.split(" ");
- return `${newName[0][0]+newName[1][0]}`
+ newName.length ===2 ?  `${newName[0][0]+newName[1][0]}`:  `${newName[0][0]}`
 }

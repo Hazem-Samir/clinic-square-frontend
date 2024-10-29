@@ -37,6 +37,7 @@ import {
 import { cn } from "@/lib/utils"
 import { PharmacySchema, PharmacyValue } from "@/schema/Pharmacy"
 import { FormDataHandler, onSignupSubmit } from "@/utils/AuthHandlers"
+import { useRouter } from 'next/navigation'
 
 import toast, { Toaster } from 'react-hot-toast';
 import Spinner from "../Spinner"
@@ -53,6 +54,7 @@ interface Iimages{
 
 }
 export default function Pharmacy({ role ,onBack}: IProps) {
+  const router = useRouter()
  
   const [isLoading,SetIsLoading]=useState(false);
 
@@ -106,6 +108,7 @@ export default function Pharmacy({ role ,onBack}: IProps) {
         duration: 2000,
         position: 'bottom-center',
       });
+      router.push("/login")
     }
     else {
       res.message.forEach((err:string) => toast.error( err || 'An unexpected error occurred.',{
@@ -415,7 +418,7 @@ export default function Pharmacy({ role ,onBack}: IProps) {
         </div>
         <div className="text-center text-sm">
           Already have an account?{" "}
-          <Link href="#" className="underline">
+          <Link href="/login" className="underline">
             Log in
           </Link>
         </div>

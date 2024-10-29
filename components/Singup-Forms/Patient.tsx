@@ -495,7 +495,7 @@ export default function Patient({ role ,onBack}: IProps) {
         </div>
         <div className="text-center text-sm">
           Already have an account?{" "}
-          <Link href="#" className="underline">
+          <Link href="/login" className="underline">
             Log in
           </Link>
         </div>

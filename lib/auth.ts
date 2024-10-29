@@ -18,6 +18,7 @@ export const setUser = (user: Accounts,token: string) => {
   Cookies.set('token', JSON.stringify(token), { expires: 7 }) // Expires in 7 days
 }
 
+
 export const removeUser = () => {
   Cookies.remove('user');
   Cookies.remove('token');

@@ -1,5 +1,6 @@
 import { removeUser } from "@/lib/auth";
 import { Accounts, ISignUpData } from "@/schema/Essentials";
+import { ProfileValue } from "@/schema/Profile";
 import { sessionCostValue } from "@/schema/Schedule";
 
 const acceptedImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
@@ -17,7 +18,7 @@ export const ImageHandler = (file:File) => {
       }
       return true;
     };
-    export const FormDataHandler = (data: Accounts | sessionCostValue) => {
+    export const FormDataHandler = (data: Accounts | sessionCostValue | ProfileValue) => {
       const formData = new FormData();
     
       const appendToFormData = (obj: any, prefix = '') => {
