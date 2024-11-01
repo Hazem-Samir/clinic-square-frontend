@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { useForm, useFieldArray, SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -18,18 +17,16 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { PlusCircle, X, File } from "lucide-react"
-import Image from "next/image"
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
 import { PatientValue } from "@/schema/Patient"
-import { ConsultationSchema, ConsultationValue, EndReservationSchema, EndReservationValues } from "@/schema/DoctorReservation"
+import { EndReservationSchema, EndReservationValues } from "@/schema/DoctorReservation"
 import Spinner from "../Spinner"
 import toast, { Toaster } from 'react-hot-toast';
 import { getToken } from "@/lib/auth"
-import { revalidatePath } from "next/cache"
 import { getAge } from "@/utils/utils"
 import { useRouter } from 'next/navigation'
 
@@ -94,9 +91,8 @@ const handleResrvationModal=()=>{
     setShowSetConsultationDialog(true)
   }
 
-  const onSubmit: SubmitHandler<EndReservationValues> = async (data:EndReservationValues) => {
-    // console.log("ANA SH8al");
-    // setTreatment({report:{...data},state:'completed'});
+  const onSubmit: SubmitHandler<EndReservationValues> = async () => {
+   
     setShowEndReservationDialog(true);
 
     
@@ -106,8 +102,6 @@ const handleResrvationModal=()=>{
     setIsLoading(true);
     const {consultationDate,...rest}=data;
     const consultaion={report:{...rest},date:new Date(consultationDate).toISOString(),state:'consultaion'};
-    // console.log(consultaion)
-    // console.log(new Date(consultationDate).toISOString())
     const token = getToken();
     try {
       const res = await fetch(`/api/doctor/reservations?ID=${RID}`, {
@@ -129,7 +123,6 @@ const handleResrvationModal=()=>{
           requestedTests:[],
           consultationDate: null,
         })
-        // console.log('Reservation updated successfully');
         // toast.success('Reservation Updated Successfully',{
         //   duration: 2000,
         //   position: 'bottom-center',
@@ -140,7 +133,6 @@ const handleResrvationModal=()=>{
           duration: 2000,
           position: 'bottom-center',
         }))
-        console.log('Failed to update reservation')
       }
     } catch (error) {
       console.error('Error updating reservation:', error)
@@ -151,13 +143,10 @@ const handleResrvationModal=()=>{
 
   const handleEndReservation = async() => {
     setIsLoading(true);
-    // console.log(treatment)
     const currentValues = getValues();
     const {consultationDate,...rest}=currentValues;
     const treatment={report:{...rest},state:'completed'};
 
-    console.log("aaa",treatment);
-    // const consultaion=({report:{...rest},consultationDate,state:'consultaion'});
     const token = getToken();
     try {
       const res = await fetch(`/api/doctor/reservations?ID=${RID}`, {
@@ -179,7 +168,6 @@ const handleResrvationModal=()=>{
           requestedTests:[],
           consultationDate: null,
         })
-        // console.log('Reservation updated successfully');
         // toast.success('Reservation Updated Successfully',{
         //   duration: 2000,
         //   position: 'bottom-center',
@@ -190,7 +178,6 @@ const handleResrvationModal=()=>{
           duration: 2000,
           position: 'bottom-center',
         }))
-        console.log('Failed to update reservation')
       }
     } catch (error) {
       console.error('Error updating reservation:', error)

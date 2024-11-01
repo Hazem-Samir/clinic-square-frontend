@@ -12,12 +12,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Trash2, Edit2, DollarSign } from "lucide-react"
-import BlurFade from "@/components/ui/blur-fade"
 import ProtectedRoute from "@/components/ProtectedRoute"
-import { ConvertTimeToDate, DaySchema, DaysOfWeek, DayValue, HandleTimeFormat } from "@/schema/Essentials"
+import { ConvertTimeToDate, DaysOfWeek, DayValue, HandleTimeFormat } from "@/schema/Essentials"
 import { DoctorScheduleSchema, DoctorScheduleValue } from "@/schema/Doctor"
 import { FormDataHandler } from "@/utils/AuthHandlers"
-import { addDay, addSchedule, DeleteDay, UpdateCost, UpdateDay } from "@/lib/clientApi"
+import { addDay, DeleteDay, UpdateCost, UpdateDay } from "@/lib/doctor/clientApi"
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import Spinner from "../Spinner"
@@ -232,7 +231,6 @@ export default function Schedule({ days, cost }: IProps) {
 
   return (
     <ProtectedRoute allowedRoles={['doctor']}>
-      <BlurFade delay={0} inView>
         <Card className="w-full h-full max-h-[90vh] sm:max-h-[95vh]">
           <CardHeader className="p-4 sm:p-6">
             <CardTitle className="text-xl sm:text-2xl font-bold">{t('title')}</CardTitle>
@@ -332,7 +330,6 @@ export default function Schedule({ days, cost }: IProps) {
             </Form>
           </DialogContent>
         </Dialog>
-      </BlurFade>
       <Toaster />
     </ProtectedRoute>
   )

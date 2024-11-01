@@ -1,26 +1,42 @@
 import { Suspense } from 'react'
+import { format } from "date-fns"
 import ProtectedRoute from "@/components/ProtectedRoute"
 import { Skeleton } from "@/components/ui/skeleton"
-import { getReservations, getReservationsHistory } from '@/lib/api'
-import ReservationsHistoryTable from '@/components/doctor/ReservationsHisotryTable'
 import BlurFade from '@/components/ui/blur-fade'
-import Revenue from '@/components/Charts/Revenue'
-import Patients from '@/components/Charts/Patients'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  CreditCard,
-  Activity,
-} from "lucide-react"
-import { format, addDays } from "date-fns"
 import ReservationsTable from '@/components/doctor/ReservationsTable'
-async function ReservationsData({ page,date }: { page: number,date:string }) {
-  const { data: reservations } = await getReservations(5,page,date);
+import Dashboard from '@/components/Charts/Dashboard'
+import { getReservations } from '@/lib/doctor/api'
+
+async function DashboardData() {
+  const today = new Date()
+  const firstDayOfPreviousMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1)
+  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999)
+  const lastDayOfPreviousMonth = new Date(firstDayOfMonth.getTime() - 1)
+  const startOfDay = new Date(today.setHours(0, 0, 0, 0))
+  const endOfDay = new Date(today.setHours(23, 59, 59, 999))
+
+  const [monthResults, todayResults, prevMonthResults] = await Promise.all([
+    getReservations(10000000, 1, firstDayOfMonth.toISOString(), lastDayOfMonth.toISOString()),
+    getReservations(10000000, 1, startOfDay.toISOString(), endOfDay.toISOString()),
+    getReservations(10000000, 1, firstDayOfPreviousMonth.toISOString(), lastDayOfPreviousMonth.toISOString())
+  ])
+  return (
+    <Dashboard 
+      monthResults={monthResults.data.results}
+      todayResults={todayResults.data.results}
+      prevMonthResults={prevMonthResults.data.results}
+    />
+  )
+}
+
+async function ReservationsData({ page, date }: { page: number, date: string }) {
+  const startOfDay = new Date(date)
+  const endOfDay = new Date(startOfDay)
+  endOfDay.setHours(23, 59, 59, 999)
+
+  const { data: reservations } = await getReservations(5, page, startOfDay.toISOString(), endOfDay.toISOString())
+
   return (
     <ReservationsTable 
       reservations={reservations.data}
@@ -31,49 +47,24 @@ async function ReservationsData({ page,date }: { page: number,date:string }) {
   )
 }
 
-export default function page({ searchParams }: { searchParams: { page?: string , date?:string } }) {
-  const page = Number(searchParams.page) || 1;
-  // const date =  searchParams.date?.toISOString() || new Date().toISOString()
-  const date = searchParams.date? format(searchParams.date, 'yyyy-MM-dd') : format(new Date().toDateString(),'yyy-MM-dd')
+export default function DoctorDashboardPage({ searchParams }: { searchParams: { page?: string, date?: string } }) {
+  const page = Number(searchParams.page) || 1
+  const date = searchParams.date 
+    ? format(new Date(searchParams.date), 'yyyy-MM-dd') 
+    : format(new Date(), 'yyyy-MM-dd')
 
   return (
     <ProtectedRoute allowedRoles={['doctor']}>  
-       <BlurFade delay={0}  inView>
-      <main className="flex flex-1 flex-col gap-2 p-2 sm:gap-4 sm:p-4 md:gap-8 md:p-8">
-        <div className="grid gap-2 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-          <Revenue />
-          <Patients />
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">Sales</CardTitle>
-              <CreditCard className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-lg sm:text-2xl font-bold">+12,234</div>
-              <p className="text-xs text-muted-foreground">
-                +19% from last month
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">Active Now</CardTitle>
-              <Activity className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-lg sm:text-2xl font-bold">+573</div>
-              <p className="text-xs text-muted-foreground">
-                +201 since last hour
-              </p>
-            </CardContent>
-          </Card>
+      <BlurFade delay={0} inView>
+        <div className="flex flex-1 flex-col gap-2 p-2 sm:gap-4 sm:p-4 md:gap-8 md:p-8">
+          <Suspense fallback={<Skeleton className="w-full h-[200px]" />}>
+            <DashboardData />
+          </Suspense>
+          <Suspense fallback={<Skeleton className="w-full h-[400px]" />}>
+            <ReservationsData page={page} date={date} />
+          </Suspense>
         </div>
-        <Suspense fallback={<Skeleton className="w-full h-[600px]" />}>
-          <ReservationsData page={page} date={date} />
-        </Suspense>
-      </main>
       </BlurFade>
-  
     </ProtectedRoute>
   )
 }

@@ -3,16 +3,13 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Upload, CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react"
+import { Upload } from "lucide-react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm ,useFieldArray} from "react-hook-form"
-import * as z from "zod"
-import { format, addYears, subYears } from "date-fns"
-import { PlusCircle, X, File } from "lucide-react"
+import { PlusCircle,  File } from "lucide-react"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { ArrowLeft } from "lucide-react"
 import {
   Form,
@@ -22,22 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { cn } from "@/lib/utils"
 import { LabSchema, LabValue } from "@/schema/Lab"
-import { onSignupSubmit } from "@/utils/AuthHandlers"
-import SetSchedule from "./LabSchedule"
 import LabSchedule from "./LabSchedule"
 
 

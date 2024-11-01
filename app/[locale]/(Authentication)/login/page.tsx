@@ -1,16 +1,9 @@
 "use client"
 import Medical from "@/public/Medical.jpeg"
-
 import { useState } from "react"
 import Image from "next/image"
-import Link from "next/link"
-import { Upload } from "lucide-react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
   Form,
@@ -20,78 +13,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import {   userTypeSchema, userTypeValue } from "@/schema/Essentials"
-import { onSignupSubmit } from "@/utils/AuthHandlers"
-import Pateint from "@/components/Singup-Forms/Pateint"
-import Doctor from "@/components/Singup-Forms/Doctor/Doctor"
-import { ArrowLeft } from "lucide-react"
-import Patient from "@/components/Singup-Forms/Patient"
-import Lab from "@/components/Singup-Forms/Lab/Lab"
-import Pharmacy from "@/components/Singup-Forms/Pharmacy"
 import Login from "@/components/Login"
+import {   userTypeSchema, userTypeValue } from "@/schema/Essentials"
 export default function LoginPage() {
   const [step, setStep] = useState(1);
-  // const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
-
   const userTypeForm = useForm<userTypeValue>({
     resolver: zodResolver(userTypeSchema),
   })
-// const defaultValues: Partial<signupValue>={
-//   firstName: "hazem",
-//   lastName: "samir",
-//   email: "hazem@gmail.com",
-//   password: "123456789",
-//   confirmPassword:"123456789",
-// }
-  // const signupForm = useForm<signupValue>({
-  //   resolver: zodResolver(signupSchema),
-  //   // defaultValues,
-  //   // mode:'onChange'
-  // })
 
-  const onUserTypeSubmit = (data: userTypeValue) => {
+  const onUserTypeSubmit = () => {
     setStep(2)
   }
 
-  // const onSignupSubmit = async (data: z.infer<typeof signupSchema>) => {
-  //   const formData = new FormData()
-
-  //   // Add user type
-  //   formData.append("userType", userTypeForm.getValues().userType)
-
-  //   // Add signup form data
-  //   Object.entries(data).forEach(([key, value]) => {
-  //     formData.append(key, value)
-  //   })
-  //   // Add profile photo if it exists
-  //   if (profilePhoto) {
-  //     formData.append("profilePhoto", profilePhoto)
-  //   }
-
-  //   // Log the FormData (for demonstration purposes)
-  //   for (let [key, value] of formData.entries()) {
-  //     console.log(`${key}: ${value}`)
-  //   }
-
-  //   // Here you would typically send the formData to your API
-  //   // For example:
-  //   // try {
-  //   //   const response = await fetch('/api/signup', {
-  //   //     method: 'POST',
-  //   //     body: formData,
-  //   //   })
-  //   //   const result = await response.json()
-  //   //   console.log(result)
-  //   // } catch (error) {
-  //   //   console.error('Error:', error)
-  //   // }
-  // }
-
-  // const handleProfilePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.files && e.target.files[0]) {
-  //     setProfilePhoto(e.target.files[0])
-  //   }
-  // }
   const handleBack = () => {
     setStep(1);
   }

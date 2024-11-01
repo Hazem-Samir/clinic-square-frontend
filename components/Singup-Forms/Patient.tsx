@@ -6,13 +6,10 @@ import Link from "next/link"
 import { Upload, CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm ,useFieldArray} from "react-hook-form"
-import * as z from "zod"
-import { format, addYears, subYears } from "date-fns"
-import { PlusCircle, X, File } from "lucide-react"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { format } from "date-fns"
+import {  File } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { ArrowLeft } from "lucide-react"
 import {
   Form,
@@ -36,8 +33,7 @@ import {
 } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 import { PatientSchema, PatientValue,  } from "@/schema/Patient"
-import { CreateFormData, FormDataHandler, onSignupSubmit } from "@/utils/AuthHandlers"
-import SetSchedule from "./Lab/LabSchedule"
+import {  FormDataHandler, onSignupSubmit } from "@/utils/AuthHandlers"
 import toast, { Toaster } from 'react-hot-toast';
 import Spinner from "../Spinner"
 import { useRouter } from "next/navigation"
@@ -90,7 +86,6 @@ export default function Patient({ role ,onBack}: IProps) {
 
 
     const onSubmitHandler=async (data:PatientValue)=>{
-      console.log(data);
       SetIsLoading(true);
       data['role']=role;
       const formData=FormDataHandler(data);

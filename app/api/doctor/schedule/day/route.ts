@@ -31,10 +31,9 @@ export async function PUT(request: NextRequest) {
     }
 
     const data = await apiResponse.json();
-    console.log(data)
     return NextResponse.json({ success: true, message: 'Schedule Updated Successfully', data });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error:', error.message);
 
     // Fallback error handling
@@ -75,10 +74,9 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await apiResponse.json();
-    console.log(data)
     return NextResponse.json({ success: true, message: 'Schedule Updated Successfully', data });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error:', error.message);
 
     // Fallback error handling
@@ -117,10 +115,9 @@ export async function DELETE(request: NextRequest) {
     }
 
     const data = await apiResponse.json();
-    console.log(data)
     return NextResponse.json({ success: true, message: 'Day Deleted Successfully', data });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error:', error.message);
 
     // Fallback error handling

@@ -1,20 +1,4 @@
 import Link from "next/link"
-import {
-  CircleUser,
-  Home,
-  LineChart,
-  Menu,
-  Package,
-  Package2,
-  Search,
-  ShoppingCart,
-  Users,
-  DollarSign,
-  CreditCard,
-  Activity,CalendarCheck,History,Hospital,
-} from "lucide-react"
-import { usePathname } from "next/navigation"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -24,8 +8,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { ModeToggle } from "./ui/ModeToggle"
 import { WelcomeUser } from "./WelcomUser"
 import {
@@ -36,6 +18,8 @@ import {
 import { cookies } from 'next/headers'; // Import cookies function from Next.js
 import { shortName } from "@/lib/utils"
 import LanguageSwitcherIcon from "./LanguageSwitcherIcon"
+import { logout } from "@/actions/logout"
+import MobileNav from "./MobileNav"
 
 const TopNavBar = () => {
 
@@ -50,67 +34,7 @@ let user;
   }
   return (
     <header className="flex h-12 sm:h-14 items-center gap-1 border-b bg-muted/40 px-2 sm:px-4 lg:h-[60px] lg:px-6">
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="shrink-0 md:hidden"
-          >
-            <Menu className="h-4 w-4" />
-            <span className="sr-only">Toggle navigation menu</span>
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-[80vw] sm:w-[300px] flex flex-col">
-          <nav className="grid gap-1 sm:gap-2 text-sm sm:text-base font-medium">
-            <Link
-              href="#"
-              className="flex items-center gap-2 text-base sm:text-lg font-semibold"
-            >
-              <Hospital className="h-5 w-5 sm:h-6 sm:w-6" />
-              <span className="">Clinic Square</span>
-            </Link>
-            <Link
-              href="#"
-              className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
-            >
-              <Home className="h-4 w-4 sm:h-5 sm:w-5" />
-              Home
-            </Link>
-            <Link
-            href="/doctor/reservations-history"
-              className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-            >
-              <History className="h-4 w-4 sm:h-5 sm:w-5" />
-              Reservations History
-              {/* <Badge className="ml-auto flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full">
-                6
-              </Badge> */}
-            </Link>
-            <Link
-              href="/doctor/my-schedule"
-              className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-            >
-              <CalendarCheck className="h-4 w-4 sm:h-5 sm:w-5" />
-              Set Schedule
-            </Link>
-            {/* <Link
-              href="#"
-              className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-            >
-              <Users className="h-4 w-4 sm:h-5 sm:w-5" />
-              Customers
-            </Link>
-            <Link
-              href="#"
-              className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-            >
-              <LineChart className="h-4 w-4 sm:h-5 sm:w-5" />
-              Analytics
-            </Link> */}
-          </nav>
-        </SheetContent>
-      </Sheet>
+      <MobileNav />
       <div className="flex-1" />
       <div className="flex items-center justify-between w-full">
         <WelcomeUser name={user.name} />
@@ -134,7 +58,11 @@ let user;
             </DropdownMenuItem></Link>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem>  <form action={logout}>
+              <Button variant="ghost" className="h-5" type="submit">
+                Logout
+              </Button>
+            </form></DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

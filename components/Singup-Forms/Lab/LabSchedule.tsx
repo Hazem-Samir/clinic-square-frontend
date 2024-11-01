@@ -64,15 +64,7 @@ export default function LabSchedule({ role ,prevData,onBack}: IProps) {
 
 
 
-  const onSubmit = (data: LabScheduleValue) => {
-    // console.log(prevData);
-    // console.log(data);
-    onSignupSubmit({data:{...prevData,schedule:{...data}},role:'doctor'})
-    // Handle form submission
-  };
-
   const onSubmitHandler=async (data:LabScheduleValue)=>{
-    // console.log("aaaaa")
     SetIsLoading(true);
     const AllData={...prevData,role,schedule:{...data}}
     const formData=FormDataHandler(AllData);
@@ -203,7 +195,7 @@ export default function LabSchedule({ role ,prevData,onBack}: IProps) {
           ))}
 
           <Button
-           disabled={isLoading}
+           disabled={isLoading||availableDays.length === 0}
             type="button"
             variant="outline"
             onClick={() => {
@@ -211,7 +203,6 @@ export default function LabSchedule({ role ,prevData,onBack}: IProps) {
                 append({ day: availableDays[0], startTime: "", endTime: "", limit: 1 });
               }
             }}
-            disabled={availableDays.length === 0}
           >
             Add Another Day
           </Button>

@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from "react"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -14,7 +14,6 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { PlusCircle, X } from "lucide-react"
-import BlurFade from "@/components/ui/blur-fade"
 
 interface UserData {
   name: string
@@ -167,7 +166,7 @@ const UpdateProfile =()=>{
                     <div className="flex flex-wrap gap-4 mt-2">
                       {formData.licensePics.map((pic, index) => (
                         <div key={index} className="relative">
-                          <img src={pic} alt={`License ${index + 1}`} className="w-32 h-24 object-cover rounded" />
+                          <Image src={pic} alt={`License ${index + 1}`} className="w-32 h-24 object-cover rounded" />
                           <Button
                             variant="destructive"
                             size="icon"

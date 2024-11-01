@@ -4,12 +4,9 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    // Parse the incoming request body
     const body = await request.json();
 
-    // console.log('Attempting to connect to:', SERVER_URL);
 
-    // Make the request to your authentication server
     const apiResponse = await fetch(`${SERVER_URL}/auth/login`, {
       method: 'POST',
       headers: {
@@ -27,10 +24,9 @@ export async function POST(request: NextRequest) {
     const data = await apiResponse.json();
     return NextResponse.json({ success: true, message: 'Login successful', data });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error:', error.message);
 
-    // Fallback error handling
     return NextResponse.json({
       success: false,
       message: error.message || 'An unexpected error occurred',
