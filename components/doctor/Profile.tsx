@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useFieldArray } from "react-hook-form"
-import { format, parse } from "date-fns"
+import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -19,7 +19,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -43,8 +42,7 @@ import { FormDataHandler } from "@/utils/AuthHandlers"
 import { PasswordSchema, PasswordValue, ProfileSchema, ProfileValue } from "@/schema/Profile"
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
-import Spinner from "../Spinner"
-import { UpdatePassword, UpdateProfile } from "@/lib/clientApi"
+import { UpdatePassword, UpdateProfile } from "@/lib/doctor/clientApi"
 import { Textarea } from "../ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
@@ -105,10 +103,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
   
   async function onSubmitPassword(data: PasswordValue) {
    
-    console.log(data)
-    // setIsLoading(true);
     const res = await UpdatePassword(data)
-    console.log(res)
     if (res.success ===true) {
       toast.success(res.message, {
         duration: 2000,
@@ -133,7 +128,6 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
     if(data.email===profile.email){
       delete data.email;
     }
-    console.log(data)
     // setIsLoading(true);
    const formData= FormDataHandler(data);
     const res = await UpdateProfile(formData)
@@ -239,7 +233,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                     <Label className="text-lg">License </Label>
                     <div className="flex flex-wrap gap-4 mt-2">
                       {profile.license.map((pic, index) => (
-                        <img key={index} src={pic} alt={`License ${index + 1}`} className="w-48 h-36 object-cover rounded" />
+                        <Image key={index} src={pic} alt={`License ${index + 1}`} width={192} height={144} className=" object-cover rounded" />
                       ))}
                     </div>
                   </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect } from "react"
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
 import { useTransition } from 'react'
@@ -22,9 +22,16 @@ export default function LanguageSwitcherIcon() {
 
   const switchLocale = (newLocale: string) => {
     startTransition(() => {
-      router.replace(pathname.replace(`/${locale}`, `/${newLocale}`))
+      document.documentElement.lang = newLocale
+      document.documentElement.dir = newLocale === 'ar' ? 'rtl' : 'ltr'
+      router.push(pathname.replace(`/${locale}`, `/${newLocale}`))
     })
   }
+
+  useEffect(() => {
+    document.documentElement.lang = locale
+    document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr'
+  }, [locale])
 
   return (
     <DropdownMenu>

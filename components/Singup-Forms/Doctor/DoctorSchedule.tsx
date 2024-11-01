@@ -66,7 +66,6 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
 
 
   const onSubmitHandler=async (data:DoctorScheduleValue)=>{
-    // console.log("aaaaa")
     SetIsLoading(true);
     const AllData={...prevData,role,schedule:{...data}}
     const formData=FormDataHandler(AllData);
@@ -197,7 +196,7 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
           ))}
 
           <Button
-          disabled={isLoading}
+          disabled={isLoading||availableDays.length === 0}
             type="button"
             variant="outline"
             onClick={() => {
@@ -205,7 +204,6 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
                 append({ day: availableDays[0], startTime: "", endTime: "", limit: 1 });
               }
             }}
-            disabled={availableDays.length === 0}
           >
             Add Another Day
           </Button>

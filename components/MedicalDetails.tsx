@@ -14,7 +14,7 @@
     import { Button } from "@/components/ui/button"
     import { File } from "lucide-react"
     import { ScrollArea } from "@/components/ui/scroll-area"
-import { EndReservationSchema, EndReservationValues } from "@/schema/DoctorReservation"
+import { EndReservationValues } from "@/schema/DoctorReservation"
 import { getAge } from "@/utils/utils"
 import { shortName } from "@/lib/utils"
     
@@ -24,13 +24,7 @@ interface IProps {
 }
 
     export default function MedicalDetails({reservation}:IProps) {
-      console.log(reservation)
-      const prescriptions = [
-        { name: "Amoxicillin", dose: "500mg" },
-        { name: "Ibuprofen", dose: "400mg" },
-      ]
-    
-      const tests = ["Blood Test", "X-Ray", "MRI", "CT Scan","Ssa"]
+
     
       const sentFiles = [
         "Test1",
@@ -56,7 +50,7 @@ interface IProps {
                 <div className="flex flex-col items-center gap-2 mb-4">
                   <Avatar className="h-16 w-16 sm:h-20 sm:w-20">
                           <AvatarImage src={reservation.patient.profilePic} alt="Patient" />
-                <AvatarFallback>{shortName(reservation.patient.name).toUpperCase()}</AvatarFallback>
+                <AvatarFallback>{shortName(reservation.patient.name)}</AvatarFallback>
                   </Avatar>
                   <div className="text-center">
                     <h2 className="text-lg sm:text-2xl font-bold">{reservation.patient.name}</h2>

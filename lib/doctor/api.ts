@@ -1,9 +1,8 @@
-import { getToken } from "./auth";
 import { cookies } from 'next/headers'
+
 export const getReservationsHistory = async (limit:number,page: number) => {
       const cookieStore = cookies()
       const token = JSON.parse (cookieStore.get('token').value)
-      console.log("token", token);
       const queryParams = new URLSearchParams({
         limit: limit.toString(),
         page: page.toString(),
@@ -22,19 +21,18 @@ export const getReservationsHistory = async (limit:number,page: number) => {
       }
     
       const res = await response.json();
-      console.log(res);
       return res;
     }
 
-  export const getReservations = async (limit:number,page: number, date: string) => {
-
+    
+  export const getReservations = async (limit:number,page: number, startOfDay: string,endOfDay:string) => {
       const cookieStore = cookies()
       const token = JSON.parse (cookieStore.get('token').value)
-      console.log("Da",date)
       const queryParams = new URLSearchParams({
         limit: limit.toString(),
         page: page.toString(),
-        date: date,
+        startOfDay: startOfDay,
+        endOfDay: endOfDay,
       }).toString();
       const response = await fetch(`http://localhost:3000/api/doctor/reservations?${queryParams}`, {
         method: 'GET',
@@ -50,7 +48,6 @@ export const getReservationsHistory = async (limit:number,page: number) => {
       }
     
       const res = await response.json();
-      console.log(res);
       return res;
     } 
 
@@ -70,7 +67,27 @@ export const getReservationsHistory = async (limit:number,page: number) => {
       }
     
       const res = await response.json();
-      console.log(res);
       return res;
     } 
 
+
+    
+    export const getQuestions = async () => {
+      const cookieStore = cookies()
+      const token = JSON.parse (cookieStore.get('token').value)
+      const response = await fetch(`http://localhost:3000/api/medicalQuestions`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        cache:"reload",
+      });
+    
+      if (!response.ok) {
+            throw new Error ('Failed to fetch reservations');
+      }
+    
+      const res = await response.json();
+      // (res);
+      return res;
+    } 

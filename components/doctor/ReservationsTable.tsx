@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { CalendarDays } from "lucide-react"
+import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react"
 import SearchBar from "@/components/ui/SearchBar"
 import {
   Popover,
@@ -21,86 +21,74 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { format, addDays } from "date-fns"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { getToken } from "@/lib/auth"
 import { shortName } from "@/lib/utils"
-import { PatientValue } from "@/schema/Patient"
 import { EndReservationValues } from "@/schema/DoctorReservation"
 import { useRouter } from 'next/navigation'
 import ShowReservation from "./ShowReservation"
 
-interface IReservations
-{
-createdAt: string;
-
-date:string;
-
-doctor:string;
-id:string;
-updatedAt:string;
-patient:PatientValue;
-report:EndReservationValues;
-}
-
-interface  IProps {
+interface IProps {
   reservations: EndReservationValues[];
   currentPage: number;
   totalPages: number;
   currentDate?: string;
 }
 
-export default function ReservationsTable({reservations,currentPage,totalPages,currentDate}:IProps) {
-  // const [currentPage, setCurrentPage] = useState(1)
-  // const [numberOfPages, SetNumberOfPages] = useState(0)
-  // const [reservations, setReservations] = useState<IReservations[]>([])
+export default function ReservationsTable({reservations, currentPage, totalPages, currentDate}: IProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null)
-  const router = useRouter()
+  const [error, setError] = useState<string | null>(null);
+  const [SearchedReservation, setSearchedReservaion] = useState(reservations);
+  const [searchQuery, setSearchQuery] = useState("");
+    const router = useRouter();
 
+  useEffect(() => {
+    setSearchedReservaion(reservations);
+  }, [reservations]);
 
-
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    const lowercasedQuery = query.toLowerCase();
+    const filtered = reservations.filter(reservation => 
+      reservation.patient.name.toLowerCase().includes(lowercasedQuery)
+    );
+    setSearchedReservaion(filtered);
+  };
 
   const handlePageChange = (newPage: number) => {
-    console.log(newPage)
     setIsLoading(true);
-    
-    router.push(`doctor?page=${newPage}&date=${currentDate}`)
+    router.push(`doctor?page=${newPage}&date=${currentDate}`);
     setIsLoading(false);
-  }
+  };
 
-  const handleDateChange = (date:Date) => {
-
-    const newDate=format(date,"yyyy MM dd")
-    console.log("dddd",newDate)
+  const handleDateChange = (date: Date) => {
+    const newDate = format(date, "yyyy-MM-dd");
     setIsLoading(true);
-    
-    router.push(`doctor?page=${currentPage}&date=${newDate}`)
+    router.push(`doctor?page=${currentPage}&date=${newDate}`);
     setIsLoading(false);
-  }
+  };
   
   const getDayOptions = () => {
-    const options = []
-    const today = new Date()
+    const options = [];
+    const today = new Date();
     for (let i = 0; i < 7; i++) {
-      const date = addDays(today, i)
+      const date = addDays(today, i);
       options.push({
         value: date.toISOString(),
         label: format(date, 'MMM d'),
         fullLabel: i === 0 ? `Today (${format(date, 'MMM d')})` : format(date, 'MMM d')
-      })
+      });
     }
-    return options
-  }
+    return options;
+  };
 
-  const dayOptions = getDayOptions()
+  const dayOptions = getDayOptions();
 
   return (
     <Card>
       <CardHeader>
         <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-2 sm:gap-4">
           <CardTitle className="text-base sm:text-lg">Reservations</CardTitle>
-          <div className="flex items-center gap-2 ">
-            <SearchBar />
+          <div className="flex items-center gap-2">
+            <SearchBar onSearch={handleSearch} setSearchedReservaion={setSearchedReservaion} />
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="outline" size="icon">
@@ -123,24 +111,24 @@ export default function ReservationsTable({reservations,currentPage,totalPages,c
               </PopoverContent>
             </Popover>
             <div className="text-sm font-medium">
-              {currentDate? format(new Date(currentDate), 'MMM d'):<h1>SHIT</h1>}
+              {currentDate ? format(new Date(currentDate), 'MMM d') : 'No date selected'}
             </div>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="grid gap-4 sm:gap-8">
+      <CardContent className="flex flex-col gap-4 sm:gap-8">
         {isLoading ? (
           <div className="text-center">Loading reservations...</div>
         ) : error ? (
           <div className="text-center text-red-500">{error}</div>
-        ) : reservations.length === 0 ? (
+        ) : SearchedReservation.length === 0 ? (
           <div className="text-center">No reservations found.</div>
         ) : (
           reservations.map((reservation) => (
             <div key={reservation.id} className="flex items-center gap-2 sm:gap-4">
               <Avatar className="max-[350px]:hidden sm:h-9 sm:w-9">
                 <AvatarImage src={reservation.patient.profilePic} alt="Avatar" />
-                <AvatarFallback>{shortName(reservation.patient.name).toUpperCase()}</AvatarFallback>
+                <AvatarFallback>{shortName(reservation.patient.name)}</AvatarFallback>
               </Avatar>
               <div className="grid gap-0.5 sm:gap-1">
                 <p className="text-xs sm:text-sm font-medium leading-none">{reservation.patient.name}</p>
@@ -157,27 +145,26 @@ export default function ReservationsTable({reservations,currentPage,totalPages,c
       </CardContent>
       
       <div className="flex justify-center items-center p-4 gap-4">
-          <Button
-           onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1||isLoading}
-            size="icon"
-            variant="outline"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <span className="text-sm font-medium">
-            {currentPage} / {totalPages}
-          </span>
-          <Button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages||isLoading}
-            size="icon"
-            variant="outline"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-     
+        <Button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1 || isLoading}
+          size="icon"
+          variant="outline"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
+        <span className="text-sm font-medium">
+          {currentPage} / {totalPages}
+        </span>
+        <Button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages || isLoading}
+          size="icon"
+          variant="outline"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+      </div>
     </Card>
   )
 }

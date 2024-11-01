@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -16,13 +15,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import Medical from "@/public/Medical.jpeg"
 import toast, { Toaster } from 'react-hot-toast';
 import { useState } from "react"
-import { ModeToggle } from "./ui/ModeToggle"
 import { PatientValue } from "@/schema/Patient"
 import { LoginSubmit } from "@/utils/AuthHandlers"
-import Cookies from 'js-cookie'
 import { useRouter } from 'next/navigation'
 import { setUser } from "@/lib/auth"
 import Spinner from "./Spinner"
@@ -38,48 +34,6 @@ const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 })
 
-// async function login(data: z.infer<typeof loginSchema>,role:String) {
- 
-//       data['role']=role;
-//       console.log("aaa",data);
-//       try {
-//       const res = await fetch('/api/login', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(data),
-//       });
-//       const response = await res.json();
-//       console.log(response.message)
-//   if (!res.ok) {
-
-//     if(response.errors?.length>0){
-
-//       return {success:[],errors:response.errors};
-//     }
-//     // Handle error response
-//     return {success:[],errors:response.message};
-//         response.errors.forEach(error => {
-          
-//           console.log(error.msg || 'An unexpected error occurred.');
-//         });
-//       } else {
-//         // Handle successful response
-
-//         return {success:response,errors:[]};
-//         // Redirect user to dashboard or other protected page
-//       //   router.push('/dashboard');
-//       }
-//     } catch (err) {
-//       return {success:[],errors:err};
-//       console.log('An error occurred while logging in. Please try again.');
-//       console.error('Login error:', err);
-//     } 
-// //     finally {
-//       // setLoading(false);
-// //     }
-//   };
 
 
 export default function Login({ role ,onBack}: IProps) {
@@ -121,50 +75,6 @@ export default function Login({ role ,onBack}: IProps) {
       // }))
     }
   }
-  // const onSubmitHandler=async (data:PatientValue)=>{
-  //   const formData=CreateFormData({data,role});
-  //  const res= await onSignupSubmit(formData);
-  //   if(res.success){
-  //     toast.success(res.message,{
-  //       duration: 2000,
-  //       position: 'bottom-center',
-  //     });
-  //   }
-  //   else {
-  //     res.error.forEach((err:string) => toast.error(err.msg || err || 'An unexpected error occurred.',{
-  //       duration: 2000,
-  //       position: 'bottom-center',
-  //     }))
-  //   }
-  // }
-  
-  // async function onSubmit(values: z.infer<typeof loginSchema>) {
-  //   // console.log(values);
-  //   SetIsLoading(true);
-  //   const ddd= await login(values,role);
-    
-  //   console.log(ddd);
-  //   SetIsLoading(false);
-  //   if(ddd?.errors?.length===0){
-  //     toast.success("Logged In",{
-  //       duration: 2000,
-  //       position: 'bottom-center',
-  //     });
-  //   }
-  //   else{
-
-
-  //     ddd?.errors?.forEach(error => {
-  //       console.log(error)
-  //       return toast.error(error.msg || error || 'An unexpected error occurred.',{
-  //         duration: 2000,
-  //         position: 'bottom-center',
-  //       });
-  //     });
-  //   }
-  //   //     console.log("s",ddd);
-  //   // Handle login logic here
-  // }
 
   return (
  

@@ -1,5 +1,5 @@
 import { DayValue } from "@/schema/Essentials";
-import { getToken, setUser } from "./auth";
+import { getToken, setUser } from "../auth";
 import { ProfileValue } from "@/schema/Profile";
 
 export const addDay = async (data)=>{
@@ -17,7 +17,6 @@ export const addDay = async (data)=>{
       
   
     const res = await response.json();
-    console.log(res);
     return res;
       } catch (error) {
         console.error('Error Add Schedule:', error)
@@ -37,7 +36,6 @@ export const addDay = async (data)=>{
   
   
     const res = await response.json();
-    console.log(res);
     return res;
       } catch (error) {
         console.error('Error Add Schedule:', error)
@@ -45,7 +43,6 @@ export const addDay = async (data)=>{
     }
 
     export const UpdateDay = async (day:DayValue)=>{
-      // console.log(JSON.stringify(day))
       const token = getToken();
       try {
         const response = await fetch(`/api/doctor/schedule/day`, {
@@ -60,7 +57,6 @@ export const addDay = async (data)=>{
       
   
     const res = await response.json();
-    console.log(res);
     return res;
       } catch (error) {
         console.error('Error Add Schedule:', error)
@@ -68,7 +64,6 @@ export const addDay = async (data)=>{
     } 
 
     export const DeleteDay = async (day:DayValue)=>{
-      // console.log(JSON.stringify(day))
       const token = getToken();
       try {
         const response = await fetch(`/api/doctor/schedule/day`, {
@@ -83,7 +78,6 @@ export const addDay = async (data)=>{
       
   
     const res = await response.json();
-    console.log(res);
     return res;
       } catch (error) {
         console.error('Error Add Schedule:', error)
@@ -106,9 +100,7 @@ export const addDay = async (data)=>{
           }
           
           const res = await response.json();
-          console.log(res.data)
           setUser(res.data.data,token);
-      console.log(res);
       return res;
         } catch (error) {
           console.error('Error Add Schedule:', error)
@@ -135,7 +127,6 @@ export const addDay = async (data)=>{
          
           
           const res = await response.json();
-     console.log(res)
       return res;
         } catch (error) {
           console.error('Error Add Schedule:', error)
@@ -145,3 +136,32 @@ export const addDay = async (data)=>{
         console.error('No Token');
       }
     }
+
+    export const SearchReservation = async (patient:string) => {
+
+      const token = getToken();
+      if(token){
+        const queryParams = new URLSearchParams({
+          patient: patient,
+        }).toString();
+        const response = await fetch(`http://localhost:3000/api/doctor/reservations?${queryParams}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+            cache:"no-store"
+            
+        });
+      
+        if (!response.ok) {
+          throw new Error('Failed to fetch reservations');
+        }
+      
+        const res = await response.json();
+        return res;
+      }
+         else {
+        console.error('No Token');
+      }
+    
+    } 

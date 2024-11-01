@@ -33,7 +33,7 @@ export async function PATCH(request: NextRequest) {
 
         return NextResponse.json({ success: true, message: 'Update successful', data });
         
-      } catch (error: any) {
+      } catch (error) {
         console.error('Error:', error.message);
 
         return NextResponse.json({

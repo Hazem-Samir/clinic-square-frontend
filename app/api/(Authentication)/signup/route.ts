@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     const data = await apiResponse.json();
     return NextResponse.json({ success: true, message: 'SignUp successful', data });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error:', error);
 
     // Fallback error handling

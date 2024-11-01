@@ -16,13 +16,9 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({  success: false, message: 'Invalid token' }, { status: 401 })
       }
 
-      const searchParams = request.nextUrl.searchParams
-      const page = parseInt(searchParams.get('page') || '1',10)
-      const limit=parseInt(searchParams.get('limit')||'5',10);
-      const today = new Date().toISOString();
      
       try {
-        const apiResponse = await fetch(`${SERVER_URL}/doctor/My-Reservations?page=${page}&limit=${limit}&date[lte]=${today}&state=completed&populate=patient`, {
+        const apiResponse = await fetch(`${SERVER_URL}/questions?populate=patient.name dateOfBirth profilePic gender`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -35,7 +31,7 @@ export async function GET(request: NextRequest) {
           }
       
           const data = await apiResponse.json();
-          return NextResponse.json({ success: true, message: 'Rservations Data', data });
+          return NextResponse.json({ success: true, message: 'Questions Data', data });
       
         } catch (error) {
           console.error('Erroraaa:', error);

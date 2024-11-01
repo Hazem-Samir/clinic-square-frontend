@@ -17,7 +17,6 @@ export async function GET(request: NextRequest) {
       }
 
      
-      // console.log(page)
       try {
         const apiResponse = await fetch(`${SERVER_URL}/doctor/getMe?fields=schedule`, {
           headers: {
@@ -34,7 +33,7 @@ export async function GET(request: NextRequest) {
           const data = await apiResponse.json();
           return NextResponse.json({ success: true, message: 'Rservations Data', data });
       
-        } catch (error: any) {
+        } catch (error) {
           console.error('Erroraaa:', error);
       
           return NextResponse.json({
@@ -65,7 +64,7 @@ export async function GET(request: NextRequest) {
           const data = await apiResponse.json();
           return NextResponse.json({ success: true, message: 'Schedule Added Successfully', data });
       
-        } catch (error: any) {
+        } catch (error) {
           console.error('Error:', error.message);
       
           // Fallback error handling

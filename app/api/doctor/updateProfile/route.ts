@@ -32,7 +32,7 @@ export async function PATCH(request: NextRequest) {
 
         return NextResponse.json({ success: true, message: 'Update successful', data });
         
-      } catch (error: any) {
+      } catch (error) {
         console.error('Error:', error.message);
 
         return NextResponse.json({
@@ -73,7 +73,7 @@ export async function PUT(request: NextRequest) {
     const data = await apiResponse.json()
     return NextResponse.json({ success: true, message: 'Update successful', data });
     
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error:', error.message)
     return NextResponse.json({
       success: false,
