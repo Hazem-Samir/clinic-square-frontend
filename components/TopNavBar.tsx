@@ -20,8 +20,16 @@ import { shortName } from "@/lib/utils"
 import LanguageSwitcherIcon from "./LanguageSwitcherIcon"
 import { logout } from "@/actions/logout"
 import MobileNav from "./MobileNav"
+interface NavItem {
+  href: string;
+  icon: string;
+  label: string;
+}
 
-const TopNavBar = () => {
+interface IProps {
+  navItems: NavItem[];
+}
+const TopNavBar = ({navItems}:IProps) => {
 
   const cookieStore = cookies();
   const userCookie = cookieStore.get('user'); // Assuming the user info is stored in 'user' cookie
@@ -34,7 +42,7 @@ let user;
   }
   return (
     <header className="flex h-12 sm:h-14 items-center gap-1 border-b bg-muted/40 px-2 sm:px-4 lg:h-[60px] lg:px-6">
-      <MobileNav />
+      <MobileNav navItems={navItems} role={user.role}/>
       <div className="flex-1" />
       <div className="flex items-center justify-between w-full">
         <WelcomeUser name={user.name} />
@@ -54,7 +62,7 @@ let user;
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <Link href='/doctor/profile' >  <DropdownMenuItem className="cursor-pointer"> Profile
+              <Link href={`/${user.role}/profile`} >  <DropdownMenuItem className="cursor-pointer"> Profile
             </DropdownMenuItem></Link>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />

@@ -1,11 +1,14 @@
 import { FadeText } from "@/components/ui/fade-text";
+import { cookies } from 'next/headers'; // Import cookies function from Next.js
 
 interface IProps {
   name: string
 }
 
 export async function WelcomeUser({name=''}:IProps) {
-
+  const cookieStore = cookies();
+  const userCookie = cookieStore.get('user'); // Assuming the user info is stored in 'user' cookie
+  const  user = JSON.parse(userCookie.value); 
   return (
  
 
@@ -15,7 +18,7 @@ export async function WelcomeUser({name=''}:IProps) {
       framerProps={{
         show: { transition: { delay: 0 } },
       }}
-      text={<>Welcome, Dr.  {name.split(' ')[0]} <span className="hidden md:inline">{name.split(' ')[1]}</span></>}
+      text={<>Welcome, {user.role==='doctor'?"Dr. ":null}  {name.split(' ')[0]} <span className="hidden md:inline">{name.split(' ')[1]}</span></>}
     />
     
 

@@ -6,7 +6,7 @@ import BlurFade from '@/components/ui/blur-fade'
 import QuestionsList from '@/components/doctor/QuestionsList'
 
 async function QuestionsData({ page }: { page: number }) {
-  const {data:question} = await getQuestions();
+  const {data:question} = await getQuestions(10,page);
   return (
     <QuestionsList 
       questions={question.data}

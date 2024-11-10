@@ -1,22 +1,37 @@
 "use client";
+
 import Link from "next/link"
 import { useSelectedLayoutSegment } from 'next/navigation'
 import {
   Home,
   History,
   CalendarCheck,
-  Hospital,MessageCircleQuestion,
+  Hospital,
+  MessageCircleQuestion,FlaskConical,
 } from "lucide-react"
 
-export default function SideNavBar() {
-  const segment = useSelectedLayoutSegment()
+interface NavItem {
+  href: string;
+  icon: string;
+  label: string;
+}
 
-  const navItems = [
-    { href: "/doctor", icon: Home, label: "Home" },
-    { href: "/doctor/reservations-history", icon: History, label: "Reservations History" },
-    { href: "/doctor/my-schedule", icon: CalendarCheck, label: "My Schedule" },
-    { href: "/doctor/medical-questions", icon: MessageCircleQuestion, label: "Medical Questions" },
-  ]
+interface IProps {
+  navItems: NavItem[];
+  role:string;
+}
+
+const iconMap = {
+  Home,
+  History,
+  CalendarCheck,
+  Hospital,
+  MessageCircleQuestion,
+  FlaskConical,
+};
+
+export default function SideNavBar({navItems,role}: IProps) {
+  const segment = useSelectedLayoutSegment()
 
   return (
     <div className="hidden border-r bg-muted/40 md:block">
@@ -28,9 +43,10 @@ export default function SideNavBar() {
           </Link>
         </div>
         <div className="flex-1">
-          <nav className="grid items-start px-2 text-xs sm:text-sm font-medium lg:px-4 space-y-1">
+          <nav className="grid items-start px-2 text-xs sm:text-sm font-medium lg:px-4 space-y-2">
             {navItems.map((item) => {
-              const isActive = segment === item.href.split('/')[2] || (segment === null && item.href === '/doctor')
+              const isActive = segment === item.href.split('/')[2] || (segment === null && item.href===`${role}`)
+              const Icon = iconMap[item.icon as keyof typeof iconMap];
               return (
                 <Link
                   key={item.href}
@@ -41,7 +57,7 @@ export default function SideNavBar() {
                       : 'text-muted-foreground hover:text-primary hover:bg-muted'
                     }`}
                 >
-                  <item.icon className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
                   {item.label}
                 </Link>
               )

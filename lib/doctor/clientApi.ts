@@ -144,7 +144,7 @@ export const addDay = async (data)=>{
         const queryParams = new URLSearchParams({
           patient: patient,
         }).toString();
-        const response = await fetch(`http://localhost:3000/api/doctor/reservations?${queryParams}`, {
+        const response = await fetch(`/api/doctor/reservations?${queryParams}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -165,3 +165,51 @@ export const addDay = async (data)=>{
       }
     
     } 
+
+
+    export const AnswerQuestion = async (data)=>{
+      const token = getToken();
+      try {
+        const response = await fetch(`/api/medicalQuestions`, {
+          method: 'POST',
+          headers: {
+              'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+  
+      
+  
+    const res = await response.json();
+    return res;
+      } catch (error) {
+        console.error('Error Add Schedule:', error)
+      }
+    }
+
+    export const UpdateAnswer = async (data)=>{
+      const token = getToken();
+      if (token){
+        try {
+          const response = await fetch(`/api/medicalQuestions`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify(data),
+          })
+    
+         
+          
+          const res = await response.json();
+      return res;
+        } catch (error) {
+          console.error('Error Add Schedule:', error)
+        }
+      }
+      else {
+        console.error('No Token');
+      }
+    }

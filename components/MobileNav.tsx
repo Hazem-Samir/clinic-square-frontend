@@ -7,28 +7,44 @@ import {
   History,
   CalendarCheck,
   Hospital,
-  Menu,
-  MessageCircleQuestion,
+  MessageCircleQuestion,FlaskConical,Menu
 } from "lucide-react"
 import { useSelectedLayoutSegment } from 'next/navigation'
 import Link from "next/link"
 import { useEffect, useState } from 'react'
-const MobileNav = () => {
+import { getUser } from "@/lib/auth"
+
+
+interface NavItem {
+  href: string;
+  icon: string;
+  label: string;
+}
+
+interface IProps {
+  navItems: NavItem[];
+  role:string;
+}
+
+const iconMap = {
+  Home,
+  History,
+  CalendarCheck,
+  Hospital,
+  MessageCircleQuestion,
+  FlaskConical,
+};
+
+const MobileNav = ({navItems,role}:IProps) => {
   const segment = useSelectedLayoutSegment()
   const [dir, setDir] = useState('ltr')
+
   useEffect(() => {
     // Access document only after component has mounted
     setDir(document.documentElement.dir || 'ltr')
+
+
   }, [])
-
-
-  const navItems = [
-    { href: "/doctor", icon: Home, label: "Home" },
-    { href: "/doctor/reservations-history", icon: History, label: "Reservations History" },
-    { href: "/doctor/my-schedule", icon: CalendarCheck, label: "My Schedule" },
-    { href: "/doctor/medical-questions", icon: MessageCircleQuestion, label: "Medical Questions" },
-
-  ]
 
   return (
     <Sheet>
@@ -43,17 +59,18 @@ const MobileNav = () => {
         </Button>
       </SheetTrigger>
       <SheetContent side={dir === 'rtl' ? 'right' : 'left'} className="w-[80vw] sm:w-[300px] flex flex-col">
-        <nav className="grid gap-1 sm:gap-2 text-sm sm:text-base font-medium  space-y-1 ">
-        <Link
-              href="#"
-              className="flex items-center gap-2 text-base sm:text-lg font-semibold"
-            >
-              <Hospital className="h-5 w-5 sm:h-6 sm:w-6" />
-              <span className="">Clinic Square</span>
-            </Link>
+        <nav className="grid gap-1 sm:gap-2 text-sm sm:text-base font-medium space-y-2">
+          <Link
+            href="#"
+            className="flex items-center gap-2 text-base sm:text-lg font-semibold"
+          >
+            <Hospital className="h-5 w-5 sm:h-6 sm:w-6" />
+            <span className="">Clinic Square</span>
+          </Link>
 
           {navItems.map((item) => {
-            const isActive = segment === item.href.split('/')[2] || (segment === null && item.href === '/doctor')
+            const isActive = segment === item.href.split('/')[2] || (segment === null && item.href===`${role}` )
+            const Icon = iconMap[item.icon as keyof typeof iconMap];
             return (
               <Link
                 key={item.href}
@@ -64,7 +81,7 @@ const MobileNav = () => {
                     : 'text-muted-foreground hover:text-primary hover:bg-muted'
                   }`}
               >
-                <item.icon className="h-3 w-3 sm:h-4 sm:w-4" />
+                <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
                 {item.label}
               </Link>
             )
