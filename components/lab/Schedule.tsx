@@ -16,7 +16,7 @@ import ProtectedRoute from "@/components/ProtectedRoute"
 import { ConvertTimeToDate, DaysOfWeek, DayValue, HandleTimeFormat } from "@/schema/Essentials"
 import { DoctorScheduleSchema, DoctorScheduleValue } from "@/schema/Doctor"
 import { FormDataHandler } from "@/utils/AuthHandlers"
-import { addDay, DeleteDay, UpdateCost, UpdateDay } from "@/lib/doctor/clientApi"
+import { addDay, DeleteDay, UpdateCost, UpdateDay } from "@/lib/lab/clientApi"
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import Spinner from "../Spinner"
@@ -39,7 +39,7 @@ function ScheduleForm({ onSubmit, availableDays, isLoading, initialData }: { onS
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit((data) => onSubmit(data.days[0]))} className="space-y-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 p-1">
           <div className="space-y-2">
             <FormField
               control={form.control}
@@ -155,25 +155,6 @@ export default function Schedule({ days, cost }: IProps) {
     setIsLoading(false);
   }
 
-  const handleSaveSessionCost = async (data: { cost: number }) => {
-    setIsLoading(true);
-    const formData = FormDataHandler({ "schedule.cost": data.cost })
-    const res = await UpdateCost(formData)
-    if (res.success === true) {
-      router.refresh()
-      toast.success(res.message, {
-        duration: 2000,
-        position: 'bottom-center',
-      })
-    } else {
-      res.message.forEach((err: string) => toast.error(err || 'An unexpected error occurred.', {
-        duration: 2000,
-        position: 'bottom-center',
-      }))
-    }
-    setIsLoading(false);
-    setIsSessionCostModalOpen(false)
-  }
 
   const handleDeleteDay = (day: DayValue) => {
     setCurrentEditingItem(day)
@@ -230,7 +211,7 @@ export default function Schedule({ days, cost }: IProps) {
   }
 
   return (
-    <ProtectedRoute allowedRoles={['doctor']}>
+    <>
         <Card className="w-full h-full max-h-[90vh] sm:max-h-[95vh]">
           <CardHeader className="p-4 sm:p-6">
             <CardTitle className="text-xl sm:text-2xl font-bold">{t('title')}</CardTitle>
@@ -242,12 +223,7 @@ export default function Schedule({ days, cost }: IProps) {
                 <div className="space-y-3 sm:space-y-4">
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0">
                     <h3 className="text-base sm:text-lg font-semibold">{t('currentSchedule')}</h3>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-sm sm:text-base font-semibold">{t('sessionCost')}: {cost} EGP</span>
-                      <Button disabled={isLoading} variant="outline" size="icon" onClick={() => setIsSessionCostModalOpen(true)}>
-                        <DollarSign className="h-4 w-4" />
-                      </Button>
-                    </div>
+                 
                   </div>
                   <div className="space-y-2">
                     {days.map((item) => (
@@ -305,32 +281,8 @@ export default function Schedule({ days, cost }: IProps) {
           </DialogContent>
         </Dialog>
 
-        <Dialog open={isSessionCostModalOpen} onOpenChange={setIsSessionCostModalOpen}>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle className="text-lg sm:text-xl">{t('setSessionCost')}</DialogTitle>
-            </DialogHeader>
-            <Form {...costForm}>
-              <form onSubmit={costForm.handleSubmit(handleSaveSessionCost)} className="space-y-4">
-                <FormField
-                  control={costForm.control}
-                  name="cost"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm sm:text-base">{t('sessionCost')}</FormLabel>
-                      <FormControl>
-                        <Input disabled={isLoading} type="number" {...field} onChange={(e) => field.onChange(Number(e.target.value))} className="text-sm sm:text-base" />
-                      </FormControl>
-                      <FormMessage className="text-xs sm:text-sm" />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit" className="w-full text-sm sm:text-base">{isLoading?<Spinner/>:(t('setCost'))}</Button>
-              </form>
-            </Form>
-          </DialogContent>
-        </Dialog>
+      
       <Toaster />
-    </ProtectedRoute>
+      </>
   )
 }

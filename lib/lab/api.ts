@@ -8,7 +8,7 @@ export const getReservationsHistory = async (limit:number,page: number) => {
         page: page.toString(),
         date: new Date().toISOString(),
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/doctor/reservationsHistory?${queryParams}`, {
+      const response = await fetch(`http://localhost:3000/api/lab/reservationsHistory?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -34,7 +34,7 @@ export const getReservationsHistory = async (limit:number,page: number) => {
         startOfDay: startOfDay,
         endOfDay: endOfDay,
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/doctor/reservations?${queryParams}`, {
+      const response = await fetch(`http://localhost:3000/api/lab/reservations?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -48,13 +48,14 @@ export const getReservationsHistory = async (limit:number,page: number) => {
       }
     
       const res = await response.json();
+      console.log(res)
       return res;
     } 
 
     export const getSchedule = async () => {
       const cookieStore = cookies()
       const token = JSON.parse (cookieStore.get('token').value)
-      const response = await fetch(`http://localhost:3000/api/doctor/schedule`, {
+      const response = await fetch(`http://localhost:3000/api/lab/schedule`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -71,14 +72,10 @@ export const getReservationsHistory = async (limit:number,page: number) => {
     } 
 
 
-    export const getQuestions = async (limit:number,page: number) => {
+    export const getAvaliableTests = async () => {
       const cookieStore = cookies()
       const token = JSON.parse (cookieStore.get('token').value)
-      const queryParams = new URLSearchParams({
-        limit: limit.toString(),
-        page: page.toString(),
-      }).toString();
-      const response = await fetch(`http://localhost:3000/api/medicalQuestions?${queryParams}`, {
+      const response = await fetch(`http://localhost:3000/api/lab/tests/available`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -95,27 +92,30 @@ export const getReservationsHistory = async (limit:number,page: number) => {
       return res;
     } 
 
+    
 
 
-    export const getOneQuestion = async (id:string) => {
+
+    export const getMyTests = async (limit:number,page: number) => {
       const cookieStore = cookies()
       const token = JSON.parse (cookieStore.get('token').value)
       const queryParams = new URLSearchParams({
-        id
+        limit: limit.toString(),
+        page: page.toString(),
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/medicalQuestions/questionDetails?${queryParams}`, {
+      const response = await fetch(`http://localhost:3000/api/lab/tests?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
         },
-        cache:"reload",
+          cache:"reload"
+          
       });
     
       if (!response.ok) {
-            throw new Error ('Failed to fetch questinos');
+        throw new Error('Failed to fetch reservations');
       }
     
       const res = await response.json();
-      // (res);
       return res;
     } 

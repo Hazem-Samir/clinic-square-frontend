@@ -29,6 +29,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { getToken } from "@/lib/auth"
 import { getAge } from "@/utils/utils"
 import { useRouter } from 'next/navigation'
+import { shortName } from "@/lib/utils"
 
 interface IProps {
   size: string;
@@ -229,8 +230,8 @@ const handleResrvationModal=()=>{
             <div className="grid gap-2 sm:gap-4 py-2 sm:py-4 space-y-2">
               <div className="flex flex-col items-center gap-2 sm:gap-4 mb-2 sm:mb-4">
                 <Avatar className="h-16 w-16 sm:h-20 sm:w-20">
-                  <AvatarImage src="/avatars/04.png" alt="Avatar" />
-                  <AvatarFallback>WK</AvatarFallback>
+                <AvatarImage src={patient.profilePic} alt={patient.name} />
+                <AvatarFallback>{shortName(patient.name)}</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col items-center">
                   <h2 className="text-lg sm:text-2xl font-bold">{patient.name}</h2>

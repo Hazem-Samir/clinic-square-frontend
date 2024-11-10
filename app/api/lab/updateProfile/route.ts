@@ -14,7 +14,7 @@ export async function PATCH(request: NextRequest) {
       const formData = await request.formData();
     
         try {
-        const apiResponse = await fetch(`${SERVER_URL}/doctor/updateMe`, {
+        const apiResponse = await fetch(`${SERVER_URL}/lab/updateMe`, {
           method: 'PATCH',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -30,7 +30,7 @@ export async function PATCH(request: NextRequest) {
     
         const data = await apiResponse.json();
 
-        return NextResponse.json({ success: true, message: 'Update successful', data });
+        return NextResponse.json({ success: true, message: 'Profile Updated Successfully', data });
         
       } catch (error) {
         console.error('Error:', error.message);
@@ -55,7 +55,7 @@ export async function PUT(request: NextRequest) {
   const body = await request.json();
 
     try {
-    const apiResponse = await fetch(`${SERVER_URL}/doctor/changeMyPassword`, {
+    const apiResponse = await fetch(`${SERVER_URL}/lab/changeMyPassword`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const data = await apiResponse.json()
-    return NextResponse.json({ success: true, message: 'Update successful', data });
+    return NextResponse.json({ success: true, message: 'Password Updated Successfully', data });
     
   } catch (error) {
     console.error('Error:', error.message)

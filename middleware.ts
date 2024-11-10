@@ -56,6 +56,7 @@ export function middleware(request: NextRequest) {
     const userData = JSON.parse(userCookie.value)
     const roleAccess: { [key: string]: string[] } = {
       doctor: ['/doctor'],
+      lab: ['/lab'],
       // Add other roles as needed
     }
 

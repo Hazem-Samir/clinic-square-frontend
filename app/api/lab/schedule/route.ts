@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
 
      
       try {
-        const apiResponse = await fetch(`${SERVER_URL}/doctor/getMe?fields=schedule`, {
+        const apiResponse = await fetch(`${SERVER_URL}/lab/getMe?fields=schedule`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
           }
       
           const data = await apiResponse.json();
-          return NextResponse.json({ success: true, message: 'Rservations Data', data });
+          return NextResponse.json({ success: true, message: 'Lab Schedule Data', data });
       
         } catch (error) {
           console.error('Erroraaa:', error);

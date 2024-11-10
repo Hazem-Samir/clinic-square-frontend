@@ -2,9 +2,10 @@ FROM node:slim
 
 WORKDIR /app
 
-# RUN npm install -g yarn
+COPY . .
+RUN npm install .
 # RUN yarn create vite react-basics
-
+# CMD ["npm","run","dev"]
 EXPOSE 3000
 
 

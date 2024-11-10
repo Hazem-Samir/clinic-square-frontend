@@ -39,7 +39,7 @@ import { cn, shortName } from "@/lib/utils"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { CalendarIcon, ChevronLeft, ChevronRight, PlusCircle, X } from "lucide-react"
 import { FormDataHandler } from "@/utils/AuthHandlers"
-import { PasswordSchema, PasswordValue, ProfileSchema, ProfileValue } from "@/schema/Profile"
+import { PasswordSchema, PasswordValue, DoctorProfileSchema, ProfileValue } from "@/schema/Profile"
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import { UpdatePassword, UpdateProfile } from "@/lib/doctor/clientApi"
@@ -70,7 +70,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
 
 
   const form = useForm<ProfileValue>({
-    resolver: zodResolver(ProfileSchema),
+    resolver: zodResolver(DoctorProfileSchema),
     defaultValues: {
       ...profile,
       profilePic:null,
@@ -102,7 +102,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
   })
   
   async function onSubmitPassword(data: PasswordValue) {
-   
+   setIsLoading(true);
     const res = await UpdatePassword(data)
     if (res.success ===true) {
       toast.success(res.message, {
@@ -214,7 +214,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                     <Label className="text-lg">Address</Label>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {profile.address.map((address, index) => (
-                    <p  key={index} className="text-xl mt-1">{address}</p>
+                    <p  key={index} className="text-xl mt-1">{address} - </p>
 
                       ))}
                     </div>
@@ -223,7 +223,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                     <Label className="text-lg">Phone Numbers</Label>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {profile.phoneNumbers.map((phone, index) => (
-                    <p  key={index} className="text-xl mt-1">{phone}</p>
+                    <p  key={index} className="text-xl mt-1">{phone} - </p>
 
                       ))}
                     </div>

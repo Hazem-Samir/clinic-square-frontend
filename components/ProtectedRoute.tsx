@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getUser, isAuthorized } from '@/lib/auth'
+import Spinner from './Spinner'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
@@ -25,7 +26,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles 
   }, [router, allowedRoles])
 
   if (isLoading) {
-    return <div>Loading...</div> // Or a loading spinner
+    return <div className="flex justify-center items-center  my-auto "><Spinner/></div> // Or a loading spinner
   }
 
   return <>{children}</>

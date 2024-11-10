@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import ProtectedRoute from "@/components/ProtectedRoute"
 import { Skeleton } from "@/components/ui/skeleton"
-import {getSchedule } from '@/lib/doctor/api'
+import {getSchedule } from '@/lib/lab/api'
 import BlurFade from '@/components/ui/blur-fade'
 import Schedule from '@/components/lab/Schedule'
 

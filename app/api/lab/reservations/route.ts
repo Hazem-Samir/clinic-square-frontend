@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
       const endOfDay= searchParams.get('endOfDay')||new Date(LastHourOfToday).toISOString();
 
       try {
-        const apiResponse = await fetch(`${SERVER_URL}/doctor/My-Reservations?page=${page}&limit=${limit}&date[gte]=${startOfDay}&date[lte]=${endOfDay}&state=pending&populate=patient`, {
+        const apiResponse = await fetch(`${SERVER_URL}/lab/My-Reservations?page=${page}&limit=${limit}&date[gte]=${startOfDay}&date[lte]=${endOfDay}&populate=patient&state=new`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
           }
       
           const data = await apiResponse.json();
-          return NextResponse.json({ success: true, message: 'Rservations Data', data });
+          return NextResponse.json({ success: true, message: 'Lab Rservations Data', data });
       
         } catch (error) {
           console.error('Erroraaa:', error);
@@ -60,12 +60,12 @@ export async function GET(request: NextRequest) {
         }
        
         const searchParams = request.nextUrl.searchParams
-        const id=searchParams.get('ID');
+        const RID=searchParams.get('RID');
         
         const body = await request.json();
       
           try {
-          const apiResponse = await fetch(`${SERVER_URL}/doctor-Reservation/${id}`, {
+          const apiResponse = await fetch(`${SERVER_URL}/lab-Reservation/${RID}`, {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',

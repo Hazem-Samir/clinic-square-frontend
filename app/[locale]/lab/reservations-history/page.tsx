@@ -1,12 +1,13 @@
 import { Suspense } from 'react'
 import ProtectedRoute from "@/components/ProtectedRoute"
 import { Skeleton } from "@/components/ui/skeleton"
-import { getReservationsHistory } from '@/lib/doctor/api'
+import { getReservationsHistory } from '@/lib/lab/api'
 import ReservationsHistoryTable from '@/components/lab/ReservationsHisotryTable'
 import BlurFade from '@/components/ui/blur-fade'
 
 async function ReservationsData({ page }: { page: number }) {
-  const { data: reservations } = await getReservationsHistory(5,page)
+  const { data: reservations } = await getReservationsHistory(7,page);
+  console.log(reservations)
   return (
     <ReservationsHistoryTable 
       reservations={reservations.data}

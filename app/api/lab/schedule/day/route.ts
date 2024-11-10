@@ -15,7 +15,7 @@ export async function PUT(request: NextRequest) {
 
       try {
     const body = await request.json();
-    const apiResponse = await fetch(`${SERVER_URL}/doctor/update-day`, {
+    const apiResponse = await fetch(`${SERVER_URL}/lab/update-day`, {
       method: 'PUT',
       headers: {
       'Authorization': `Bearer ${token}`,
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
 
       try {
     const body = await request.json();
-    const apiResponse = await fetch(`${SERVER_URL}/doctor/add-day`, {
+    const apiResponse = await fetch(`${SERVER_URL}/lab/add-day`, {
       method: 'POST',
       headers: {
       'Authorization': `Bearer ${token}`,
@@ -99,7 +99,7 @@ export async function DELETE(request: NextRequest) {
 
       try {
     const body = await request.json();
-    const apiResponse = await fetch(`${SERVER_URL}/doctor/delete-schedule-day`, {
+    const apiResponse = await fetch(`${SERVER_URL}/lab/delete-schedule-day`, {
       method: 'DELETE',
       headers: {
       'Authorization': `Bearer ${token}`,

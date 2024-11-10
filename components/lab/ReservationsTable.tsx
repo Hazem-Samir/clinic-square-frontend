@@ -55,7 +55,7 @@ export default function ReservationsTable({reservations, currentPage, totalPages
 
   const handlePageChange = (newPage: number) => {
     setIsLoading(true);
-    router.push(`doctor?page=${newPage}&date=${currentDate}`);
+    router.push(`lab?page=${newPage}&date=${currentDate}`);
     setIsLoading(false);
   };
 
@@ -137,7 +137,7 @@ export default function ReservationsTable({reservations, currentPage, totalPages
                 </p>
               </div>
               <div className="ltr:ml-auto rtl:mr-auto font-medium">
-                <ShowReservation size="sm" patient={reservation.patient} currentPage={currentPage} currentDate={currentDate} RID={reservation.id}/>
+                <ShowReservation size="sm" patient={reservation.patient} currentPage={currentPage} currentDate={currentDate} RID={reservation.id} requestedTests={reservation.requestedTests}/>
               </div>
             </div>
           ))

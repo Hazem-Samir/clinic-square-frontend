@@ -5,10 +5,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import SearchBar from "@/components/ui/SearchBar"
-import MedicalDetails from "../MedicalDetails"
+import MedicalDetails from "../doctor/MedicalDetails"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { EndReservationValues } from '@/schema/DoctorReservation'
 import { shortName } from '@/lib/utils'
+import ReservationDetails from './ReservationDetails'
 
 
 type IProps = {
@@ -50,7 +51,7 @@ export default function ReservationsHistoryTable({
                 </p>
               </div>
               <div className="ltr:ml-auto rtl:mr-auto font-medium">
-                <MedicalDetails size="sm"  reservation={reservation}/>
+                <ReservationDetails size="sm"  reservation={reservation}/>
               </div>
             </div>
           ))}

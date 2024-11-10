@@ -39,16 +39,17 @@ import { cn, shortName } from "@/lib/utils"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { CalendarIcon, ChevronLeft, ChevronRight, PlusCircle, X } from "lucide-react"
 import { FormDataHandler } from "@/utils/AuthHandlers"
-import { PasswordSchema, PasswordValue, ProfileSchema, ProfileValue } from "@/schema/Profile"
+import { PasswordSchema, PasswordValue, LabProfileSchema, ProfileValue } from "@/schema/Profile"
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
-import { UpdatePassword, UpdateProfile } from "@/lib/doctor/clientApi"
+import { UpdatePassword, UpdateProfile } from "@/lib/lab/clientApi"
 import { Textarea } from "../ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Label } from "../ui/label"
 import { getAge } from "@/utils/utils"
 import { removeUser } from "@/lib/auth"
+import Spinner from "../Spinner"
 
 interface Iimages {
   profilePic: File | string | null;
@@ -59,23 +60,20 @@ interface IProps {
   profile: ProfileValue;
 }
 
-export default function DoctorProfileUpdate({ profile }: IProps) {
+export default function LabProfileUpdate({ profile }: IProps) {
   const [isOpenUpdateProfile, setIsOpenUpdateProfile] = useState(false)
   const [isOpenUpdatePassword, setIsOpenUpdatePassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [year, setYear] = useState(new Date().getFullYear())
-  const [month, setMonth] = useState(new Date().getMonth())
   const [images, setImages] = useState<Iimages>({ profilePic: null, license: [] })
   const router = useRouter();
 
 
   const form = useForm<ProfileValue>({
-    resolver: zodResolver(ProfileSchema),
+    resolver: zodResolver(LabProfileSchema),
     defaultValues: {
       ...profile,
       profilePic:null,
       license:[],
-      dateOfBirth: new Date(profile.dateOfBirth),
     },
   })
 
@@ -102,7 +100,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
   })
   
   async function onSubmitPassword(data: PasswordValue) {
-   
+   setIsLoading(true);
     const res = await UpdatePassword(data)
     if (res.success ===true) {
       toast.success(res.message, {
@@ -122,6 +120,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
     setIsOpenUpdateProfile(false)
   }
   async function onSubmit(data: ProfileValue) {
+    setIsLoading(true);
     if(!data.profilePic){
       delete data.profilePic;
     }
@@ -161,17 +160,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
     }
   }
 
-  const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i)
-  const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ]
 
-  const getDaysInMonth = (year: number, month: number) => {
-    return new Date(year, month + 1, 0).getDate()
-  }
-
-  const days = Array.from({ length: getDaysInMonth(year, month) }, (_, i) => i + 1)
 
   return (
 
@@ -195,26 +184,14 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                   </div>
                 </div>
                 <div className="space-y-6">
-                <div>
-                    <Label className="text-lg">About Me</Label>
-                    <p   className="text-xl mt-1">{profile.about}</p>
-
-                  </div>
-                  <div>
-                    <Label className="text-lg">Age</Label>
-                    <p   className="text-xl mt-1">{getAge(profile.dateOfBirth)}</p>
-
-                  </div>
-                  <div>
-                    <Label className="text-lg">Gender</Label>
-                    <p   className="text-xl mt-1">{profile.gender}</p>
-
-                  </div>
+                
+                  
+                 
                   <div>
                     <Label className="text-lg">Address</Label>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {profile.address.map((address, index) => (
-                    <p  key={index} className="text-xl mt-1">{address}</p>
+                    <p  key={index} className="text-xl mt-1">{address} - </p>
 
                       ))}
                     </div>
@@ -223,7 +200,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                     <Label className="text-lg">Phone Numbers</Label>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {profile.phoneNumbers.map((phone, index) => (
-                    <p  key={index} className="text-xl mt-1">{phone}</p>
+                    <p  key={index} className="text-xl mt-1">{phone} - </p>
 
                       ))}
                     </div>
@@ -233,7 +210,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                     <Label className="text-lg">License </Label>
                     <div className="flex flex-wrap gap-4 mt-2">
                       {profile.license.map((pic, index) => (
-                        <Image key={index} src={pic} alt={`License ${index + 1}`} width={192} height={144} className=" object-cover rounded" />
+                        <Image  key={index} priority src={pic} alt={`License ${index + 1}`} width={192} height={144} className=" h-auto object-cover rounded" />
                       ))}
                     </div>
                   </div>
@@ -242,11 +219,11 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
 
                 <Dialog open={isOpenUpdateProfile} onOpenChange={setIsOpenUpdateProfile}>
       <DialogTrigger asChild>
-        <Button>Update Profile</Button>
+        <Button  disabled={isLoading}>Update Profile</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Update Doctor Profile</DialogTitle>
+          <DialogTitle>Update Lab Profile</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -264,14 +241,16 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                         <div className="flex items-center space-x-4">
                         <div className="relative w-28 h-20 rounded-full overflow-hidden bg-muted">
                           <Image
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             src={typeof images.profilePic === 'string' ? images.profilePic : images.profilePic instanceof File ? URL.createObjectURL(images.profilePic) : '/placeholder.svg'}
                             alt="Profile"
                             fill
                             style={{objectFit:"cover"}}
-                            // className="rounded-full"
+                            className="h-auto"
                           />
                           </div>
                           <Input
+                          disabled={isLoading}
                             type="file"
                             accept="image/*"
                             onChange={(e) => handleFileChange(e, 'profile')}
@@ -290,7 +269,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                     <FormItem>
                       <FormLabel>Full Name</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input  disabled={isLoading} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -304,182 +283,18 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input {...field} type="email" />
+                        <Input  disabled={isLoading} {...field} type="email" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-     <FormField
-                  control={form.control}
-                  name="about"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>About Me</FormLabel>
-                      <FormControl>
-                      <Textarea
-                aria-describedby="About field"
-                disabled={isLoading}
-                  placeholder="Tell us about you"
-                  {...field}
-                  className="w-full text-xs sm:text-sm"
-                />
-                        {/* <Input {...field} type="text" /> */}
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="gender"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Gender</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a gender" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="male">Male</SelectItem>
-                          <SelectItem value="female">Female</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+    
+         
 
-                <FormField
-                  control={form.control}
-                  name="dateOfBirth"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <FormLabel>Date of birth</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "w-full pl-3 text-left font-normal",
-                                !field.value && "text-muted-foreground"
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, "PPP")
-                              ) : (
-                                <span>Pick a date</span>
-                              )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <div className="p-4 space-y-4 bg-background rounded-lg shadow-lg border border-border space-x-3">
-                            <div className="flex justify-between items-center">
-                              <Select
-                                value={year.toString()}
-                                onValueChange={(value) => setYear(parseInt(value))}
-                              >
-                                <SelectTrigger className="w-[120px]">
-                                  <SelectValue placeholder="Year" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {years.map((y) => (
-                                    <SelectItem key={y} value={y.toString()}>
-                                      {y}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                              <div className="flex items-center">
-                                <Button
-                                  variant="outline"
-                                  size="icon"
-                                  onClick={() => setMonth((prev) => (prev === 0 ? 11 : prev - 1))}
-                                  className="h-7 w-7"
-                                >
-                                  <ChevronLeft className="h-4 w-4" />
-                                </Button>
-                                <div className="w-[100px] text-center font-medium">
-                                  {months[month]}
-                                </div>
-                                <Button
-                                  variant="outline"
-                                  size="icon"
-                                  onClick={() => setMonth((prev) => (prev === 11 ? 0 : prev + 1))}
-                                  className="h-7 w-7"
-                                >
-                                  <ChevronRight className="h-4 w-4" />
-                                </Button>
-                              </div>
-                            </div>
-                            <div className="grid grid-cols-7 gap-2">
-                              {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
-                                <div key={day} className="text-center text-sm font-medium text-muted-foreground">
-                                  {day}
-                                </div>
-                              ))}
-                              {Array.from({ length: new Date(year, month, 1).getDay() }, (_, i) => (
-                                <div key={`empty-${i}`} />
-                              ))}
-                              {days.map((day) => {
-                                const date = new Date(year, month, day);
-                                const isSelected = field.value && format(field.value, "yyyy-MM-dd") === format(date, "yyyy-MM-dd");
-                                const isToday = format(new Date(), "yyyy-MM-dd") === format(date, "yyyy-MM-dd");
-                                return (
-                                  <Button
-                                    key={day}
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => {
-                                      field.onChange(date);
-                                    }}
-                                    className={cn(
-                                      "h-8 w-8 p-0 font-normal",
-                                      isSelected && "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
-                                      isToday && !isSelected && "border border-primary text-primary",
-                                      "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                                    )}
-                                  >
-                                    {day}
-                                  </Button>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        </PopoverContent>
-                      </Popover>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+          
 
-                <FormField
-                  control={form.control}
-                  name="specialization"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Specialization</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a Specialization" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="Dermatologist">Dermatologist</SelectItem>
-                          <SelectItem value="Psychologist">Psychologist</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
+               
                 {phoneFields.map((field, index) => (
                   <FormField
                     key={field.id}
@@ -490,9 +305,10 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                         <FormLabel>{index === 0 ? "Phone Number" : `Phone Number ${index + 1}`}</FormLabel>
                         <FormControl>
                           <div className="flex items-center space-x-2">
-                            <Input {...field} />
+                            <Input  disabled={isLoading} {...field} />
                             {index > 0 && (
                               <Button
+                              disabled={isLoading}
                                 type="button"
                                 variant="outline"
                                 size="icon"
@@ -509,6 +325,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                   />
                 ))}
                 <Button
+                 disabled={isLoading}
                   type="button"
                   variant="outline"
                   size="sm"
@@ -528,9 +345,10 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                         
                         <FormControl>
                           <div className="flex items-center space-x-2">
-                            <Input {...field} />
+                            <Input  disabled={isLoading} {...field} />
                             {index > 0 && (
                               <Button
+                              disabled={isLoading}
                                 type="button"
                                 variant="outline"
                                 size="icon"
@@ -547,6 +365,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                   />
                 ))}
                 <Button
+                 disabled={isLoading}
                   type="button"
                   variant="outline"
                   size="sm"
@@ -572,7 +391,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                                   alt={`License ${index + 1}`}
                                   width={100}
                                   height={75}
-                                  className="rounded"
+                                  className="rounded  h-auto"
                                 />
                               ))}
                                {/* {images.license.map((file, index) => (
@@ -588,13 +407,14 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                             </div>
                             <ScrollBar orientation="horizontal" />
                           </ScrollArea>
-                          <Button type="button" variant="outline" size="sm" className="text-xs sm:text-sm">
+                          <Button  disabled={isLoading} type="button" variant="outline" size="sm" className="text-xs sm:text-sm">
                             <label htmlFor="license" className="flex w-full h-full items-center cursor-pointer">
                               <PlusCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                               Upload License Photo
                             </label>
                           </Button>
                           <Input
+                           disabled={isLoading}
                             id="license"
                             type="file"
                             accept="image/*"
@@ -610,7 +430,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                 />
               </div>
             </ScrollArea>
-            <Button type="submit" className="w-full">Update Profile</Button>
+            <Button type="submit" className="w-full">{isLoading?<Spinner/>:"Update Profile"}</Button>
           </form>
         </Form>
         <Toaster />
@@ -619,11 +439,11 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
 
     <Dialog open={isOpenUpdatePassword} onOpenChange={setIsOpenUpdatePassword}>
       <DialogTrigger asChild>
-        <Button>Update Password</Button>
+        <Button  disabled={isLoading}>Update Password</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Update Doctor Profile</DialogTitle>
+          <DialogTitle>Update Lab Password</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <Form {...passwordForm}>
@@ -640,7 +460,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                     <FormItem>
                       <FormLabel>Current Password</FormLabel>
                       <FormControl>
-                        <Input {...field} type="password"/>
+                        <Input  disabled={isLoading}{...field} type="password"/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -654,7 +474,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                     <FormItem>
                       <FormLabel>New Password</FormLabel>
                       <FormControl>
-                        <Input {...field} type="password" />
+                        <Input  disabled={isLoading}{...field} type="password" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -667,7 +487,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                     <FormItem>
                       <FormLabel>Confirm New Password</FormLabel>
                       <FormControl>
-                        <Input {...field} type="password" />
+                        <Input  disabled={isLoading} {...field} type="password" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -678,7 +498,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
               
               </div>
             </ScrollArea>
-            <Button type="submit" className="w-full">Update Password</Button>
+            <Button type="submit" className="w-full">{isLoading?<Spinner/>:"Update Password"}</Button>
           </form>
         </Form>
             <Toaster />
