@@ -4,39 +4,54 @@ import ProtectedRoute from "@/components/ProtectedRoute"
 import { Skeleton } from "@/components/ui/skeleton"
 import BlurFade from '@/components/ui/blur-fade'
 import ReservationsTable from '@/components/lab/ReservationsTable'
-import Dashboard from '@/components/Charts/Dashboard'
+import Dashboard from '@/components/lab/Dashboard'
 import { getReservations } from '@/lib/lab/api'
 
-// async function DashboardData() {
-//   const today = new Date()
-//   const firstDayOfPreviousMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1)
-//   const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
-//   const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999)
-//   const lastDayOfPreviousMonth = new Date(firstDayOfMonth.getTime() - 1)
-//   const startOfDay = new Date(today.setHours(0, 0, 0, 0))
-//   const endOfDay = new Date(today.setHours(23, 59, 59, 999))
+async function DashboardData() {
+  const today = new Date()
+  const firstDayOfPreviousMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1)
+  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999)
+  const lastDayOfPreviousMonth = new Date(firstDayOfMonth.getTime() - 1)
+  const startOfDay = new Date(today.setHours(0, 0, 0, 0))
+  const endOfDay = new Date(today.setHours(23, 59, 59, 999))
 
-//   const [monthResults, todayResults, prevMonthResults] = await Promise.all([
-//     getReservations(10000000, 1, firstDayOfMonth.toISOString(), lastDayOfMonth.toISOString()),
-//     getReservations(10000000, 1, startOfDay.toISOString(), endOfDay.toISOString()),
-//     getReservations(10000000, 1, firstDayOfPreviousMonth.toISOString(), lastDayOfPreviousMonth.toISOString())
-//   ])
-//   console.log("bbb",monthResults.data.results,todayResults.data.results,prevMonthResults.data.results);
-//   return (
-//     <Dashboard 
-//       monthResults={monthResults.data.results}
-//       todayResults={todayResults.data.results}
-//       prevMonthResults={prevMonthResults.data.results}
-//     />
-//   )
-// }
+  const [monthResults, todayResults, prevMonthResults] = await Promise.all([
+    getReservations(10000000, 1, firstDayOfMonth.toISOString(), lastDayOfMonth.toISOString(),"completed"),
+    getReservations(10000000, 1, startOfDay.toISOString(), endOfDay.toISOString(),"new"),
+    getReservations(10000000, 1, firstDayOfPreviousMonth.toISOString(), lastDayOfPreviousMonth.toISOString(),"completed")
+  ])
+  console.log("b",monthResults.data.data[0].requestedTests[0].testDetails.cost)
+ let ThismonthRevenue=0;
+  monthResults.data.data.map((data)=>{
+    data.requestedTests.map((test)=>{
+     ThismonthRevenue+=Number(test.testDetails.cost)
+    })
+  })
+
+  let prevmonthRevenue=0;
+  prevMonthResults.data.data.map((data)=>{
+    data.requestedTests.map((test)=>{
+     ThismonthRevenue+=Number(test.testDetails.cost)
+    })
+  })
+  
+
+  return (
+    <Dashboard 
+      monthResults={ThismonthRevenue}
+      todayResults={todayResults.data.results}
+      prevMonthResults={prevmonthRevenue}
+    />
+  )
+}
 
 async function ReservationsData({ page, date }: { page: number, date: string }) {
   const startOfDay = new Date(date)
   const endOfDay = new Date(startOfDay)
   endOfDay.setHours(23, 59, 59, 999)
 
-  const { data: reservations } = await getReservations(7, page, startOfDay.toISOString(), endOfDay.toISOString())
+  const { data: reservations } = await getReservations(7, page, startOfDay.toISOString(), endOfDay.toISOString(),"new")
 
   return (
     <ReservationsTable 
@@ -59,7 +74,7 @@ export default function DoctorDashboardPage({ searchParams }: { searchParams: { 
       <BlurFade delay={0} inView>
         <div className="flex flex-1 flex-col gap-2 p-2 sm:gap-4 sm:p-4 md:gap-8 md:p-8">
           <Suspense fallback={<Skeleton className="w-full h-[200px]" />}>
-            {/* <DashboardData /> */}
+            <DashboardData />
           </Suspense>
           <Suspense fallback={<Skeleton className="w-full h-[400px]" />}>
             <ReservationsData page={page} date={date} />

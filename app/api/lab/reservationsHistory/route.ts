@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
       const today = new Date().toISOString();
      
       try {
-        const apiResponse = await fetch(`${SERVER_URL}/lab/My-Reservations?page=${page}&limit=${limit}&date[lte]=${today}&state=completed&populate=patient`, {
+        const apiResponse = await fetch(`${SERVER_URL}/lab/My-Reservations?page=${page}&limit=${limit}&date[lte]=${today}&state=completed&populate=patient,requestedTests.testDetails.test=name`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }

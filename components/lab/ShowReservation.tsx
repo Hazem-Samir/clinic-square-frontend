@@ -24,7 +24,6 @@ import { useRouter } from 'next/navigation'
 // Zod schema
 const TestResultSchema = z.object({
   id: z.string(),
-  testName: z.string(),
   testResult: z.array(z.instanceof(File)).min(1, "At least one file is required"),
 })
 
@@ -42,7 +41,7 @@ interface Patient {
 
 interface IProps {
   patient: Patient
-  requestedTests: {id:string, testName: string; testResult: File[] }[]
+  requestedTests: {id:string, testDetails: {test:{name:string}}; testResult: File[] }[]
   RID: string;
 }
 
@@ -142,8 +141,8 @@ export default function ShowReservation({ RID, patient, requestedTests }: IProps
         <form onSubmit={handleSubmit(onSubmit)}>
           {fields.map((field, index) => (
             <div key={field.id} className="mb-4 p-4 border rounded-md">
-              <Label htmlFor={`testName-${index}`} className="text-sm font-medium">
-                {field.testName}
+              <Label  className="text-sm font-medium">
+                {field.testDetails.test.name}
               </Label>
               <div className="mt-2 space-y-2">
                 <Input

@@ -16,8 +16,8 @@ const Dashboard =({monthResults,todayResults,prevMonthResults}:IProps)=>{
   const cookieStore = cookies();
   const userCookie = cookieStore.get('user'); // Assuming the user info is stored in 'user' cookie
   const  user = JSON.parse(userCookie.value); 
-  const profit =(user.schedule.cost*monthResults)-(user.schedule.cost*prevMonthResults);
-  const profitPercentage = prevMonthResults!==0?((user.schedule.cost*monthResults-user.schedule.cost*prevMonthResults)/(prevMonthResults*user.schedule.cost))*100: 100
+  const profit =(monthResults)-(prevMonthResults);
+  const profitPercentage = prevMonthResults!==0?((monthResults-prevMonthResults)/(prevMonthResults))*100: 100
       return(
         <div className="grid gap-2 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
   <Card x-chunk="dashboard-01-chunk-0">
@@ -28,7 +28,7 @@ const Dashboard =({monthResults,todayResults,prevMonthResults}:IProps)=>{
               <Banknote className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">    {monthResults?  <NumberTicker value={user.schedule.cost*monthResults} />:0}EGP</div>
+              <div className="text-2xl font-bold">    {monthResults?  <NumberTicker value={monthResults} />:0}EGP</div>
               <p className="text-xs text-muted-foreground">
                This Month
               </p>
@@ -64,7 +64,7 @@ const Dashboard =({monthResults,todayResults,prevMonthResults}:IProps)=>{
           {/* <NumberTicker value={todayResults} /> */}
           </div>
           <p className="text-xs text-muted-foreground">
-           Today
+           Waiting Today
           </p>
         </CardContent>
       </Card>

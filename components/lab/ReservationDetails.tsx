@@ -52,7 +52,7 @@ export default function ReservationDetails({ reservation }: IProps) {
                   {test.testResult.length > 0 ? (
                     <ScrollArea className="w-full whitespace-nowrap rounded-md border">
                       <div className="flex justify-center mt-2">
-                      <h4 className=" text-sm font-medium">{test.testName}</h4>
+                      <h4 className=" text-sm font-medium">{test.testDetails.test.name}</h4>
                       </div>
                       <div className="flex w-max space-x-4 p-4">
                         {test.testResult.map((result, index) => (

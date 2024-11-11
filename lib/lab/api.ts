@@ -25,14 +25,15 @@ export const getReservationsHistory = async (limit:number,page: number) => {
     }
 
     
-  export const getReservations = async (limit:number,page: number, startOfDay: string,endOfDay:string) => {
+  export const getReservations = async (limit:number,page: number, startOfDay: string,endOfDay:string,state:string) => {
       const cookieStore = cookies()
       const token = JSON.parse (cookieStore.get('token').value)
       const queryParams = new URLSearchParams({
         limit: limit.toString(),
         page: page.toString(),
-        startOfDay: startOfDay,
-        endOfDay: endOfDay,
+        startOfDay,
+        endOfDay,
+        state,
       }).toString();
       const response = await fetch(`http://localhost:3000/api/lab/reservations?${queryParams}`, {
         method: 'GET',

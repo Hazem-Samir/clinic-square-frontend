@@ -18,12 +18,13 @@ export async function GET(request: NextRequest) {
       const searchParams = request.nextUrl.searchParams
       const page = parseInt(searchParams.get('page') || '1',10)
       const limit=parseInt(searchParams.get('limit')||'5',10);
+      const state=searchParams.get('state')||'pending';
       const startOfDay = searchParams.get('startOfDay')|| new Date().toISOString();
       const LastHourOfToday = searchParams.get('startOfDay')|| new Date().setHours(23, 59, 59, 999);
       const endOfDay= searchParams.get('endOfDay')||new Date(LastHourOfToday).toISOString();
 
       try {
-        const apiResponse = await fetch(`${SERVER_URL}/doctor/My-Reservations?page=${page}&limit=${limit}&date[gte]=${startOfDay}&date[lte]=${endOfDay}&state=pending&populate=patient`, {
+        const apiResponse = await fetch(`${SERVER_URL}/doctor/My-Reservations?page=${page}&limit=${limit}&date[gte]=${startOfDay}&date[lte]=${endOfDay}&state=${state}&populate=patient`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }

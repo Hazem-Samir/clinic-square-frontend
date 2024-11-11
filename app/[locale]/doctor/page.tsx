@@ -4,7 +4,7 @@ import ProtectedRoute from "@/components/ProtectedRoute"
 import { Skeleton } from "@/components/ui/skeleton"
 import BlurFade from '@/components/ui/blur-fade'
 import ReservationsTable from '@/components/doctor/ReservationsTable'
-import Dashboard from '@/components/Charts/Dashboard'
+import Dashboard from '@/components/doctor/Dashboard'
 import { getReservations } from '@/lib/doctor/api'
 
 async function DashboardData() {
@@ -17,9 +17,9 @@ async function DashboardData() {
   const endOfDay = new Date(today.setHours(23, 59, 59, 999))
 
   const [monthResults, todayResults, prevMonthResults] = await Promise.all([
-    getReservations(10000000, 1, firstDayOfMonth.toISOString(), lastDayOfMonth.toISOString()),
-    getReservations(10000000, 1, startOfDay.toISOString(), endOfDay.toISOString()),
-    getReservations(10000000, 1, firstDayOfPreviousMonth.toISOString(), lastDayOfPreviousMonth.toISOString())
+    getReservations(10000000, 1, firstDayOfMonth.toISOString(), lastDayOfMonth.toISOString(),"completed"),
+    getReservations(10000000, 1, startOfDay.toISOString(), endOfDay.toISOString(),"pending"),
+    getReservations(10000000, 1, firstDayOfPreviousMonth.toISOString(), lastDayOfPreviousMonth.toISOString(),"completed")
   ])
   return (
     <Dashboard 
@@ -35,7 +35,7 @@ async function ReservationsData({ page, date }: { page: number, date: string }) 
   const endOfDay = new Date(startOfDay)
   endOfDay.setHours(23, 59, 59, 999)
 
-  const { data: reservations } = await getReservations(5, page, startOfDay.toISOString(), endOfDay.toISOString())
+  const { data: reservations } = await getReservations(5, page, startOfDay.toISOString(), endOfDay.toISOString(),"pending")
 
   return (
     <ReservationsTable 
