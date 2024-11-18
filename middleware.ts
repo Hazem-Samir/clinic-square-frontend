@@ -39,6 +39,9 @@ export function middleware(request: NextRequest) {
         case 'lab':
           return NextResponse.redirect(new URL(`/${locale}/lab`, request.url))
         break;
+        case 'patient':
+          return NextResponse.redirect(new URL(`/${locale}/patient`, request.url))
+        break;
       default:
         break;
     }
@@ -57,6 +60,7 @@ export function middleware(request: NextRequest) {
     const roleAccess: { [key: string]: string[] } = {
       doctor: ['/doctor'],
       lab: ['/lab'],
+      patient: ['/patient'],
       // Add other roles as needed
     }
 
