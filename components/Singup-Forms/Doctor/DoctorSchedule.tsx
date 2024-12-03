@@ -25,7 +25,7 @@ import {
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation'
 
-import {  DoctorValue, DoctorScheduleSchema, DoctorScheduleValue } from "@/schema/Doctor"
+import {  DoctorValue, DoctorScheduleschema, DoctorScheduleschemaValue } from "@/schema/Doctor"
 import { FormDataHandler, onSignupSubmit } from "@/utils/AuthHandlers"
 import { DaysOfWeek } from "@/schema/Essentials"
 import Spinner from "@/components/Spinner"
@@ -37,13 +37,13 @@ interface IProps {
   onBack: () => void;
 }
 
-export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
+export default function DoctorScheduleschema({ role ,prevData,onBack}: IProps) {
   const router = useRouter()
 
   const [isLoading,SetIsLoading]=useState(false);
 
-  const form = useForm<DoctorScheduleValue>({
-    resolver: zodResolver(DoctorScheduleSchema),
+  const form = useForm<DoctorScheduleschemaValue>({
+    resolver: zodResolver(DoctorScheduleschema),
     defaultValues: {
       days: [{ day: "monday", startTime: "", endTime: "", limit: 1 }],
       cost: 0,
@@ -65,7 +65,7 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
 
 
 
-  const onSubmitHandler=async (data:DoctorScheduleValue)=>{
+  const onSubmitHandler=async (data:DoctorScheduleschemaValue)=>{
     SetIsLoading(true);
     const AllData={...prevData,role,schedule:{...data}}
     const formData=FormDataHandler(AllData);

@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import ProtectedRoute from "@/components/ProtectedRoute"
 import { Skeleton } from "@/components/ui/skeleton"
 import BlurFade from '@/components/ui/blur-fade'
-import UserProfile from '@/components/doctor/Profile'
+import UserProfile from '@/components/patient/Profile'
 import { cookies } from 'next/headers'; // Import cookies function from Next.js
 
 async function ProfileData() {
@@ -20,7 +20,7 @@ async function ProfileData() {
 export default function Page() {
   
   return (
-    <ProtectedRoute allowedRoles={['doctor']}>
+    <ProtectedRoute allowedRoles={['patient']}>
 
 
       <main className="flex flex-1 flex-col gap-2 p-5 sm:gap-4 sm:p-4 md:gap-8 md:p-8">

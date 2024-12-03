@@ -21,7 +21,6 @@ async function DashboardData() {
     getReservations(10000000, 1, startOfDay.toISOString(), endOfDay.toISOString(),"new"),
     getReservations(10000000, 1, firstDayOfPreviousMonth.toISOString(), lastDayOfPreviousMonth.toISOString(),"completed")
   ])
-  console.log("b",monthResults.data.data[0].requestedTests[0].testDetails.cost)
  let ThismonthRevenue=0;
   monthResults.data.data.map((data)=>{
     data.requestedTests.map((test)=>{

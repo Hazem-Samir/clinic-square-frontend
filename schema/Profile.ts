@@ -31,6 +31,19 @@ export const DoctorProfileSchema = z.object({
           })])),
     })
 
+    export const PatientProfileSchema = z.object({
+      name: z.string().min(2, "Name must be at least 2 characters"),
+      email: z.string().email("Invalid email address"),
+      gender: z.enum(["male", "female"]),
+      dateOfBirth: z.date(),
+      phoneNumbers: z.array(z.string().min(1, "Phone number is required")),
+      address: z.array(z.string().min(1, "Address is required")),
+      profilePic: z.union([z.string(), z.custom<File>(ImageHandler, {
+            message: 'Invalid image file. Must be JPEG, PNG, or GIF and less than 5MB.',
+          })]).nullish(),
+  
+    })
+
     export const PasswordSchema = z.object({
      
       currentPassword: z.string().min(6, "Password must be at least 8 characters"),
@@ -40,5 +53,8 @@ export const DoctorProfileSchema = z.object({
       message: "Passwords do not match",
       path: ["passwordConfirm"],
     });
-    export type ProfileValue = z.infer<typeof ProfileSchema>
+    type DoctorProfileValue = z.infer<typeof DoctorProfileSchema>
+    type PateintProfileValue = z.infer<typeof PatientProfileSchema>
+    type LabProfileValue = z.infer<typeof LabProfileSchema>
+    export type ProfileValue= DoctorProfileValue|PateintProfileValue|LabProfileValue;
     export type PasswordValue = z.infer<typeof PasswordSchema>

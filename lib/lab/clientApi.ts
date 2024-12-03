@@ -99,7 +99,7 @@ export const addDay = async (data)=>{
       if (token){
         try {
           const response = await fetch(`/api/lab/updateProfile`, {
-            method: 'PUT',
+            method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,

@@ -25,6 +25,7 @@ import { shortName } from "@/lib/utils"
 import { EndReservationValues } from "@/schema/DoctorReservation"
 import { useRouter } from 'next/navigation'
 import ShowReservation from "./ShowReservation"
+import Pagination from "../Pagination"
 
 interface IProps {
   reservations: EndReservationValues[];
@@ -137,14 +138,14 @@ export default function ReservationsTable({reservations, currentPage, totalPages
                 </p>
               </div>
               <div className="ltr:ml-auto rtl:mr-auto font-medium">
-                <ShowReservation size="sm" patient={reservation.patient} currentPage={currentPage} currentDate={currentDate} RID={reservation.id}/>
+                <ShowReservation size="sm" reservation={reservation}  consultaion={reservation.report}  currentPage={currentPage} currentDate={currentDate} RID={reservation.id}/>
               </div>
             </div>
           ))
         )}
       </CardContent>
       
-      <div className="flex justify-center items-center p-4 gap-4">
+      {/* <div className="flex justify-center items-center p-4 gap-4">
         <Button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1 || isLoading}
@@ -164,7 +165,9 @@ export default function ReservationsTable({reservations, currentPage, totalPages
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
-      </div>
+      </div> */}
+      <Pagination isLoading={isLoading} currentPage={currentPage} currentDate={currentDate} totalPages={totalPages} DataExist={reservations.length} handlePageChange={handlePageChange} />
+
     </Card>
   )
 }

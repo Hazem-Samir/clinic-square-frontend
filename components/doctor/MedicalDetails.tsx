@@ -17,6 +17,7 @@
 import { EndReservationValues } from "@/schema/DoctorReservation"
 import { getAge } from "@/utils/utils"
 import { shortName } from "@/lib/utils"
+import Link from 'next/link'
     
 interface IProps {
   reservation: EndReservationValues;
@@ -61,12 +62,13 @@ interface IProps {
                 <div>
                 <h3 className="mb-2 text-sm sm:text-lg font-semibold">Files Sent by Patient</h3>
                 <div className="flex flex-wrap gap-2">
-                    {sentFiles.map((file, index) => (
-                         <Button  key={index} variant="outline" size="sm" className="text-xs sm:text-sm">
-                         <File className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                         View {file}
-                       </Button>
-                    ))}
+                   
+                         {reservation.report.results.length>0? reservation.report.results.map((index,result)=>{
+ <Link href={result} index={index} className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground text-xs sm:text-sm h-9 rounded-md px-3" >
+ <File className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+ View File {index}
+</Link>
+                    }):"No Files"}
                   </div>
                 </div>
                 <div>

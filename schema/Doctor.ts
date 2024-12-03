@@ -34,14 +34,14 @@ import { DaySchema } from "./Essentials";
       }),
       password: z.string().min(6, "Password must be at least 8 characters"),
       passwordConfirm: z.string().min(6, "Password must be at least 8 characters"),
-    }).refine((data) => data.password === data.passwordConfirm, {
+    }).refine((data:{password:string,passwordConfirm:string}) => data.password === data.passwordConfirm, {
       message: "Passwords do not match",
       path: ["passwordConfirm"],
     });
 
   
     
-    export const DoctorScheduleSchema = z.object({
+    export const DoctorScheduleschema = z.object({
       days: z.array(DaySchema) .min(1, "At least one day must be scheduled")
       .refine(
         (days) => {
@@ -56,8 +56,33 @@ import { DaySchema } from "./Essentials";
     });
 
     
+
+
+export const ReservationSchema = z.object({
+  diagnose: z.string().min(3, "Diagnosis is required"),
+  medicine: z.array(z.object({
+        name: z.string().min(3, "Medication name is required"),
+        dose: z.string().min(2, "Dose is required"),
+      })),
+      requestedTests: z.array(z.string().min(1, "Test name is required")),
+      consultationDate: z.string().min(1, "Consultation date is required").refine((value:string) => {
+        const inputDate = new Date(value);
+        const today = new Date();
+    
+        // Remove the time part by setting hours, minutes, seconds, and milliseconds to 0
+        today.setHours(0, 0, 0, 0);
+    
+        // Check if the input date is today or in the future
+        return inputDate >= today;
+      }, {
+        message: 'Date must not be before today', // Custom error message
+      }).nullish(),
+})
+
+
     // Export the schema for use in your form
 
     export type DoctorValue =z.infer<typeof DoctorSchema>;
-    export type DoctorScheduleValue =z.infer<typeof DoctorScheduleSchema>;
+    export type DoctorScheduleschemaValue =z.infer<typeof DoctorScheduleschema>;
+   export type ReservationSchema = z.infer<typeof ReservationSchema>
     

@@ -50,6 +50,7 @@ interface IProps {
   Doctor: Doctor;
 }
 
+
 const DoctorInfo = ({ doctor }: { doctor: Doctor }) => (
   <div>
     <h1 className="text-3xl font-bold">{doctor.name}</h1>
@@ -160,6 +161,8 @@ const LicenseInfo = ({ licenses }: { licenses: string[] }) => {
 }
 
 export default function DoctorDetails({ Doctor }: IProps) {
+  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'visa'>('cash')
+
   const [isBookingOpen, setIsBookingOpen] = useState(false)
   const [selectedDay, setSelectedDay] = useState("")
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
@@ -168,13 +171,13 @@ export default function DoctorDetails({ Doctor }: IProps) {
   const [isLoading, setIsLoading] = useState(false)
   const {name:PatientName, phoneNumbers:PatientPhoneNumbers} = getUser();
 
-  const getNextFourDates = useCallback((day: string) => {
+  const getNextFiveDates = useCallback((day: string) => {
     const dayIndex = DaysOfWeek.indexOf(day.toLowerCase());
     const today = new Date();
     const dates: Date[] = [];
     let currentDate = new Date(today);
 
-    while (dates.length < 4) {
+    while (dates.length < 5) {
       if (currentDate.getDay() === dayIndex) {
         dates.push(new Date(currentDate));
       }
@@ -188,15 +191,18 @@ export default function DoctorDetails({ Doctor }: IProps) {
 
   useEffect(() => {
     if (selectedDay) {
-      const dates = getNextFourDates(selectedDay);
+      const dates = getNextFiveDates(selectedDay);
       setAvailableDates(dates);
     }
-  }, [selectedDay, getNextFourDates]);
+  }, [selectedDay, getNextFiveDates]);
 
   const handleBook = useCallback(async() => {
-
-
     setIsLoading(true);
+
+if(paymentMethod==="cash"){
+
+
+
     const res = await BookSession({doctor:Doctor.id,date:new Date(selectedDate.setHours(0,0,0,0)).toISOString()})
     if (res.success ===true) {
       console.log(res.message)
@@ -211,13 +217,20 @@ export default function DoctorDetails({ Doctor }: IProps) {
                   position: 'top-center',
             }))
       }
-      setIsBookingOpen(false);
-      setSelectedDay("");
-      setSelectedDay(null)
+    }
+
+    else if(paymentMethod==="visa"){
+      console.log(new Date(new Date(selectedDate).setUTCHours(0,0,0,0)).toISOString());
+    }
+    setIsBookingOpen(false);
+    setSelectedDay("");
+    setSelectedDay(null)
     setIsLoading(false);
 
-
-  }, [selectedDay, selectedDate, Doctor.id]);
+  }
+  
+  
+  , [selectedDay, selectedDate, Doctor.id]);
 
   const formatDate = useCallback((date: Date) => {
     return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -333,6 +346,60 @@ export default function DoctorDetails({ Doctor }: IProps) {
               </div>
             )}
           </div>
+          <div className="mb-4">
+                      <h3 className="text-lg font-semibold mb-2">Payment Method</h3>
+                      <RadioGroup 
+                        value={paymentMethod} 
+                        onValueChange={(value) => setPaymentMethod(value as 'cash' | 'visa')}
+                        className="flex space-x-4"
+                      >
+                        <div className="flex items-center">
+                          <RadioGroupItem value="cash" id="cash" className="peer sr-only" />
+                          <Label
+                            htmlFor="cash"
+                            className="flex items-center space-x-2 rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="h-4 w-4"
+                            >
+                              <rect width="20" height="12" x="2" y="6" rx="2" />
+                              <circle cx="12" cy="12" r="2" />
+                              <path d="M6 12h.01M18 12h.01" />
+                            </svg>
+                            <span>Cash</span>
+                          </Label>
+                        </div>
+                        <div className="flex items-center">
+                          <RadioGroupItem value="visa" id="visa" className="peer sr-only" />
+                          <Label
+                            htmlFor="visa"
+                            className="flex items-center space-x-2 rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="h-4 w-4"
+                            >
+                              <rect width="20" height="14" x="2" y="5" rx="2" />
+                              <line x1="2" x2="22" y1="10" y2="10" />
+                            </svg>
+                            <span>Visa</span>
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
           <DialogFooter>
             <Button onClick={handleBook} disabled={!selectedDay || !selectedDate}>Confirm Booking</Button>
           </DialogFooter>

@@ -21,6 +21,7 @@ export default async function DoctorDetailsPage({ params }: { params: { locale:s
       <BlurFade delay={0} className="flex-grow p-4 md:p-8 space-y-8 md:space-y-12 max-w-7xl mx-auto w-full bg-background  text-foreground" inView>
         <Suspense fallback={<Skeleton className="w-full h-[600px]" />}>
           <LabDetails  Lab={lab} Tests={LabTests.data.data} currentPage={LabTests.data.paginationResult.current} totalPages={LabTests.data.paginationResult.numberOfPages} />
+          
         </Suspense>
       </BlurFade>
     </ProtectedRoute>

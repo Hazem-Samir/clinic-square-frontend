@@ -7,7 +7,7 @@ import {
   History,
   CalendarCheck,
   Hospital,
-  MessageCircleQuestion,FlaskConical,
+  MessageCircleQuestion,FlaskConical,BriefcaseMedical,
 } from "lucide-react"
 
 interface NavItem {
@@ -28,6 +28,7 @@ const iconMap = {
   Hospital,
   MessageCircleQuestion,
   FlaskConical,
+  BriefcaseMedical,
 };
 
 export default function SideNavBar({navItems,role}: IProps) {

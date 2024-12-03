@@ -34,6 +34,8 @@ interface IProps {
 export default function DoctorsList({ Doctors, currentPage, totalPages }: IProps) {
     const router = useRouter();
 
+console.log(Doctors)
+
       const handlePageChange = (newPage: number) => {
             router.push(`patient/our-doctors?page=${newPage}`);
           };
@@ -61,7 +63,7 @@ export default function DoctorsList({ Doctors, currentPage, totalPages }: IProps
                 <div className="flex items-center mt-2">
                   <Star className="w-4 h-4 text-yellow-400 fill-current" />
                   <span className="ml-1 text-sm">{doctor.rating || 'N/A'}</span>
-                  <span className="ml-1 text-sm text-gray-500">({doctor.reviews || 0} reviews)</span>
+                  {/* <span className="ml-1 text-sm text-gray-500">({doctor.reviews || 0} reviews)</span> */}
                 </div>
                 <Accordion type="single" collapsible className="w-full mt-4">
                   <AccordionItem value="address">

@@ -38,7 +38,7 @@ export default function SearchSection() {
       <Card className="bg-card shadow-xl rounded-3xl border border-border">
         <CardContent className="p-4 sm:p-6 md:p-8">
           <Tabs defaultValue="name" className="w-full ">
-            <TabsList className="grid w-full grid-cols-2 mb-4 p-0">
+            <TabsList className="grid w-full grid-cols-1 md:grid-cols-2 mb-8 md:mb-4 bg-transparent md:space-y-0 space-y-1 md:bg-muted p-0 ">
               <TabsTrigger value="name" className="text-xs  sm:text-sm md:text-base lg:text-lg h-full ">
                 Search for Doctor
               </TabsTrigger>

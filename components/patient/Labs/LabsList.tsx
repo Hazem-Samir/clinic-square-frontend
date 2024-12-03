@@ -10,6 +10,7 @@ import Image from 'next/image'
 import { shortName } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Star, MapPin, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 interface Lab {
   id: string
@@ -28,6 +29,9 @@ interface IProps {
 
 export default function LabsList({currentPage,totalPages,Labs}:IProps) {
   const [searchTerm, setSearchTerm] = useState('')
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter()
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     // In a real application, you would fetch labs based on the search term
@@ -36,6 +40,11 @@ export default function LabsList({currentPage,totalPages,Labs}:IProps) {
     // )
     // setLabs(filteredLabs)
   }
+  const handlePageChange = (newPage: number) => {
+    setIsLoading(true);
+    router.push(`labs?page=${newPage}`);
+    setIsLoading(false);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">

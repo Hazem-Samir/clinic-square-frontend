@@ -126,7 +126,7 @@ export const userTypeSchema = z.object({
       limit: z.coerce.number().int().positive(),
     });
     
-    export const DoctorScheduleSchema = z.object({
+    export const DoctorScheduleschema = z.object({
       days: z.array(DaySchema) .min(1, "At least one day must be scheduled")
       .refine(
         (days) => {
@@ -160,7 +160,7 @@ export const userTypeSchema = z.object({
     export type DoctorValue =z.infer<typeof DoctorSchema>;
     export type LabValue =z.infer<typeof LabSchema>;
     export type PharmacyValue =z.infer<typeof PharmacySchema>;
-    export type DoctorScheduleValue =z.infer<typeof DoctorScheduleSchema>;
+    export type DoctorScheduleschemaValue =z.infer<typeof DoctorScheduleschema>;
     export type LabScheduleValue =z.infer<typeof LabScheduleSchema>;
     export type Accounts = PatientValue| DoctorValue| signupValue3;
     

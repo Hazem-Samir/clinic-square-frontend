@@ -6,19 +6,21 @@ import ReservationsHistoryTable from '@/components/doctor/ReservationsHisotryTab
 import BlurFade from '@/components/ui/blur-fade'
 
 async function ReservationsData({ page }: { page: number }) {
-  const { data: reservations } = await getReservationsHistory(5,page)
+  const { data: reservations } = await getReservationsHistory(10,page);
+  console.log(reservations)
   return (
     <ReservationsHistoryTable 
       reservations={reservations.data}
       currentPage={page}
       totalPages={reservations.paginationResult.numberOfPages}
+      numberOfResults={reservations.results}
   
     />
   )
 }
 
 export default function ReservationsHistory({ searchParams }: { searchParams: { page?: string } }) {
-  const page = Number(searchParams.page) || 1
+  const page = Number(searchParams.page) || 1;
 
   return (
     <ProtectedRoute allowedRoles={['doctor']}>

@@ -25,6 +25,7 @@ import { shortName } from "@/lib/utils"
 import { EndReservationValues } from "@/schema/DoctorReservation"
 import { useRouter } from 'next/navigation'
 import ShowReservation from "./ShowReservation"
+import Pagination from "../Pagination"
 
 interface IProps {
   reservations: EndReservationValues[];
@@ -62,7 +63,7 @@ export default function ReservationsTable({reservations, currentPage, totalPages
   const handleDateChange = (date: Date) => {
     const newDate = format(date, "yyyy-MM-dd");
     setIsLoading(true);
-    router.push(`doctor?page=${currentPage}&date=${newDate}`);
+    router.push(`lab?page=${currentPage}&date=${newDate}`);
     setIsLoading(false);
   };
   
@@ -144,7 +145,7 @@ export default function ReservationsTable({reservations, currentPage, totalPages
         )}
       </CardContent>
       
-      <div className="flex justify-center items-center p-4 gap-4">
+      {/* <div className="flex justify-center items-center p-4 gap-4">
         <Button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1 || isLoading}
@@ -164,7 +165,9 @@ export default function ReservationsTable({reservations, currentPage, totalPages
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
-      </div>
+      </div> */}
+      <Pagination currentPage={currentPage} totalPages={totalPages} currentDate={currentDate} isLoading={isLoading}  handlePageChange={handlePageChange} />
+
     </Card>
   )
 }

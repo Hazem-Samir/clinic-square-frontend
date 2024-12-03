@@ -38,6 +38,7 @@ import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import { getUser } from '@/lib/auth'
 import Spinner from '../Spinner'
+import { ITest, ITestDetails } from '@/interfaces/Lab'
 interface MyTest {
   id: string;
   lab: string;
@@ -47,10 +48,10 @@ interface MyTest {
 }
 
 interface IProps {
-  myTests: MyTest[];
+  data: ITest[];
   currentPage: number;
   totalPages: number;
-  availableTests: {name:string,id:string}[]
+  availableTests: ITestDetails[]
 }
 
 const testFormSchema = z.object({
@@ -64,7 +65,7 @@ const testFormSchema = z.object({
 })
 type TestFormValue =z.infer<typeof testFormSchema>;
 
-export default function TestManagement({myTests, currentPage, totalPages,availableTests}: IProps) {
+export default function TestManagement({data, currentPage, totalPages,availableTests}: IProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false)
   const [testName, setTestName] = useState('')
@@ -149,7 +150,7 @@ const handleUpdateSubmit=(data:TestFormValue)=>{
 
 const handlePageChange = (newPage: number) => {
   setIsLoading(true);
-  router.push(`doctor?page=${newPage}`);
+  router.push(`lab/my-tests?page=${newPage}`);
   setIsLoading(false);
 };
 
@@ -239,7 +240,7 @@ const handleDeleteTest = async() => {
         </Dialog>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        {myTests.map((test) => (
+        {data.map((test) => (
           <div key={test.id} className="bg-card text-card-foreground rounded-lg p-4 shadow-md transition-all hover:shadow-lg border border-border">
             <div className="flex justify-between items-start mb-2">
               <h2 className="text-lg font-semibold">{test.test.name}</h2>

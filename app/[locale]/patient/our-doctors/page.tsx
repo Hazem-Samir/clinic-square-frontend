@@ -9,7 +9,7 @@ import { getAllDoctors } from '@/lib/patient/api'
 
 async function DoctorsData({ page }: { page: number }) {
   const {data:doctors} = await getAllDoctors(10,page);
-  console.log(doctors)
+  console.log(doctors.data)
   return (
    <DoctorsList
    currentPage={page}

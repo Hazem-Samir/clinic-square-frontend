@@ -24,6 +24,218 @@ export const BookSession = async (data:{doctor:string,date:string})=>{
     }
 
 
+    export const GetMyCart = async () => {
+      const token = getToken();
+      const response = await fetch(`http://localhost:3000/api/patient/cart`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      cache:"reload",
+      });
+      
+      if (!response.ok) {
+          throw new Error ('Failed to fetch Cart Data');
+      }
+      
+      const res = await response.json();
+      return res;
+      }
+
+
+      export const RemoveTestFromCart = async (id:string)=>{
+        const token = getToken();
+        const queryParams = new URLSearchParams({
+          id,
+          type:"test"
+        }).toString();
+        try {
+          const response = await fetch(`http://localhost:3000/api/patient/cart?${queryParams}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                // 'Content-Type': 'application/json',
+            },
+          })
+    
+        
+    
+      const res = await response.json();
+      return res;
+        } catch (error) {
+          console.error('Error Add Schedule:', error)
+        }
+      } 
+
+      export const RemoveMedicineFromCart = async (id:string)=>{
+        const token = getToken();
+        const queryParams = new URLSearchParams({
+          id,
+          type:"medicine"
+        }).toString();
+        try {
+          const response = await fetch(`http://localhost:3000/api/patient/cart?${queryParams}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                // 'Content-Type': 'application/json',
+            },
+          })
+    
+        
+    
+      const res = await response.json();
+      return res;
+        } catch (error) {
+          console.error('Error Add Schedule:', error)
+        }
+      } 
+
+
+
+
+
+
+      export const AddToCart   = async (data:{medicineId:string}|{testId:string})=>{
+        const token = getToken();
+        try {
+          const response = await fetch(`/api/patient/cart`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          })
+    
+        
+    
+      const res = await response.json();
+      return res;
+        } catch (error) {
+          console.error('Error Add Schedule:', error)
+        }
+      }
+
+      
+
+      export const updateMedicineQuantity = async (data:{type:string,quantity:number},id:string)=>{
+        const token = getToken();
+        if (token){
+          const queryParams = new URLSearchParams({
+            id,
+          }).toString();
+          try {
+            const response = await fetch(`/api/patient/cart?${queryParams}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`,
+              },
+              body: JSON.stringify(data),
+            })
+      
+           
+            
+            const res = await response.json();
+        return res;
+          } catch (error) {
+            console.error('Error Add Schedule:', error)
+          }
+        }
+        else {
+          console.error('No Token');
+        }
+      }
+      export const MedicineOnlinePayment = async (id:string)=>{
+        const token = getToken();
+        const queryParams = new URLSearchParams({
+          id,
+        }).toString();
+        try {
+          const response = await fetch(`http://localhost:3000/api/patient/cart/checkout/medicine?${queryParams}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                // 'Content-Type': 'application/json',
+            },
+          })
+    
+        
+    
+      const res = await response.json();
+      return res;
+        } catch (error) {
+          console.error('Error Add Schedule:', error)
+        }
+      }  
+
+      export const MedicineCashPayment   = async ()=>{
+        const token = getToken();
+        try {
+          const response = await fetch(`/api/patient/cart/checkout/medicine`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          })
+    
+        
+    
+      const res = await response.json();
+      return res;
+        } catch (error) {
+          console.error('Error Add Schedule:', error)
+        }
+      }
+
+      export const TestOnlinePayment = async (reservationDate:string, id:string)=>{
+        const token = getToken();
+        const queryParams = new URLSearchParams({
+          id,
+          reservationDate,
+        }).toString();
+        try {
+          const response = await fetch(`http://localhost:3000/api/patient/cart/checkout/test?${queryParams}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+          })
+    
+        
+    
+      const res = await response.json();
+      return res;
+        } catch (error) {
+          console.log('Error Add Schedule:', error)
+        }
+      }  
+
+
+      export const TestCashPayment   = async (data:{date:string})=>{
+        const token = getToken();
+        try {
+          const response = await fetch(`/api/patient/cart/checkout/test`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+
+          })
+    
+        
+    
+      const res = await response.json();
+      return res;
+        } catch (error) {
+          console.error('Error Add Schedule:', error)
+        }
+      }
 
     export const UpdateDay = async (day:DayValue)=>{
       const token = getToken();
@@ -71,7 +283,7 @@ export const BookSession = async (data:{doctor:string,date:string})=>{
       const token = getToken();
       if (token){
         try {
-          const response = await fetch(`/api/lab/updateProfile`, {
+          const response = await fetch(`/api/patient/updateProfile`, {
             method: 'PATCH',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -98,8 +310,8 @@ export const BookSession = async (data:{doctor:string,date:string})=>{
       const token = getToken();
       if (token){
         try {
-          const response = await fetch(`/api/lab/updateProfile`, {
-            method: 'PUT',
+          const response = await fetch(`/api/patient/updateProfile/updatePassword`, {
+            method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
@@ -267,6 +479,9 @@ export const UpdateQuestion = async (data:{question:string},questionID:string)=>
     console.error('No Token');
   }
 }
+
+
+
 
 
 

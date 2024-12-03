@@ -15,8 +15,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({  success: false, message: 'Invalid token' }, { status: 401 })
   }
 
-  const searchParams = request.nextUrl.searchParams
-  const page = parseInt(searchParams.get('page') || '1',10)
+  const searchParams = request.nextUrl.searchParams;
+  const page = parseInt(searchParams.get('page') || '1',10);
   const limit=parseInt(searchParams.get('limit')||'5',10);
   try {
     const apiResponse = await fetch(`${SERVER_URL}/questions?populate=patient=name dateOfBirth profilePic gender,answers.doctor=name profilePic specialization&page=${page}&limit=${limit}`, {
@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
           const body = await request.json();
       
       
-          const apiResponse = await fetch(`${SERVER_URL}/questions/answer`, {
+          const apiResponse = await fetch(`${SERVER_URL}/questions`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
           }
       
           const data = await apiResponse.json();
-          return NextResponse.json({ success: true, message: 'Question Answered, Thanks', data });
+          return NextResponse.json({ success: true, message: 'Question Added, Thanks', data });
       
         } catch (error) {
           console.error('Error:', error.message);
@@ -100,11 +100,12 @@ export async function GET(request: NextRequest) {
         if (!token) {
           return NextResponse.json({  success: false, message: 'Invalid token' }, { status: 401 })
         }
-            
+        const searchParams = request.nextUrl.searchParams
+        const questionID = searchParams.get('questionID')||"";
         const body = await request.json();
       
           try {
-          const apiResponse = await fetch(`${SERVER_URL}/questions/answer`, {
+          const apiResponse = await fetch(`${SERVER_URL}/questions/${questionID}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

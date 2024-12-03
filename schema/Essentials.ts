@@ -1,10 +1,10 @@
 import * as z from "zod"
-import { DoctorScheduleValue, DoctorValue } from "./Doctor";
+import { DoctorScheduleschemaValue, DoctorValue } from "./Doctor";
 import { PatientValue } from "./Patient";
 import { LabValue } from "./Lab";
 import { PharmacyValue } from "./Pharmacy";
 
-type Doctor={DoctorValue:DoctorValue,role:string,schedule:DoctorScheduleValue}
+type Doctor={DoctorValue:DoctorValue,role:string,schedule:DoctorScheduleschemaValue}
 export type Accounts = PatientValue| DoctorValue| LabValue | PharmacyValue
 export interface ISignUpData {
   data: Accounts;

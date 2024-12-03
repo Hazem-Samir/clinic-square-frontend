@@ -28,7 +28,31 @@ import { ImageHandler } from "@/utils/AuthHandlers";
       path: ["passwordConfirm"],
     });
  
+    export const MedicineSchema = z.object({
+      id: z.string().min(5, {
+        message: "Medicine name must be at least 5 characters.",
+      }),
+      stock: z.string().refine((val:string) => !isNaN(Number(val)) && Number(val) > 0, {
+        message: "Stock must be a positive number.",
+      }),
+ 
+     
+    })
+    export const NewMedicineSchema = z.object({
+      name: z.string().min(5, {
+        message: "Medicine name must be at least 5 characters.",
+      }),
+      cost: z.string().refine((val:string) => !isNaN(Number(val)) && Number(val) > 0, {
+        message: "Stock must be a positive number.",
+      }),
+      photo:z.custom<File>(ImageHandler, {
+        message: 'Invalid image file. Must be JPEG, PNG, or GIF and less than 5MB.',
+      }),
+     
+    })
     
+   export type MedicineValue = z.infer<typeof MedicineSchema>;
+   export type NewMedicineValue = z.infer<typeof NewMedicineSchema>;
     
     // Export the schema for use in your form
 

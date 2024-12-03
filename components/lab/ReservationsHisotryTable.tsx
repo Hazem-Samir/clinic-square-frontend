@@ -10,6 +10,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { EndReservationValues } from '@/schema/DoctorReservation'
 import { shortName } from '@/lib/utils'
 import ReservationDetails from './ReservationDetails'
+import Pagination from '../Pagination'
 
 
 type IProps = {
@@ -24,7 +25,6 @@ export default function ReservationsHistoryTable({
   totalPages
 }: IProps) {
   const router = useRouter()
-
   const handlePageChange = (newPage: number) => {
     router.push(`reservations-history?page=${newPage}`)
   }
@@ -56,7 +56,7 @@ export default function ReservationsHistoryTable({
             </div>
           ))}
         </CardContent>
-        <div className="flex justify-center items-center p-4 gap-4">
+        {/* <div className="flex justify-center items-center p-4 gap-4">
           <Button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
@@ -66,17 +66,18 @@ export default function ReservationsHistoryTable({
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <span className="text-sm font-medium">
-            {currentPage} / {totalPages}
+          {currentPage} / {reservations.length>0? totalPages:1}
           </span>
           <Button
             onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
+            disabled={currentPage === totalPages||reservations.length<=0}
             size="icon"
             variant="outline"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
-        </div>
+        </div> */}
+        <Pagination currentPage={currentPage} totalPages={totalPages}  handlePageChange={handlePageChange} />
       </Card>
   )
 }

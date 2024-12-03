@@ -11,7 +11,7 @@ async function Testsdata({ page }: { page: number }) {
   const {data:availableTests} = await getAvaliableTests();
   return (
     <TestManagement 
-      myTests={myTests.data}
+      data={myTests.data}
       availableTests={availableTests.data}
       currentPage={page}
       totalPages={myTests.paginationResult.numberOfPages}

@@ -20,7 +20,6 @@ export async function GET(request: NextRequest) {
       const page = parseInt(searchParams.get('page') || '1',10)
       const limit=parseInt(searchParams.get('limit')||'5',10);
       const today = new Date().toISOString();
-     
       try {
         const apiResponse = await fetch(`${SERVER_URL}/doctor/My-Reservations?page=${page}&limit=${limit}&date[lte]=${today}&state=completed&populate=patient`, {
           headers: {
@@ -35,6 +34,7 @@ export async function GET(request: NextRequest) {
           }
       
           const data = await apiResponse.json();
+
           return NextResponse.json({ success: true, message: 'Rservations Data', data });
       
         } catch (error) {
