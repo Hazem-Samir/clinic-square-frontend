@@ -11,6 +11,7 @@ import { shortName } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Star, MapPin, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import Pagination from '@/components/Pagination'
 
 interface Pharmacy {
   id: string
@@ -55,7 +56,7 @@ export default function PharmaciesList({currentPage,totalPages,Pharmacies}:IProp
         <div className="flex gap-2">
           <Input
             type="text"
-            placeholder="Search for lab tests..."
+            placeholder="Search for pharmacies medicines..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="flex-grow"
@@ -99,7 +100,7 @@ export default function PharmaciesList({currentPage,totalPages,Pharmacies}:IProp
           </Card>
         ))}
       </div>
-      <div className="flex justify-center items-center p-4 gap-4">
+      {/* <div className="flex justify-center items-center p-4 gap-4">
         <Button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1 || isLoading}
@@ -119,7 +120,8 @@ export default function PharmaciesList({currentPage,totalPages,Pharmacies}:IProp
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
-      </div>
+      </div> */}
+      <Pagination currentPage={currentPage} totalPages={totalPages} handlePageChange={handlePageChange} />
     </div>
   )
 }

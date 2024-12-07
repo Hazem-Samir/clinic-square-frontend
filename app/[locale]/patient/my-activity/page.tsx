@@ -5,16 +5,17 @@ import {getSchedule } from '@/lib/doctor/api'
 import BlurFade from '@/components/ui/blur-fade'
 import Schedule from '@/components/doctor/Schedule'
 import DoctorsList from '@/components/patient/ourDoctors/DoctorsList'
-import { getAllDoctors, getMyDoctorsResrvations } from '@/lib/patient/api'
+import { getAllDoctors, getMyDoctorsResrvations, getMyLabsResrvations, getMyPharmaciesResrvations } from '@/lib/patient/api'
 import MyActivity from '@/components/patient/MyActivity/MyActiviy'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import DoctorAppointments from '@/components/patient/MyActivity/DoctorsAppointments'
+import LabAppointments from '@/components/patient/MyActivity/LabAppointments'
+import PharmacyOrders from '@/components/patient/MyActivity/PharmacyOrders'
 
 type activeTabOptions= "doctors"|"labs"|"pharmacies";
 
 async function MyDoctorsResrvations({ page }: { page: number }) {
   const {data:doctors} = await getMyDoctorsResrvations(10,page);
-  console.log(doctors.data)
   return (
    <DoctorAppointments
    currentPage={page}
@@ -22,9 +23,43 @@ async function MyDoctorsResrvations({ page }: { page: number }) {
    appointments={doctors.data}/>
   )
 }
-export default function MyActivityPage({ searchParams }: { searchParams: { page?: string ,activeTab?:activeTabOptions} }) {
-  const page = Number(searchParams.page) || 1
+
+
+async function MyLabsResrvations({ page }: { page: number }) {
+  const {data:labs} = await getMyLabsResrvations(10,page);
+  return (
+   <LabAppointments
+   currentPage={page}
+   totalPages={labs.paginationResult.numberOfPages}
+   appointments={labs.data}/>
+  )
+}
+
+
+async function MyPharmaciesResrvations({ page }: { page: number }) {
+  const {data:pharmacies} = await getMyPharmaciesResrvations(10,page);
+  return (
+   <PharmacyOrders
+   currentPage={page}
+   totalPages={pharmacies.paginationResult.numberOfPages}
+   orders={pharmacies.data}/>
+  )
+}
+
+interface ISearchParams  { 
+  doctorsPage?: string;
+  labsPage?: string;
+  pharmaciesPage?: string;
+  activeTab?: activeTabOptions;
+};
+
+
+export default function MyActivityPage({ searchParams }: ISearchParams) {
+  const doctorsPage = Number(searchParams.doctorsPage) || 1;
+  const labsPage = Number(searchParams.labsPage) || 1;
+  const pharmaciesPage = Number(searchParams.pharmaciesPage) || 1;
   const activeTab = searchParams.activeTab || "doctors";
+
 
   return (
     <ProtectedRoute allowedRoles={['patient']}>
@@ -41,14 +76,14 @@ export default function MyActivityPage({ searchParams }: { searchParams: { page?
           <TabsTrigger value="pharmacies">Pharmacy Orders</TabsTrigger>
         </TabsList>
         <TabsContent value="doctors">
-      <MyDoctorsResrvations page={page} />
-          {/* <DoctorAppointments /> */}
+      <MyDoctorsResrvations page={doctorsPage} />
         </TabsContent>
         <TabsContent value="labs">
-          {/* <LabAppointments /> */}
+      <MyLabsResrvations page={labsPage} />
+      
         </TabsContent>
         <TabsContent value="pharmacies">
-          {/* <PharmacyOrders /> */}
+      <MyPharmaciesResrvations page={pharmaciesPage} />
         </TabsContent>
       </Tabs>
     </div>

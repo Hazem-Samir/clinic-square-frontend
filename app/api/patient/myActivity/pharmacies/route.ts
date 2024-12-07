@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     
 
       try {
-        const apiResponse = await fetch(`${SERVER_URL}/patient/Patient-reservation?page=${page}&limit=${limit}&populate=doctor=name profilePic specialization gender`, {
+        const apiResponse = await fetch(`${SERVER_URL}/orders?page=${page}&limit=${limit}&populate=pharmacy=name profilePic phoneNumbers,medicines.medicineId.medicine=name photo category`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }

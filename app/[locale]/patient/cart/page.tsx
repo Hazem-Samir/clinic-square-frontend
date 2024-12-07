@@ -331,7 +331,7 @@ export default function CartPage() {
               <Card>
                 <CardContent className="pt-6 text-center">
                   <p className="text-lg mb-4">No medicines in your cart.</p>
-                  <Link href="/pharmacy-search">
+                  <Link href="/patient/pharmacies">
                     <Button>Browse Medicines</Button>
                   </Link>
                 </CardContent>
@@ -428,7 +428,7 @@ export default function CartPage() {
               <Card>
                 <CardContent className="pt-6 text-center">
                   <p className="text-lg mb-4">No tests in your cart.</p>
-                  <Link href="/lab-search">
+                  <Link href="/patient/labs">
                     <Button>Browse Tests</Button>
                   </Link>
                 </CardContent>

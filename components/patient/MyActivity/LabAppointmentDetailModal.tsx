@@ -11,20 +11,27 @@ import { Label } from "@/components/ui/label"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { ImageHandler } from '@/utils/AuthHandlers'
 
-type Appointment = {
-  id: string
-  doctorName: string
-  doctorPhoto: string
-  specialization: string
-  date: string
-  files?: File[]
+interface testDtails {
+  test:{id:string,name:string}
+  preparations:string[]
+  cost:number
+  id:string
+  
+}
+interface ILabReservation {
+  lab:{name:string,id:string,porfilePic:string}
+  id:string
+  state:string
+  requestedTests:{testDetails:testDtails,testResult:string[],id:string}[]
+  date:string
 }
 
-type AppointmentDetailModalProps = {
+
+interface AppointmentDetailModalProps  {
   isOpen: boolean
   onClose: () => void
-  appointment: Appointment | null
-  onUpdate: (updatedAppointment: Appointment) => void
+  appointment: ILabReservation | null
+  onUpdate: (date:string) => void
 }
 
 const formSchema = z.object({
@@ -35,24 +42,15 @@ export default function LabAppointmentDetailModal({ isOpen, onClose, appointment
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      date: appointment?.date || '',
+      date: '',
     },
   })
 
-  useEffect(() => {
-    if (isOpen && appointment) {
-      form.reset({
-        date: appointment.date,
-      })
-    }
-  }, [isOpen, appointment, form])
+
 
   const handleUpdate = (values: z.infer<typeof formSchema>) => {
     if (appointment) {
-      onUpdate({
-        ...appointment,
-        date: values.date,
-      })
+      onUpdate(values.date)
     }
     onClose()
   }
@@ -68,24 +66,18 @@ export default function LabAppointmentDetailModal({ isOpen, onClose, appointment
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-8">
             <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Doctor
+              <div className="flex items-center justify-center ">
+                <Label htmlFor="name" className="text-right text-lg">
+                {appointment.lab.name}
                 </Label>
-                <Input id="name" value={appointment.doctorName} className="col-span-3" readOnly />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="specialization" className="text-right">
-                  Specialization
-                </Label>
-                <Input id="specialization" value={appointment.specialization} className="col-span-3" readOnly />
-              </div>
+              
               <FormField
                 control={form.control}
                 name="date"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-4 items-center gap-4">
-                    <FormLabel className="text-right">Date</FormLabel>
+                    <FormLabel className="text-right">New Date</FormLabel>
                     <FormControl className="col-span-3">
                       <Input type="date" {...field} />
                     </FormControl>

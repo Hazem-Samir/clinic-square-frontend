@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     
 
       try {
-        const apiResponse = await fetch(`${SERVER_URL}/patient/Patient-reservation?page=${page}&limit=${limit}&populate=doctor=name profilePic specialization gender`, {
+        const apiResponse = await fetch(`${SERVER_URL}/patient/Patient-LabReservation?page=${page}&limit=${limit}&populate=lab=name profilePic,requestedTests.testDetails.test=name`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
         const body = await request.formData();
       
           try {
-          const apiResponse = await fetch(`${SERVER_URL}/doctor-Reservation/${id}`, {
+          const apiResponse = await fetch(`${SERVER_URL}/lab-Reservation/${id}`, {
             method: 'PATCH',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -106,7 +106,7 @@ export async function GET(request: NextRequest) {
         const searchParams = request.nextUrl.searchParams
         const id = searchParams.get('id')||""
         try {
-      const apiResponse = await fetch(`${SERVER_URL}/doctor-Reservation/${id}`, {
+      const apiResponse = await fetch(`${SERVER_URL}/lab-Reservation/${id}`, {
         method: 'DELETE',
         headers: {
         'Authorization': `Bearer ${token}`,

@@ -12,11 +12,12 @@ import {
     type CancelModalProps = {
       isOpen: boolean
       onClose: () => void
-      onConfirm: () => void
+      onConfirm: (itemId:string) => void
       itemName: string
+      itemId:string
     }
     
-    export default function CancelModal({ isOpen, onClose, onConfirm, itemName }: CancelModalProps) {
+    export default function CancelModal({ isOpen, onClose, onConfirm, itemName,itemId }: CancelModalProps) {
       return (
         <AlertDialog open={isOpen} onOpenChange={onClose}>
           <AlertDialogContent>
@@ -28,7 +29,7 @@ import {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel onClick={onClose}>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={onConfirm}>Confirm</AlertDialogAction>
+              <AlertDialogAction onClick={()=>{onConfirm(itemId)}}>Confirm</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

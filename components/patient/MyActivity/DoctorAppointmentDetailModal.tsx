@@ -9,25 +9,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { ImageHandler } from '@/utils/AuthHandlers'
+import { FormDataHandler, ImageHandler } from '@/utils/AuthHandlers'
 import { PlusCircle, X, File } from 'lucide-react'
 import Link from 'next/link'
-
-type Appointment = {
-  id: string
-  doctorName: string
-  doctorPhoto: string
-  specialization: string
-  date: string
-  files?: File[]
-}
-
-type AppointmentDetailModalProps = {
-  isOpen: boolean
-  onClose: () => void
-  onUpdate: (updatedAppointment: Appointment) => void
-  appointment:IDoctorReservation|null
-}
 
 interface IDoctorReservation {
   doctor:{name:string,id:string,porfilePic:string,gender:string,specialization:string}
@@ -37,11 +21,22 @@ interface IDoctorReservation {
   date:string
 }
 
+interface AppointmentDetailModalProps  {
+  isOpen: boolean
+  onClose: () => void
+  onUpdate: (data:{date:string,files:File[]}) => void
+  appointment:IDoctorReservation|null
+}
+
+
 
 const formSchema = z.object({
-  date: z.string().min(1, { message: "Date is required" }),
+  date: z.string().optional(),
   files: z.array(z.custom<File>()).optional(),
-})
+}).refine(data => data.date || (data.files && data.files.length > 0), {
+  message: "Either date or files must be provided",
+  path: ['date'], // This will show the error message on the date field
+});
 
 export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointment, onUpdate }: AppointmentDetailModalProps) {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -52,7 +47,6 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
     },
   })
 
-  console.log(appointment)
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "files",
@@ -62,9 +56,21 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
 
   const handleUpdate = (values: z.infer<typeof formSchema>) => {
     if (appointment) {
-     console.log(values)
-    onClose()
-  }
+      if (values.date || (values.files && values.files.length > 0)) {
+        
+        onUpdate({
+          date: values.date || appointment.date,
+          files: values.files || [],
+        });
+
+        onClose();
+      } else {
+        form.setError('date', { 
+          type: 'manual', 
+          message: 'Either date or files must be provided' 
+        });
+      }
+    }
   }
   if (!appointment) return null
 
@@ -131,7 +137,7 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                         multiple
                         onChange={(e) => {
                           const newFiles = Array.from(e.target.files || []);
-                          newFiles.forEach((file) => append({ file }));
+                          newFiles.forEach((file) => append(file ));
                         }}
                       />
                     </FormControl>
@@ -141,7 +147,7 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
               />
               {fields.map((field, index) => (
                 <div key={field.id} className="grid grid-cols-4 items-center gap-4">
-                  <span className="col-start-2 col-span-2">{field.file.name}</span>
+                  <span className="col-start-2 col-span-2">{`File ${index+1}`}</span>
                   <Button
                     type="button"
                     variant="ghost"
@@ -157,7 +163,7 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
               <Button type="button" variant="outline" onClick={onClose}>
                 Cancel
               </Button>
-              <Button type="submit">Update</Button>
+              <Button type="submit" disabled={!form.formState.isValid}>Update</Button>
             </DialogFooter>
           </form>
         </Form>

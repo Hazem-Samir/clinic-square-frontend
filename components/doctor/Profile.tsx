@@ -129,6 +129,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
       delete data.email;
     }
     // setIsLoading(true);
+    console.log(data)
    const formData= FormDataHandler(data);
     const res = await UpdateProfile(formData)
     if (res.success ===true) {

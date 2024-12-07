@@ -3,57 +3,63 @@
 import { useState } from 'react'
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { shortName } from '@/lib/utils'
+import Pagination from '@/components/Pagination'
+import { useRouter } from 'next/navigation'
 
-type PharmacyOrder = {
-  id: string
-  pharmacyName: string
-  pharmacyPhoto: string
-  products: { name: string; price: number; quantity: number }[]
-  date: string
-  totalPrice: number
+
+
+interface medicineDtails {
+  id:string
+  name:string
+  photo:string
+  category:string
+  
 }
 
-export default function PharmacyOrders() {
-  const [orders, setOrders] = useState<PharmacyOrder[]>([
-    { 
-      id: '1', 
-      pharmacyName: 'City Pharmacy', 
-      pharmacyPhoto: '/placeholder.svg', 
-      products: [
-        { name: 'Aspirin', price: 5, quantity: 2 },
-        { name: 'Vitamin C', price: 10, quantity: 1 }
-      ],
-      date: '2023-06-10',
-      totalPrice: 20
-    },
-    { 
-      id: '2', 
-      pharmacyName: 'Health Plus', 
-      pharmacyPhoto: '/placeholder.svg', 
-      products: [
-        { name: 'Antibiotic', price: 15, quantity: 1 },
-        { name: 'Bandages', price: 5, quantity: 2 }
-      ],
-      date: '2023-06-12',
-      totalPrice: 25
-    },
-  ])
+interface IPharmacyReservation {
+  pharmacy:{name:string,id:string,porfilePic:string,phoneNumbers:string[]}
+  id:string
+  state:string
+  medicines:{medicineId:{medicine:medicineDtails},price:number,quantity:number,id:string}[]
+  paymentMethod:string
+  totalCost:string
+}
+
+interface IProps {
+  currentPage:number
+   totalPages:number
+  orders:IPharmacyReservation[];
+}
+
+export default function PharmacyOrders({orders,currentPage,totalPages}:IProps) {
+  const router = useRouter();
+
+const handlePageChange=(newPage:number)=>{
+  router.push(`my-activity?pharmaciesPage=${newPage}&activeTab=pharmacies`);
+}
 
   return (
     <div className="grid gap-4">
       {orders.map((order) => (
         <Card key={order.id} className="w-full">
           <CardContent className="p-4">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
               <div className="flex items-center space-x-4 mb-2 sm:mb-0">
                 <Avatar>
-                  <AvatarImage src={order.pharmacyPhoto} alt={order.pharmacyName} />
-                  <AvatarFallback>{order.pharmacyName[0]}</AvatarFallback>
+                  <AvatarImage src={order.pharmacy.porfilePic} alt={order.pharmacy.name} />
+                  <AvatarFallback>{shortName(order.pharmacy.name)}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <h3 className="font-semibold">{order.pharmacyName}</h3>
-                  <p className="text-sm text-gray-500">Date: {order.date}</p>
+                  <h3 className="font-semibold">{order.pharmacy.name}</h3>
+                  <p className="text-sm text-gray-500">{order.pharmacy.phoneNumbers[0]}</p>
+
                 </div>
+              </div>
+              <div className="flex flex-col items-center" >
+
+              <p className="text-sm text-gray-500">State: {order.state}</p>
+              <p className="text-sm text-gray-500">Pay Method: {order.paymentMethod}</p>
               </div>
             </div>
             <div>
@@ -63,20 +69,28 @@ export default function PharmacyOrders() {
 <h4 className="font-semibold mb-2">Unit Price</h4>
       </div>
               <ul className="space-y-1">
-                {order.products.map((product, index) => (
-                  <li key={index} className="flex justify-between">
-                    <span>{product.name} (x{product.quantity})</span>
-                    <span>${product.price * product.quantity}</span>
+                {order.medicines.map((product, index) => (
+                  <li key={product.id} className="flex justify-between items-center ">
+                    <div className="flex flex-col items-center space-y-1 sm:space-y-0 my-1 sm:flex-row sm:space-x-2 ">
+
+                      <Avatar >
+                  <AvatarImage src={product.medicineId.medicine.photo} alt={product.medicineId.medicine.name} />
+                  <AvatarFallback>{shortName(product.medicineId.medicine.name)}</AvatarFallback>
+                </Avatar>
+                    <span>{product.medicineId.medicine.name} (x{product.quantity})</span>
+                    </div>
+                    <span>{product.price * product.quantity} EGP</span>
                   </li>
                 ))}
               </ul>
             </div>
             <div className="mt-4 text-right font-semibold">
-              Total: ${order.totalPrice}
+              Total: {order.totalCost} EGP
             </div>
           </CardContent>
         </Card>
       ))}
+      <Pagination  currentPage={currentPage} totalPages={totalPages} handlePageChange={handlePageChange} />
     </div>
   )
 }

@@ -6,60 +6,99 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import CancelModal from './CancelModal'
 import LabAppointmentDetailModal from './LabAppointmentDetailModal'
+import toast, { Toaster } from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
+import { CancelLabReservation, UpdateMyLabReservation } from '@/lib/patient/clientApi'
+import { shortName } from '@/lib/utils'
+import { FormDataHandler } from '@/utils/AuthHandlers'
+import { format } from "date-fns"
+import Pagination from '@/components/Pagination'
 
-type LabAppointment = {
-  id: string
-  labName: string
-  labPhoto: string
-  tests: { name: string; price: number }[]
-  date: string
+
+interface testDtails {
+  test:{id:string,name:string}
+  preparations:string[]
+  cost:number
+  id:string
+  
+}
+interface ILabReservation {
+  lab:{name:string,id:string,porfilePic:string,phoneNumbers:string[]}
+  id:string
+  paymentMethod:string
+  state:string
+  totalCost:string
+  requestedTests:{testDetails:testDtails,testResult:string[],id:string}[]
+  date:string
 }
 
-export default function LabAppointments() {
-  const [appointments, setAppointments] = useState<LabAppointment[]>([
-    { 
-      id: '1', 
-      labName: 'Central Lab', 
-      labPhoto: '/placeholder.svg', 
-      tests: [{ name: 'Blood Test', price: 50 }, { name: 'Urine Test', price: 30 }],
-      date: '2023-06-18' 
-    },
-    { 
-      id: '2', 
-      labName: 'City Medical Lab', 
-      labPhoto: '/placeholder.svg', 
-      tests: [{ name: 'X-Ray', price: 100 }],
-      date: '2023-06-25' 
-    },
-  ]);
-  const [detailModalOpen, setDetailModalOpen] = useState(false)
-  const [cancelModalOpen, setCancelModalOpen] = useState(false)
-  const [selectedAppointment, setSelectedAppointment] = useState<LabAppointment | null>(null)
+interface IProps {
+  currentPage:number
+   totalPages:number
+  appointments:ILabReservation[];
+}
 
-  const handleCancel = (appointment: LabAppointment) => {
+
+
+export default function LabAppointments({appointments,currentPage,totalPages}:IProps) {
+ const [detailModalOpen, setDetailModalOpen] = useState(false)
+  const [cancelModalOpen, setCancelModalOpen] = useState(false)
+  const [selectedAppointment, setSelectedAppointment] = useState<ILabReservation | null>(null)
+  const router = useRouter();
+
+  const handleCancel = (appointment: ILabReservation) => {
     setSelectedAppointment(appointment)
     setCancelModalOpen(true)
   }
-
-  const confirmCancel = () => {
+  const confirmCancel = async() => {
     if (selectedAppointment) {
-      setAppointments(appointments.filter(a => a.id !== selectedAppointment.id))
+      const res = await CancelLabReservation(selectedAppointment.id);
+    if (res.success === true) {
+      toast.success(res.message, {
+        duration: 3000,
+        position: 'top-center',
+      });
+      router.push(`my-activity?labsPage=${currentPage}&activeTab=labs`);
+    } else {
+      res.message.forEach((err: string) => toast.error(err || 'An unexpected error occurred.', {
+        duration: 3000,
+        position: 'bottom-center',
+      }));
+    }
     }
     setCancelModalOpen(false)
+    setSelectedAppointment(null)
   }
-
+  const handlePageChange=(newPage:number)=>{
+    router.push(`my-activity?labsPage=${newPage}&activeTab=labs`);
+  }
   
-    const handleShowDetails = (appointment: Appointment) => {
+    const handleShowDetails = (appointment: ILabReservation) => {
       setSelectedAppointment(appointment)
       setDetailModalOpen(true)
     }
 
+    const handleUpdate = async(date:string) => {
+      if(date!==''){
+        const formData=FormDataHandler({date});
+     
   
-    const handleUpdate = (updatedAppointment: Appointment) => {
-      setAppointments(appointments.map(a => a.id === updatedAppointment.id ? updatedAppointment : a))
-      setDetailModalOpen(false)
-      setSelectedAppointment(null)
+      const res = await UpdateMyLabReservation(formData,selectedAppointment.id);
+      if (res.success === true) {
+        toast.success(res.message, {
+          duration: 3000,
+          position: 'top-center',
+        });
+        router.refresh();
+      } else {
+        res.message.forEach((err: string) => toast.error(err || 'An unexpected error occurred.', {
+          duration: 3000,
+          position: 'bottom-center',
+        }));
+      }
     }
+    }
+
   
     const handleCloseDetailModal = () => {
       setDetailModalOpen(false)
@@ -71,16 +110,20 @@ export default function LabAppointments() {
       {appointments.map((appointment) => (
         <Card key={appointment.id} className="w-full">
           <CardContent className="p-4">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
               <div className="flex items-center space-x-4 mb-2 sm:mb-0">
                 <Avatar>
-                  <AvatarImage src={appointment.labPhoto} alt={appointment.labName} />
-                  <AvatarFallback>{appointment.labName[0]}</AvatarFallback>
+                  <AvatarImage src={appointment.lab.porfilePic} alt={appointment.lab.name} />
+                  <AvatarFallback>{shortName(appointment.lab.name)}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <h3 className="font-semibold">{appointment.labName}</h3>
-                  <p className="text-sm text-gray-500">Date: {appointment.date}</p>
+                  <h3 className="font-semibold">{appointment.lab.name}</h3>
                 </div>
+              </div>
+              <div className="flex flex-col items-center" >
+
+              <p className="text-sm text-gray-500">State: {appointment.state}</p>
+              <p className="text-sm text-gray-500">Date: {format(new Date(appointment.date), 'yyyy-MM-dd') }</p>
               </div>
             </div>
             <div>
@@ -90,24 +133,25 @@ export default function LabAppointments() {
               <h4 className="font-semibold mb-2">Price</h4>
                     </div>
               <ul className="space-y-1">
-                {appointment.tests.map((test, index) => (
-                      <li key={index} className="flex justify-between">
-                    <span>{test.name}</span>
-                    <span>${test.price}</span>
+                {appointment.requestedTests.map((test, index) => (
+                      <li key={index} className="flex justify-between items-center">
+                    <span>{test.testDetails.test.name}</span>
+                    <span>{test.testDetails.cost} EGP</span>
                   </li>
                 ))}
               </ul>
                 </div>
                 <div className="mt-4 text-right font-semibold">
-              Total: ${100}
+              Total: {appointment.totalCost} EGP
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex flex-col sm:flex-row justify-start gap-2">
         
             <Button onClick={() => handleShowDetails(appointment)} className="w-full sm:w-auto">Details</Button>
             <Button variant="outline" onClick={() => handleCancel(appointment)} className="w-full sm:w-auto">Cancel</Button>
             {/* <Button variant="outline" onClick={() => handleCancel(appointment)} className="w-full sm:w-auto">Cancel</Button> */}
           </CardFooter>
+          
         </Card>
       ))}
       <CancelModal 
@@ -122,6 +166,8 @@ export default function LabAppointments() {
             appointment={selectedAppointment}
             onUpdate={handleUpdate}
             />
+          <Pagination currentPage={currentPage} totalPages={totalPages} handlePageChange={handlePageChange} />
+
     </div>
   )
 }

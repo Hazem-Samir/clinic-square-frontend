@@ -5,12 +5,11 @@ interface IPrpos {
       handlePageChange:(newPage:number)=>void;
       currentPage: number;
       totalPages: number;
-      currentDate?: string;
       isLoading?: boolean;
       
 };
 
-const Pagination =({handlePageChange,currentPage,currentDate,totalPages,isLoading=false}:IPrpos)=>{
+const Pagination =({handlePageChange,currentPage,totalPages,isLoading=false}:IPrpos)=>{
       return(
             <div className="flex justify-center items-center p-4 gap-4">
         <Button
@@ -22,7 +21,7 @@ const Pagination =({handlePageChange,currentPage,currentDate,totalPages,isLoadin
           <ChevronLeft className="h-4 w-4" />
         </Button>
         <span className="text-sm font-medium">
-          {currentPage} / {totalPages}
+          {currentPage} / {totalPages<=1?1:totalPages}
         </span>
         <Button
           onClick={() => handlePageChange(currentPage + 1)}

@@ -8,17 +8,16 @@ import DoctorAppointmentDetailModal from './DoctorAppointmentDetailModal'
 import CancelModal from './CancelModal'
 import { shortName } from '@/lib/utils'
 import { format } from "date-fns"
+import { CancelDoctorReservation, CancelReservation, UpdateMyDoctorReservation } from '@/lib/patient/clientApi'
+import toast, { Toaster } from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
+import { FormDataHandler } from '@/utils/AuthHandlers'
+import Pagination from '@/components/Pagination'
 
-interface Appointment  {
-  id: string
-  doctorName: string
-  doctorPhoto: string
-  specialization: string
-  date: string
-}
+
 
 interface IDoctorReservation {
-  doctor:{name:string,id:string,porfilePic:string,gender:string,specialization:string}
+  doctor:{name:string,id:string,porfilePic:string,gender:string,specialization:string,phoneNumbers:string[]}
   id:string
   state:string
   report:{diagnose: string|null,requestedTests:string[],results:string[],medicine:string[]}
@@ -32,15 +31,14 @@ interface IProps {
 }
 
 export default function DoctorAppointments({appointments,currentPage,totalPages}:IProps) {
-  // const [appointments, setAppointments] = useState<Appointment[]>([
-  //   { id: '1', doctorName: 'Dr. Smith', doctorPhoto: '/placeholder.svg', specialization: 'Cardiologist', date: '2023-06-15' },
-  //   { id: '2', doctorName: 'Dr. Johnson', doctorPhoto: '/placeholder.svg', specialization: 'Dermatologist', date: '2023-06-20' },
-  // ])
+
+  const router = useRouter();
+
   const [cancelModalOpen, setCancelModalOpen] = useState(false)
   const [detailModalOpen, setDetailModalOpen] = useState(false)
-  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null)
+  const [selectedAppointment, setSelectedAppointment] = useState<IDoctorReservation | null>(null)
 
-  const handleCancel = (appointment: Appointment) => {
+  const handleCancel = (appointment: IDoctorReservation) => {
     setSelectedAppointment(appointment)
     setCancelModalOpen(true)
   }
@@ -49,18 +47,54 @@ export default function DoctorAppointments({appointments,currentPage,totalPages}
     setSelectedAppointment(appointment)
     setDetailModalOpen(true)
   }
-
-  const confirmCancel = () => {
+  const handlePageChange=(newPage:number)=>{
+    router.push(`my-activity?doctorsPage=${newPage}&activeTab=doctors`);
+  }
+  
+  
+  const confirmCancel = async() => {
     if (selectedAppointment) {
-      setAppointments(appointments.filter(a => a.id !== selectedAppointment.id))
+      const res = await CancelDoctorReservation(selectedAppointment.id);
+    if (res.success === true) {
+      toast.success(res.message, {
+        duration: 3000,
+        position: 'top-center',
+      });
+      router.push(`my-activity?doctorsPage=${currentPage}&activeTab=doctors`);
+    } else {
+      res.message.forEach((err: string) => toast.error(err || 'An unexpected error occurred.', {
+        duration: 3000,
+        position: 'bottom-center',
+      }));
+    }
     }
     setCancelModalOpen(false)
     setSelectedAppointment(null)
   }
 
-  const handleUpdate = (updatedAppointment: Appointment) => {
-    console.log(updatedAppointment)
-    setDetailModalOpen(false)
+  const handleUpdate = async(data:{date:string,files:File[]}) => {
+    let formData;
+    if(data.files.length>0){
+      formData=FormDataHandler({date:new Date(data.date).toISOString(),"report.results":data.files});
+    }
+    else {
+
+      formData=FormDataHandler({date:new Date(data.date).toISOString()});
+    }
+
+    const res = await UpdateMyDoctorReservation(formData,selectedAppointment.id);
+    if (res.success === true) {
+      toast.success(res.message, {
+        duration: 3000,
+        position: 'top-center',
+      });
+      router.refresh();
+    } else {
+      res.message.forEach((err: string) => toast.error(err || 'An unexpected error occurred.', {
+        duration: 3000,
+        position: 'bottom-center',
+      }));
+    }
   }
 
   const handleCloseDetailModal = () => {
@@ -84,12 +118,17 @@ export default function DoctorAppointments({appointments,currentPage,totalPages}
                   <p className="text-sm text-gray-500">{appointment.doctor.specialization}</p>
                 </div>
               </div>
+              <div className="flex flex-col items-center" >
+
+              <p className="text-sm text-gray-500">State: {appointment.state}</p>
               <p className="text-sm text-gray-500">Date: {format(new Date(appointment.date), 'yyyy-MM-dd') }</p>
+              </div>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col sm:flex-row justify-start gap-2">
             <Button onClick={() => handleShowDetails(appointment)} className="w-full sm:w-auto">Details</Button>
             <Button variant="outline" onClick={() => handleCancel(appointment)} className="w-full sm:w-auto">Cancel</Button>
+         <Toaster />
           </CardFooter>
         </Card>
       ))}
@@ -104,12 +143,13 @@ export default function DoctorAppointments({appointments,currentPage,totalPages}
       />
       {selectedAppointment && (
         <DoctorAppointmentDetailModal 
-          isOpen={detailModalOpen}
-          onClose={handleCloseDetailModal}
-          appointment={selectedAppointment}
-          onUpdate={handleUpdate}
+        isOpen={detailModalOpen}
+        onClose={handleCloseDetailModal}
+        appointment={selectedAppointment}
+        onUpdate={handleUpdate}
         />
       )}
+      <Pagination currentPage={currentPage} totalPages={totalPages} handlePageChange={handlePageChange} />
     </div>
   )
 }

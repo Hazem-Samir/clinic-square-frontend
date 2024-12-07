@@ -37,6 +37,55 @@ export const getAllDoctors = async (limit:number,page: number) => {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
+          
+        },
+        cache:"reload",
+      });
+    
+      if (!response.ok) {
+            throw new Error ('Failed to fetch Doctors');
+      }
+    
+      const res = await response.json();
+      return res;
+    }
+
+
+    export const getMyPharmaciesResrvations = async (limit:number,page: number) => {
+      const cookieStore = cookies()
+      const token = JSON.parse (cookieStore.get('token').value)
+      const queryParams = new URLSearchParams({
+        limit: limit.toString(),
+        page: page.toString(),
+      }).toString();
+      const response = await fetch(`http://localhost:3000/api/patient/myActivity/pharmacies?${queryParams}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          
+        },
+        cache:"reload",
+      });
+    
+      if (!response.ok) {
+            throw new Error ('Failed to fetch Doctors');
+      }
+    
+      const res = await response.json();
+      return res;
+    }
+    export const getMyLabsResrvations = async (limit:number,page: number) => {
+      const cookieStore = cookies()
+      const token = JSON.parse (cookieStore.get('token').value)
+      const queryParams = new URLSearchParams({
+        limit: limit.toString(),
+        page: page.toString(),
+      }).toString();
+      const response = await fetch(`http://localhost:3000/api/patient/myActivity/labs?${queryParams}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          
         },
         cache:"reload",
       });

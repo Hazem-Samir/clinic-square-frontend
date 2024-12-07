@@ -544,3 +544,111 @@ export const MarkCompleted = async (data:{state:string},RID:string)=>{
     console.error('No Token');
   }
 }
+export const UpdateMyLabReservation = async (formData:FormData,id:string)=>{
+  const token = getToken();
+  if (token){
+    const queryParams = new URLSearchParams({
+      id,
+    }).toString();
+    try {
+      const response = await fetch(`/api/patient/myActivity/labs?${queryParams}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+      })
+
+      if (response.ok) {
+      }
+      
+      const res = await response.json();
+  return res;
+    } catch (error) {
+      console.error('Error Upload Test:', error)
+    }
+  }
+  else {
+    console.error('No Token');
+  }
+}
+
+
+export const CancelLabReservation = async (id:string)=>{
+  const token = getToken();
+  const queryParams = new URLSearchParams({
+    id,
+  }).toString();
+  try {
+    const response = await fetch(`/api/patient/myActivity/labs?${queryParams}`, {
+      method: 'DELETE',
+      headers: {
+          'Authorization': `Bearer ${token}`,
+          // 'Content-Type': 'application/json',
+      },
+    })
+
+  
+
+const res = await response.json();
+console.log("res",res)
+return res;
+  } catch (error) {
+    console.error('Error Add Schedule:', error)
+  }
+} 
+
+
+export const CancelDoctorReservation = async (id:string)=>{
+  const token = getToken();
+  const queryParams = new URLSearchParams({
+    id,
+  }).toString();
+  try {
+    const response = await fetch(`/api/patient/myActivity/doctors?${queryParams}`, {
+      method: 'DELETE',
+      headers: {
+          'Authorization': `Bearer ${token}`,
+          // 'Content-Type': 'application/json',
+      },
+    })
+
+  
+
+const res = await response.json();
+console.log("res",res)
+return res;
+  } catch (error) {
+    console.error('Error Add Schedule:', error)
+  }
+} 
+
+export const UpdateMyDoctorReservation = async (formData:FormData,id:string)=>{
+  const token = getToken();
+  if (token){
+    const queryParams = new URLSearchParams({
+      id,
+    }).toString();
+    try {
+      const response = await fetch(`/api/patient/myActivity/doctors?${queryParams}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+      })
+
+      if (response.ok) {
+      }
+      
+      const res = await response.json();
+  return res;
+    } catch (error) {
+      console.error('Error Upload Test:', error)
+    }
+  }
+  else {
+    console.error('No Token');
+  }
+}
+
