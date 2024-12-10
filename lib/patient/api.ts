@@ -6,7 +6,6 @@ export const getAllDoctors = async (limit:number,page: number) => {
       const queryParams = new URLSearchParams({
         limit: limit.toString(),
         page: page.toString(),
-        state: "true"
       }).toString();
       const response = await fetch(`http://localhost:3000/api/patient/doctors?${queryParams}`, {
         method: 'GET',

@@ -18,11 +18,10 @@ export async function GET(request: NextRequest) {
       const searchParams = request.nextUrl.searchParams
       const page = parseInt(searchParams.get('page') || '1',10)
       const limit=parseInt(searchParams.get('limit')||'5',10);
-      const state=searchParams.get('state')||'true';
     
 
       try {
-        const apiResponse = await fetch(`${SERVER_URL}/doctor?page=${page}&limit=${limit}&state=${state}&fields=name,specialization,profilePic,address`, {
+        const apiResponse = await fetch(`${SERVER_URL}/doctor?page=${page}&limit=${limit}&fields=name,specialization,profilePic,address,email,phoneNumbers,about,gender,license,dateOfBirth,state`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }

@@ -7,8 +7,9 @@ import {
   History,
   CalendarCheck,
   Hospital,
-  MessageCircleQuestion,FlaskConical,Menu,BriefcaseMedical
+  MessageCircleQuestion,FlaskConical,BriefcaseMedical,UserCog,Pill,Menu,User,Tablets,TestTubeDiagonal,
 } from "lucide-react"
+
 import { useSelectedLayoutSegment } from 'next/navigation'
 import Link from "next/link"
 import { useEffect, useState } from 'react'
@@ -34,7 +35,10 @@ const iconMap = {
   MessageCircleQuestion,
   FlaskConical,
   BriefcaseMedical,
+  UserCog,
+  Pill,User,Tablets,TestTubeDiagonal
 };
+
 
 const MobileNav = ({navItems,role}:IProps) => {
   const segment = useSelectedLayoutSegment()

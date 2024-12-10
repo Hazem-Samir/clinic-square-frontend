@@ -3,8 +3,8 @@ import type { NextRequest } from 'next/server'
 import createIntlMiddleware from 'next-intl/middleware'
 
 const locales = ['en', 'ar']
-const publicPages = ['/login', '/signup']
-const loggedInRestrictedPages = ['/login', '/signup']
+const publicPages = ['/login']
+const loggedInRestrictedPages = ['/login']
 
 const intlMiddleware = createIntlMiddleware({
   locales,
@@ -33,17 +33,8 @@ export function middleware(request: NextRequest) {
   // Check if user is logged in and trying to access login or signup pages
   if (userCookie && loggedInRestrictedPages.some(page => pathnameWithoutLocale.startsWith(page))) {
     switch (JSON.parse(userCookie.value).role) {
-      case 'doctor':
-        return NextResponse.redirect(new URL(`/${locale}/doctor`, request.url))
-        break;
-        case 'lab':
-          return NextResponse.redirect(new URL(`/${locale}/lab`, request.url))
-        break;
-        case 'patient':
-          return NextResponse.redirect(new URL(`/${locale}/patient`, request.url))
-        break;
-        case 'pharmacy':
-          return NextResponse.redirect(new URL(`/${locale}/pharmacy`, request.url))
+      case 'admin':
+        return NextResponse.redirect(new URL(`/${locale}/admin`, request.url))
         break;
       default:
         break;
@@ -61,10 +52,7 @@ export function middleware(request: NextRequest) {
   try {
     const userData = JSON.parse(userCookie.value)
     const roleAccess: { [key: string]: string[] } = {
-      doctor: ['/doctor'],
-      lab: ['/lab'],
-      patient: ['/patient'],
-      pharmacy: ['/pharmacy'],
+      admin: ['/admin'],
       // Add other roles as needed
     }
 

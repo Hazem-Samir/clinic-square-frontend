@@ -19,7 +19,7 @@ import { cookies } from 'next/headers'; // Import cookies function from Next.js
 import { shortName } from "@/lib/utils"
 import LanguageSwitcherIcon from "./LanguageSwitcherIcon"
 import { logout } from "@/actions/logout"
-import MobileNav from "./MobileNav"
+import MobileNav from "@/components/MobileNav"
 interface NavItem {
   href: string;
   icon: string;

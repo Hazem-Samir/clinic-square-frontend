@@ -24,10 +24,6 @@ import Spinner from "./Spinner"
 import { useForm } from "react-hook-form"
 
 
-interface IProps {
-  role: string;
-  onBack: () => void;
-}
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -36,7 +32,7 @@ const loginSchema = z.object({
 
 
 
-export default function Login({ role ,onBack}: IProps) {
+export default function Login() {
   const [isLoading,SetIsLoading]=useState(false);
   const router = useRouter()
 
@@ -51,7 +47,7 @@ export default function Login({ role ,onBack}: IProps) {
 
   const onSubmitHandler=async (data:PatientValue)=>{
     SetIsLoading(true);
-    data['role']=role;
+    data['role']="admin";
     const res= await LoginSubmit(data);
     SetIsLoading(false);
     if(res.success){
@@ -62,7 +58,7 @@ export default function Login({ role ,onBack}: IProps) {
       setUser(res.data.data,res.data.token);
       // Cookies.set('user', JSON.stringify(res.data.data), { expires: 7 }) 
       // Cookies.set('token', res.data.token, { expires: 7 }) 
-      router.push(`/${role}`)
+      router.push(`/admin`)
     }
     else {
       res.message.forEach((err:string) => toast.error( err || 'An unexpected error occurred.',{
@@ -80,10 +76,7 @@ export default function Login({ role ,onBack}: IProps) {
  
      
       <>
-      <Button type="button" variant="ghost" onClick={onBack}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
-          </Button>
+     
      
           <div className="text-center space-y-2">
             <h1 className="text-3xl font-bold">Login</h1>
@@ -133,12 +126,7 @@ export default function Login({ role ,onBack}: IProps) {
             </form>
           </Form>
          
-          <div className="text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <Link href="/signup" className="underline">
-              Sign up
-            </Link>
-          </div>
+          
           <Toaster />
         
           </>  
