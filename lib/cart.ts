@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { AddMedicineToCart, AddToCart, GetMyCart, RemoveMedicineFromCart, RemoveTestFromCart, updateMedicineQuantity } from '../../clinic-square-admin/lib/admin/clientApi'
+import { AddMedicineToCart, AddToCart, GetMyCart, RemoveMedicineFromCart, RemoveTestFromCart, updateMedicineQuantity } from '@/lib/patient/clientApi'
 
 interface Pharmacy {
   _id: string
