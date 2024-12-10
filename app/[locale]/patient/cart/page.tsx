@@ -12,7 +12,7 @@ import useCartStore from '@/lib/cart'
 import { DatePicker } from "@/components/ui/date-picker"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
-import { MedicineCashPayment, MedicineOnlinePayment, TestCashPayment, TestOnlinePayment } from '@/lib/patient/clientApi'
+import { MedicineCashPayment, MedicineOnlinePayment, TestCashPayment, TestOnlinePayment } from '@/lib/admin/clientApi'
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import CartPageSkeleton from '@/components/cart-page-skeleton'

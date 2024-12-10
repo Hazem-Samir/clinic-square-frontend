@@ -36,7 +36,7 @@ import {
     } from "@hookform/resolvers/zod"
     import * as z from "zod"
 import { getUser } from '@/lib/auth'
-import { AddQuestion } from '@/lib/patient/clientApi'
+import { AddQuestion } from '@/lib/admin/clientApi'
     const formSchema = z.object({
       question: z.string().min(2,"Question is Required")
     });

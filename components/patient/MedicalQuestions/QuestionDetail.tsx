@@ -31,7 +31,7 @@ import * as z from "zod"
 
 import toast, { Toaster } from 'react-hot-toast'
 import Spinner from '@/components/Spinner'
-import { UpdateQuestion } from '@/lib/patient/clientApi'
+import { UpdateQuestion } from '@/lib/admin/clientApi'
 import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({

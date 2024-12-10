@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const apiResponse = await fetch(`${SERVER_URL}/tests?state=accepted`, {
+    const apiResponse = await fetch(`${SERVER_URL}/tests?state=true`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       }

@@ -19,7 +19,7 @@ import Image from 'next/image'
 import { getUser } from '@/lib/auth'
 import { DaysOfWeek, HandleTimeFormat } from '@/schema/Essentials'
 import toast, { Toaster } from 'react-hot-toast'
-import { BookSession } from '@/lib/patient/clientApi'
+import { BookSession } from '@/lib/admin/clientApi'
 interface ScheduleDay {
   day: string;
   startTime: string;
