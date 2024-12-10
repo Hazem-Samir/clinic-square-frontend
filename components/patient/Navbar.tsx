@@ -35,6 +35,7 @@ export default function NavBar() {
 
   const menuItems = [
     { href: "/patient", label: "Home" },
+    { href: "/patient/my-activity", label: "My Activity" },
     { href: "/patient/our-doctors", label: "Doctors" },
     { href: "/patient/labs", label: "Labs" },
     { href: "/patient/pharmacies", label: "Pharmacies" },

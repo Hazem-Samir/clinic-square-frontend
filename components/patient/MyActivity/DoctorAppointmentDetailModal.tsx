@@ -10,8 +10,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { FormDataHandler, ImageHandler } from '@/utils/AuthHandlers'
-import { PlusCircle, X, File } from 'lucide-react'
+import { PlusCircle, X, File, FileText } from 'lucide-react'
 import Link from 'next/link'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface IDoctorReservation {
   doctor:{name:string,id:string,porfilePic:string,gender:string,specialization:string}
@@ -52,7 +54,7 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
     name: "files",
   })
 
-
+console.log(appointment)
 
   const handleUpdate = (values: z.infer<typeof formSchema>) => {
     if (appointment) {
@@ -76,12 +78,13 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] h-[65vh]">
+        <ScrollArea className="h-[calc(65vh-2rem)] pr-4" style={{ overflow: 'auto' }}>
         <DialogHeader>
           <DialogTitle>Appointment Details</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-8 p-1">
+          <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-8 p-1 pb-8">
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
@@ -96,29 +99,45 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                 </Label>
                 <span id="specialization">{appointment.doctor.specialization}</span>
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="specialization" className="text-right">
-                  Files Sent
+                   <div className="flex items-center gap-4 ">
+                   <Label  className="text-right ">
+                  Files
                 </Label>
-                  <div className="flex flex-wrap gap-2">
-                    {appointment.report.results.length>0? appointment.report.results.map((index,result)=>{
- <Link href={result} index={index} className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground text-xs sm:text-sm h-9 rounded-md px-3" >
- <File className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
- View File {index}
-</Link>
-                    }):"No Files"}
-                   
-
-                  </div>
-                </div>
+                
+                <div className="flex gap-2 p-4 flex-wrap items-center justify-start">
+                            {appointment.report.results.map((result, index) => (
+                              <Button
+                                key={index}
+                                variant="outline"
+                                size="sm"
+                                className="flex-shrink-0 flex items-center space-x-2"
+                                asChild
+                              >
+                                <a
+                                  href={result}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  title={`View Result File ${index + 1}`}
+                                >
+                                  <FileText className="h-4 w-4" />
+                                  <span>File {index + 1}</span>
+                                </a>
+                              </Button>
+                             
+                           
+                            ))}
+                          </div>
+              </div>
+              {appointment.state==="completed"?null:
+              <>
               <FormField
                 control={form.control}
                 name="date"
                 render={({ field }) => (
-                  <FormItem className="grid grid-cols-4 items-center gap-4">
+                  <FormItem className="grid grid-cols-4 items-center gap-4 ">
                     <FormLabel className="text-right">Date</FormLabel>
                     <FormControl className="col-span-3 ">
-                      <Input type="date" {...field} />
+                      <Input type="date"  {...field} />
                     </FormControl>
                     <FormMessage className="col-start-2 col-span-3" />
                   </FormItem>
@@ -158,15 +177,20 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                   </Button>
                 </div>
               ))}
+              </>
+              }
             </div>
+            {appointment.state==="completed"?null:
             <DialogFooter>
               <Button type="button" variant="outline" onClick={onClose}>
                 Cancel
               </Button>
               <Button type="submit" disabled={!form.formState.isValid}>Update</Button>
             </DialogFooter>
+}
           </form>
         </Form>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   )

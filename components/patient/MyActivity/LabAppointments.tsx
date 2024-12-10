@@ -45,7 +45,7 @@ export default function LabAppointments({appointments,currentPage,totalPages}:IP
   const [cancelModalOpen, setCancelModalOpen] = useState(false)
   const [selectedAppointment, setSelectedAppointment] = useState<ILabReservation | null>(null)
   const router = useRouter();
-
+console.log(appointments)
   const handleCancel = (appointment: ILabReservation) => {
     setSelectedAppointment(appointment)
     setCancelModalOpen(true)

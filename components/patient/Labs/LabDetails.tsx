@@ -52,7 +52,7 @@ interface IProps {
 export default function LabDetails({ Lab, Tests }: IProps) {
   const [currentLicenseIndex, setCurrentLicenseIndex] = useState(0)
   const { addToCart } = useCartStore()
-
+console.log(Tests)
   const handleAddToCart = async (testId: string) => {
     const res = await addToCart({ testId })
     if (!res.success) {
@@ -135,7 +135,7 @@ export default function LabDetails({ Lab, Tests }: IProps) {
         </CardContent>
       </Card>
 
-      <Card className="mb-8">
+      {/* <Card className="mb-8">
         <CardContent className="p-6">
           <h2 className="text-2xl font-semibold mb-4">License & Certifications</h2>
           <div className="relative w-full max-w-sm mx-auto">
@@ -174,7 +174,7 @@ export default function LabDetails({ Lab, Tests }: IProps) {
             License {currentLicenseIndex + 1} of {Lab.license.length}
           </p>
         </CardContent>
-      </Card>
+      </Card> */}
 
       <h2 className="text-2xl font-semibold mb-4">Available Tests</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

@@ -19,10 +19,9 @@ export async function GET(request: NextRequest) {
       const searchParams = request.nextUrl.searchParams
       const page = parseInt(searchParams.get('page') || '1',10)
       const limit=parseInt(searchParams.get('limit')||'5',10);
-      const today = new Date().toISOString();
      
       try {
-        const apiResponse = await fetch(`${SERVER_URL}/lab/My-Reservations?page=${page}&limit=${limit}&date[lte]=${today}&state=completed&populate=patient,requestedTests.testDetails.test=name`, {
+        const apiResponse = await fetch(`${SERVER_URL}/lab/My-Reservations?page=${page}&limit=${limit}&state=completed&populate=patient,requestedTests.testDetails.test=name`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
