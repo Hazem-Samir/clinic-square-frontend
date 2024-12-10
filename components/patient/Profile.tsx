@@ -48,7 +48,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Label } from "../ui/label"
 import { getAge } from "@/utils/utils"
 import { removeUser } from "@/lib/auth"
-import { UpdatePassword, UpdateProfile } from "@/lib/admin/clientApi"
+import { UpdatePassword, UpdateProfile } from "@/lib/patient/clientApi"
 
 interface Iimages {
   profilePic: File | string | null;

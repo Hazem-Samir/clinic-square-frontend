@@ -8,7 +8,7 @@ import CancelModal from './CancelModal'
 import LabAppointmentDetailModal from './LabAppointmentDetailModal'
 import toast, { Toaster } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
-import { CancelLabReservation, UpdateMyLabReservation } from '@/lib/admin/clientApi'
+import { CancelLabReservation, UpdateMyLabReservation } from '@/lib/patient/clientApi'
 import { shortName } from '@/lib/utils'
 import { FormDataHandler } from '@/utils/AuthHandlers'
 import { format } from "date-fns"
