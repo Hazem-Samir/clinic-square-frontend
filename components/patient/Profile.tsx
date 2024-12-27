@@ -36,13 +36,12 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { cn, shortName } from "@/lib/utils"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { CalendarIcon, ChevronLeft, ChevronRight, PlusCircle, X } from "lucide-react"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { CalendarIcon, ChevronLeft, ChevronRight, X } from "lucide-react"
 import { FormDataHandler } from "@/utils/AuthHandlers"
-import { PasswordSchema, PasswordValue, DoctorProfileSchema, ProfileValue, PatientProfileSchema } from "@/schema/Profile"
+import { PasswordSchema, PasswordValue, ProfileValue, PatientProfileSchema } from "@/schema/Profile"
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
-import { Textarea } from "../ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Label } from "../ui/label"
@@ -245,7 +244,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                 <FormField
                   control={form.control}
                   name="profilePic"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem>
                       <FormLabel>Profile Picture</FormLabel>
                       <FormControl>

@@ -215,6 +215,30 @@ export const BookSession = async (data:{doctor:string,date:string})=>{
       }  
 
 
+      export const DoctorOnlinePayment = async ( id:string,reservationDate:string)=>{
+        const token = getToken();
+        const queryParams = new URLSearchParams({
+          id,
+          reservationDate,
+        }).toString();
+        try {
+          const response = await fetch(`http://localhost:3000/api/patient/cart/checkout/doctor?${queryParams}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+          })
+    
+        
+    
+      const res = await response.json();
+      return res;
+        } catch (error) {
+          console.log('Error Add Schedule:', error)
+        }
+      } 
+
       export const TestCashPayment   = async (data:{date:string})=>{
         const token = getToken();
         try {
@@ -652,3 +676,175 @@ export const UpdateMyDoctorReservation = async (formData:FormData,id:string)=>{
   }
 }
 
+
+export const SearchForTest = async (keyword:string,page:number) => {
+
+  const token = getToken();
+  if(token){
+    const queryParams = new URLSearchParams({
+      keyword,
+      page:page.toString()||`1`
+    }).toString();
+    const response = await fetch(`http://localhost:3000/api/patient/search/tests?${queryParams}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+        cache:"no-store"
+        
+    });
+  
+    if (!response.ok) {
+      throw new Error('Failed to fetch reservations');
+    }
+  
+    const res = await response.json();
+    return res;
+  }
+     else {
+    console.error('No Token');
+  }
+
+} 
+
+export const SearchForLab = async (keyword:string,page:number) => {
+
+  const token = getToken();
+  if(token){
+    const queryParams = new URLSearchParams({
+      keyword,
+      page:page.toString()||`1`
+    }).toString();
+    const response = await fetch(`http://localhost:3000/api/patient/search/labs?${queryParams}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+        cache:"no-store"
+        
+    });
+  
+    if (!response.ok) {
+      throw new Error('Failed to fetch reservations');
+    }
+  
+    const res = await response.json();
+    return res;
+  }
+     else {
+    console.error('No Token');
+  }
+
+} 
+export const SearchForPharmacy = async (keyword:string,page:number) => {
+
+  const token = getToken();
+  if(token){
+    const queryParams = new URLSearchParams({
+      keyword,
+      page:page.toString()||`1`
+    }).toString();
+    const response = await fetch(`http://localhost:3000/api/patient/search/pharmacy?${queryParams}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+        cache:"no-store"
+        
+    });
+  
+    if (!response.ok) {
+      throw new Error('Failed to fetch reservations');
+    }
+  
+    const res = await response.json();
+    return res;
+  }
+     else {
+    console.error('No Token');
+  }
+
+} 
+
+export const SearchForMedicine = async (keyword:string,page:number) => {
+
+  const token = getToken();
+  if(token){
+    const queryParams = new URLSearchParams({
+      keyword,
+      page:page.toString()||`1`
+    }).toString();
+    const response = await fetch(`http://localhost:3000/api/patient/search/medicines?${queryParams}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+        cache:"no-store"
+        
+    });
+  
+    if (!response.ok) {
+      throw new Error('Failed to fetch reservations');
+    }
+  
+    const res = await response.json();
+    return res;
+  }
+     else {
+    console.error('No Token');
+  }
+
+} 
+
+
+export const SearchForActor = async (keyword:string,actor:string,page:number) => {
+
+  const token = getToken();
+  if(token){
+    const queryParams = new URLSearchParams({
+      keyword,
+      actor,
+      page:page.toString()||`1`
+    }).toString();
+    const response = await fetch(`http://localhost:3000/api/patient/search/actors?${queryParams}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+        cache:"no-store"
+        
+    });
+  
+    if (!response.ok) {
+      throw new Error('Failed to fetch reservations');
+    }
+  
+    const res = await response.json();
+    return res;
+  }
+     else {
+    console.error('No Token');
+  }
+
+} 
+
+export const UseModel = async (data:{symptoms:string[]})=>{
+  const token = getToken();
+  try {
+    const response = await fetch(`/api/model`, {
+      method: 'POST',
+      headers: {
+          'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+
+  
+
+const res = await response.json();
+return res;
+  } catch (error) {
+    console.error('Error Answer Question:', error)
+  }
+}

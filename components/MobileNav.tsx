@@ -12,7 +12,6 @@ import {
 import { useSelectedLayoutSegment } from 'next/navigation'
 import Link from "next/link"
 import { useEffect, useState } from 'react'
-import { getUser } from "@/lib/auth"
 
 
 interface NavItem {
@@ -70,7 +69,7 @@ const MobileNav = ({navItems,role}:IProps) => {
           </Link>
 
           {navItems.map((item) => {
-            const isActive = segment === item.href.split('/')[2] || (segment === null && item.href===`${role}` )
+            const isActive = segment === item.href.split('/')[2] || (segment === null && item.href===`/${role}` )
             const Icon = iconMap[item.icon as keyof typeof iconMap];
             return (
               <Link

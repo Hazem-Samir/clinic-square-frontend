@@ -23,7 +23,7 @@ export default function LabLayout({
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <body>
         <BlurFade delay={0} className="mt-1 grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]" inView>
-          <SideNavBar navItems={navItems} role='lab'/>
+          <SideNavBar navItems={navItems} role='pharmacy'/>
           <div className="flex flex-col">
             <TopNavBar navItems={navItems}/>
             {children}

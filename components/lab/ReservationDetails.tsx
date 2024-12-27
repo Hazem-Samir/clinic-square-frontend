@@ -49,8 +49,9 @@ export default function ReservationDetails({ reservation }: IProps) {
               <h3 className="text-lg font-semibold">Test Results</h3>
               {reservation.requestedTests.map((test, testIndex) => (
                 <div key={testIndex} className="space-y-2">
+                  <ScrollArea className="w-full whitespace-nowrap rounded-md border">
                   {test.testResult.length > 0 ? (
-                    <ScrollArea className="w-full whitespace-nowrap rounded-md border">
+                    <>
                       <div className="flex justify-center mt-2">
                       <h4 className=" text-sm font-medium">{test.testDetails.test.name}</h4>
                       </div>
@@ -70,11 +71,12 @@ export default function ReservationDetails({ reservation }: IProps) {
                           </Link>
                         ))}
                       </div>
-                      <ScrollBar orientation="horizontal" />
+                      </>
+                    ) : (
+                      <p className="text-sm text-muted-foreground italic p-4">No results available</p>
+                    )}
+                    <ScrollBar orientation="horizontal" />
                     </ScrollArea>
-                  ) : (
-                    <p className="text-sm text-muted-foreground italic">No results available</p>
-                  )}
                 </div>
               ))}
             </div>

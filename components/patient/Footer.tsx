@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { Facebook, Instagram, Twitter } from 'lucide-react'
-import BlurFade from '../ui/blur-fade'
 
 export default function Footer() {
   return (

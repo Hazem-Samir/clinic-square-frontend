@@ -1,8 +1,7 @@
 "use client"
 
+import { Star, MapPin, ChevronLeft, ChevronRight,Search } from 'lucide-react'
 import { useState } from 'react'
-import { Star, MapPin, ChevronLeft, ChevronRight } from 'lucide-react'
-
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import {
@@ -14,7 +13,13 @@ import {
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-
+import { Input } from "@/components/ui/input"
+import toast, { Toaster } from 'react-hot-toast'
+import { SearchForTest } from '@/lib/patient/clientApi'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import Pagination from '@/components/Pagination'
+import Spinner from '@/components/Spinner'
+import { Doctors_Specializations } from '@/schema/Essentials'
 interface Doctor {
   id: string;
   profilePic: string;
@@ -29,21 +34,20 @@ interface IProps {
   currentPage: number;
   totalPages: number;
   Doctors: Doctor[];
+ searchParams?:{name:string,spec:string}
+  searchResult?: {currentPage:number,totalPages:number,Doctors:Doctor[]}|null
+}
+interface IDoctorsData extends IProps  {
+  handlePageChange:(newPage:number)=>void
+  isLoading:boolean
+
 }
 
-export default function DoctorsList({ Doctors, currentPage, totalPages }: IProps) {
-    const router = useRouter();
 
-console.log(Doctors)
-
-      const handlePageChange = (newPage: number) => {
-            router.push(`patient/our-doctors?page=${newPage}`);
-          };
-        
+const DoctorsData=({Doctors,currentPage,totalPages,handlePageChange,isLoading}:IDoctorsData)=>{
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center mb-8">Our Doctors</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {Doctors.map((doctor) => (
           <Card key={doctor.id} className="flex flex-col h-[500px]">
             <CardContent className="p-0 flex-grow">
@@ -75,7 +79,7 @@ console.log(Doctors)
                     </AccordionTrigger>
                     <AccordionContent>
                       {doctor.address.map((address, index) => (
-                         <div className="flex items-center mt-2">
+                         <div key={index} className="flex items-center mt-2">
                          <MapPin className="w-4 h-4 text-gray-400" />
                         <span className="ml-1 text-sm">{address}</span>
                        </div>
@@ -93,27 +97,91 @@ console.log(Doctors)
           </Card>
         ))}
       </div>
-      <div className="flex justify-center items-center p-4 gap-4">
-        <Button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1 || isLoading}
-          size="icon"
-          variant="outline"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
-        <span className="text-sm font-medium">
-          {currentPage} / {totalPages}
-        </span>
-        <Button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages || isLoading}
-          size="icon"
-          variant="outline"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </div>
+      <Pagination currentPage={currentPage} handlePageChange={handlePageChange} totalPages={totalPages} isLoading={isLoading} />
+    </>
+  )
+}
+
+
+export default function DoctorsList({ Doctors, currentPage, totalPages,searchParams:{name='',spec=''},searchResult=null }: IProps) {
+  const [searchTerm, setSearchTerm] = useState(name)
+  const [isLoading, setIsLoading] = useState(false);
+  const [specialization, setSpecialization] = useState(spec)
+  const router = useRouter()
+
+
+  const handleSearch =async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true);
+    if(searchTerm.trim().length>0&&specialization.length>0){
+
+      router.push(`our-doctors?name=${searchTerm}&specialization=${specialization}`)
+    }
+    else if(searchTerm.trim().length>0){
+      router.push(`our-doctors?name=${searchTerm}`)
+    }
+    else if(specialization.length>0){
+      router.push(`our-doctors?specialization=${specialization}`)
+
+    }
+
+  setIsLoading(false);
+
+  }
+
+      const handlePageChange = (newPage: number) => {
+        if(name.trim().length>0&&specialization.length>0){
+
+          router.push(`our-doctors?name=${searchTerm}&specialization=${specialization}&resultsPage=${newPage}`)
+        }
+        else if(name.trim().length>0){
+          router.push(`our-doctors?name=${searchTerm}&resultsPage=${newPage}`)
+        }
+        else if(specialization.length>0){
+          router.push(`our-doctors?specialization=${specialization}&resultsPage=${newPage}`)
+    
+        }
+        else{
+
+          router.push(`our-doctors?page=${newPage}`);
+        }
+          };
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold text-center mb-8">Our Doctors</h1>
+      <form onSubmit={handleSearch} className="mb-8">
+        <div className="flex gap-2">
+          <Input
+            type="text"
+            placeholder="Search for Doctors..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="flex-grow"
+          />
+            <Select  value={specialization} onValueChange={setSpecialization}>
+                  <SelectTrigger className="w-full text-sm py-2 ">
+                    <SelectValue placeholder="Select specialization" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Doctors_Specializations.map(spec => (
+
+                    <SelectItem  value={`${spec}`}>{spec}</SelectItem>
+                    ))}
+                 
+                  </SelectContent>
+                </Select>
+          <Button type="submit">
+            <Search className="w-4 h-4 mr-2" />
+            Search
+          </Button>
+        </div>
+      </form>
+      
+{(searchResult&& searchResult.Doctors.length<=0&&(name.trim().length>0||specialization.length>0))?(
+<div className="flex justify-center mt-6"><h2>No Doctors Found</h2>
+</div>):(searchResult===null?<DoctorsData Doctors={Doctors} totalPages={totalPages} currentPage={currentPage} isLoading={isLoading} handlePageChange={handlePageChange} />
+     :<DoctorsData Doctors={searchResult.Doctors} totalPages={searchResult.totalPages} currentPage={searchResult.currentPage} isLoading={isLoading} handlePageChange={handlePageChange} />)}
     </div>
   )
 }

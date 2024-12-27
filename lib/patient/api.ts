@@ -24,6 +24,37 @@ export const getAllDoctors = async (limit:number,page: number) => {
       return res;
     }
 
+export const SearchForActor = async (keyword:string,actor:string,page:number) => {
+
+  const cookieStore = cookies()
+  const token = JSON.parse (cookieStore.get('token').value)
+  if(token){
+    const queryParams = new URLSearchParams({
+      keyword,
+      actor,
+      page:page.toString()||`1`
+    }).toString();
+    const response = await fetch(`http://localhost:3000/api/patient/search/actors?${queryParams}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+        cache:"no-store"
+        
+    });
+  
+    if (!response.ok) {
+      throw new Error('Failed to fetch reservations');
+    }
+  
+    const res = await response.json();
+    return res;
+  }
+     else {
+    console.error('No Token');
+  }
+
+} 
 
 
     export const getMyDoctorsResrvations = async (limit:number,page: number) => {
@@ -363,3 +394,4 @@ return res;
       const res = await response.json();
       return res;
     } 
+

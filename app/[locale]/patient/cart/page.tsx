@@ -15,7 +15,6 @@ import { Label } from "@/components/ui/label"
 import { MedicineCashPayment, MedicineOnlinePayment, TestCashPayment, TestOnlinePayment } from '@/lib/patient/clientApi'
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
-import CartPageSkeleton from '@/components/cart-page-skeleton'
 import Spinner from '@/components/Spinner'
 
 export default function CartPage() {
@@ -26,7 +25,7 @@ export default function CartPage() {
   const router = useRouter()
 
   const handleCartUpdate = useCallback((event: MessageEvent) => {
-    const { type, action } = event.data
+    const { type } = event.data
     if (type === 'UPDATE_CART') {
       fetchCart()
     }
@@ -144,7 +143,11 @@ export default function CartPage() {
               <AvatarImage src={pharmacy.pharmacyId.profilePic} alt={pharmacy.pharmacyId.name} />
               <AvatarFallback>{shortName(pharmacy.pharmacyId.name)}</AvatarFallback>
             </Avatar>
+            <div>
+
             <h3 className="text-xl font-semibold">{pharmacy.pharmacyId.name}</h3>
+            <p className="text-xs text-muted-foreground">Locations: {pharmacy.pharmacyId.address}</p>
+            </div>
           </div>
           {pharmacy.purchasedMedicines.map((medicine) => (
             <Card key={medicine.id} className="mb-4">

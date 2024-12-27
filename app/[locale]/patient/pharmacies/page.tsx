@@ -1,14 +1,9 @@
 import { Suspense } from 'react'
 import ProtectedRoute from "@/components/ProtectedRoute"
 import { Skeleton } from "@/components/ui/skeleton"
-import {getSchedule } from '@/lib/doctor/api'
 import BlurFade from '@/components/ui/blur-fade'
-import Schedule from '@/components/doctor/Schedule'
-import DoctorsList from '@/components/patient/ourDoctors/DoctorsList'
-import { getAllDoctors, getAllLabs, getAllPharmacies } from '@/lib/patient/api'
-import LabDetails from '@/components/patient/Labs/LabsList'
-import LabsList from '@/components/patient/Labs/LabsList'
 import PharmaciesList from '@/components/patient/Pharmacies/PharmaciesList'
+import { getAllPharmacies } from '@/lib/patient/api'
 
 async function PharmaciesData({ page }: { page: number }) {
   const {data:pharmacies} = await getAllPharmacies(10,page);

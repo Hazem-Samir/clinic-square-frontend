@@ -1,8 +1,4 @@
-import Banner from "@/components/patient/Banner";
-import ExploreCards from "@/components/patient/ExploreCards";
-import HealthServices from "@/components/patient/HealthServices";
 import KCALCalculator from "@/components/patient/HealthServices/KCALCalculator";
-import SearchSection from "@/components/patient/SearchSection";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import BlurFade from "@/components/ui/blur-fade";
 

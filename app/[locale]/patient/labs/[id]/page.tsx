@@ -1,12 +1,8 @@
 import { Suspense } from 'react'
 import ProtectedRoute from "@/components/ProtectedRoute"
 import { Skeleton } from "@/components/ui/skeleton"
-import {getSchedule } from '@/lib/doctor/api'
 import BlurFade from '@/components/ui/blur-fade'
-import Schedule from '@/components/doctor/Schedule'
-import DoctorsList from '@/components/patient/ourDoctors/DoctorsList'
-import { getAllDoctors, GetLabTests, getOneDoctor, getOneLab } from '@/lib/patient/api'
-import DoctorDetails from '@/components/patient/ourDoctors/DoctorDetails'
+import {  GetLabTests, getOneLab } from '@/lib/patient/api'
 import LabDetails from '@/components/patient/Labs/LabDetails'
 
 

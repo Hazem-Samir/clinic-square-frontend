@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { shortName } from '@/lib/utils'
@@ -69,7 +68,7 @@ const handlePageChange=(newPage:number)=>{
 <h4 className="font-semibold mb-2">Unit Price</h4>
       </div>
               <ul className="space-y-1">
-                {order.medicines.map((product, index) => (
+                {order.medicines.map((product) => (
                   <li key={product.id} className="flex justify-between items-center ">
                     <div className="flex flex-col items-center space-y-1 sm:space-y-0 my-1 sm:flex-row sm:space-x-2 ">
 

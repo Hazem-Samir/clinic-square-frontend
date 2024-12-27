@@ -2,11 +2,8 @@ import { Button } from "../ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import {  MessageCircle } from "lucide-react"
 import Link from "next/link"
-interface IPrpos {
 
-};
-
-const MedicalQuestionCard =({}:IPrpos)=>{
+const MedicalQuestionCard =()=>{
       return(
             <Card className="mb-6">
             <CardHeader>

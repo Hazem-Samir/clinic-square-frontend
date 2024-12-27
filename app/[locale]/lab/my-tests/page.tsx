@@ -2,7 +2,6 @@ import { Suspense } from 'react'
 import ProtectedRoute from "@/components/ProtectedRoute"
 import { Skeleton } from "@/components/ui/skeleton"
 import BlurFade from '@/components/ui/blur-fade'
-import QuestionsList from '@/components/doctor/QuestionsList'
 import TestManagement from '@/components/lab/TestManagement'
 import { getAvaliableTests, getMyTests } from '@/lib/lab/api'
 
@@ -11,7 +10,7 @@ async function Testsdata({ page }: { page: number }) {
   const {data:availableTests} = await getAvaliableTests();
   return (
     <TestManagement 
-      data={myTests.data}
+    tests={myTests.data}
       availableTests={availableTests.data}
       currentPage={page}
       totalPages={myTests.paginationResult.numberOfPages}

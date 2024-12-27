@@ -2,6 +2,58 @@ import { DayValue } from "@/schema/Essentials";
 import { getToken, setUser } from "../auth";
 import { ProfileValue } from "@/schema/Profile";
 
+
+export const searchOrders = async (keyword:string,limit:number,page: number,state:string) => {
+  const token = getToken();
+  if(token){
+  const queryParams = new URLSearchParams({
+    limit: limit.toString(),
+    page: page.toString(),
+    state,
+    keyword,
+  }).toString();
+  const response = await fetch(`http://localhost:3000/api/pharmacy/search/orders?${queryParams}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    cache:"reload",
+  });
+
+  if (!response.ok) {
+        throw new Error ('Failed to fetch reservations');
+  }
+
+  const res = await response.json();
+  return res;
+}
+}
+
+export const searchMedicines = async (keyword:string,limit:number,page: number) => {
+  const token = getToken();
+  if(token){
+  const queryParams = new URLSearchParams({
+    limit: limit.toString(),
+    page: page.toString(),
+    keyword,
+  }).toString();
+  const response = await fetch(`http://localhost:3000/api/pharmacy/search/medicines?${queryParams}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    cache:"reload",
+  });
+
+  if (!response.ok) {
+        throw new Error ('Failed to fetch reservations');
+  }
+
+  const res = await response.json();
+  return res;
+}
+}
+
 export const addDay = async (data)=>{
       const token = getToken();
       try {

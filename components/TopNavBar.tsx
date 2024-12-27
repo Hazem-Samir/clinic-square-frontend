@@ -64,7 +64,6 @@ let user;
               <DropdownMenuSeparator />
               <Link href={`/${user.role}/profile`} >  <DropdownMenuItem className="cursor-pointer"> Profile
             </DropdownMenuItem></Link>
-              <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>  <form action={logout}>
               <Button variant="ghost" className="h-5" type="submit">

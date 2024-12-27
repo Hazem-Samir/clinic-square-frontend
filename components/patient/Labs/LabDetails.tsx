@@ -1,7 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
-import { MapPin, Phone, Clock, TestTubeDiagonal, ChevronLeft, ChevronRight, ShoppingCart } from 'lucide-react'
+import { MapPin, Phone, TestTubeDiagonal, ShoppingCart } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { toast, Toaster } from 'react-hot-toast'
@@ -50,7 +49,7 @@ interface IProps {
 }
 
 export default function LabDetails({ Lab, Tests }: IProps) {
-  const [currentLicenseIndex, setCurrentLicenseIndex] = useState(0)
+  // const [currentLicenseIndex, setCurrentLicenseIndex] = useState(0)
   const { addToCart } = useCartStore()
 console.log(Tests)
   const handleAddToCart = async (testId: string) => {
@@ -68,17 +67,17 @@ console.log(Tests)
     }
   }
 
-  const nextLicense = () => {
-    setCurrentLicenseIndex((prevIndex) => 
-      prevIndex === Lab.license.length - 1 ? 0 : prevIndex + 1
-    )
-  }
+  // const nextLicense = () => {
+  //   setCurrentLicenseIndex((prevIndex) => 
+  //     prevIndex === Lab.license.length - 1 ? 0 : prevIndex + 1
+  //   )
+  // }
 
-  const prevLicense = () => {
-    setCurrentLicenseIndex((prevIndex) => 
-      prevIndex === 0 ? Lab.license.length - 1 : prevIndex - 1
-    )
-  }
+  // const prevLicense = () => {
+  //   setCurrentLicenseIndex((prevIndex) => 
+  //     prevIndex === 0 ? Lab.license.length - 1 : prevIndex - 1
+  //   )
+  // }
 
   return (
     <div className="container mx-auto px-4 py-8">

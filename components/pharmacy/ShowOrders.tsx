@@ -1,8 +1,6 @@
 'use client'
 
 import { useState } from "react"
-import { useForm, useFieldArray, SubmitHandler } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -13,52 +11,32 @@ import {
   DialogFooter,
   DialogDescription,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { PlusCircle, X, File } from 'lucide-react'
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
-import { PatientValue } from "@/schema/Patient"
-import { EndReservationSchema, EndReservationValues } from "@/schema/DoctorReservation"
 import Spinner from "../Spinner"
 import toast, { Toaster } from 'react-hot-toast';
-import { getToken } from "@/lib/auth"
-import { getAge } from "@/utils/utils"
 import { useRouter } from 'next/navigation'
 import { shortName } from "@/lib/utils"
-import { FormDataHandler } from "@/utils/AuthHandlers"
-import { ScrollArea } from "../ui/scroll-area"
 import { MarkDelivered } from "@/lib/pharmacy/clientApi"
 
-interface consultaitonData {
-  diagnose: string;
-  medicine: { name: string, dose: string, id: string }[];
-  requestedTests: string[];
-}
+
 
 interface IProps {
-  size: string;
   OID: string;
-  currentPage: number;
   order:{};
 }
 
-export default function ShowOrders({ size = "default", OID, currentPage ,order}: IProps) {
+export default function ShowOrders({ OID ,order}: IProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const [showEndReservationDialog, setShowEndReservationDialog] = useState(false)
   const [showSetConsultationDialog, setShowSetConsultationDialog] = useState(false)
 
-  console.log(order)
 
-  const handleResrvationModal = () => {
-    setIsOpen(!isOpen)
-  }
   const handleMarkDelivered = async () => {
     setIsLoading(true);
     console.log(order.id)
@@ -87,14 +65,6 @@ export default function ShowOrders({ size = "default", OID, currentPage ,order}:
     }
   }
 
-  const handleCancelConsultationDate = () => {
-    const currentValues = getValues();
-    reset({
-      ...currentValues,
-      consultationDate: null,
-    })
-    setShowSetConsultationDialog(false)
-  }
 
   return (
     <>

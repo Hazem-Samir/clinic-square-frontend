@@ -1,14 +1,10 @@
 "use client"
 
-import { useState } from 'react'
-import { MapPin, Phone, Clock, TestTubeDiagonal, ChevronLeft, ChevronRight, ShoppingCart, Plus, Minus } from 'lucide-react'
+import { MapPin, Phone, ShoppingCart } from 'lucide-react'
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import Image from 'next/image'
-import { HandleTimeFormat } from '@/schema/Essentials'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { shortName } from '@/lib/utils'
 import { toast, Toaster } from 'react-hot-toast'
 import useCartStore from '@/lib/cart'
 
@@ -48,13 +44,10 @@ interface Pharmacy {
 interface IProps {
   Pharmacy: Pharmacy;
   Medicines: Medicine[];
-  currentPage: number;
-  totalPages: number;
 }
 
-export default function PharmacyDetails({Pharmacy, Medicines, currentPage, totalPages}: IProps) {
-  const [currentLicenseIndex, setCurrentLicenseIndex] = useState(0)
-  const {cart,updateMedicineQuantity,  addToCart } = useCartStore();
+export default function PharmacyDetails({Pharmacy, Medicines}: IProps) {
+  const {  addToCart } = useCartStore();
 
 
   const handleAddToCart = async (medicineId: string) => {
@@ -72,17 +65,6 @@ export default function PharmacyDetails({Pharmacy, Medicines, currentPage, total
     }
   }
 
-  const nextLicense = () => {
-    setCurrentLicenseIndex((prevIndex) => 
-      prevIndex === Pharmacy.license.length - 1 ? 0 : prevIndex + 1
-    )
-  }
-
-  const prevLicense = () => {
-    setCurrentLicenseIndex((prevIndex) => 
-      prevIndex === 0 ? Pharmacy.license.length - 1 : prevIndex - 1
-    )
-  }
 
   
   return (

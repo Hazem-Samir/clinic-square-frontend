@@ -24,6 +24,27 @@ export const getQuestions = async (limit:number,page: number) => {
       return res;
     } 
 
+    export const Logout = async () => {
+      const cookieStore = cookies()
+      const token = JSON.parse (cookieStore.get('token').value)
+      
+      const response = await fetch(`http://localhost:3000/api/logout`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        cache:"no-cache",
+      });
+    
+      if (!response.ok) {
+            throw new Error ('Failed to fetch Doctors');
+      }
+    
+      const res = await response.json();
+      console.log(res)
+      return res;
+    }
+    
 
 
     export const getOneQuestion = async (id:string) => {

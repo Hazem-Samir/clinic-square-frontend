@@ -40,7 +40,6 @@ interface IProps {
 export default function QuestionDetail({question}: IProps) {
   const router = useRouter();
   const answerRef = useRef<HTMLTextAreaElement>(null);
-  const editedAnswerRef = useRef<HTMLTextAreaElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [editingAnswer, setEditingAnswer] = useState<string | null>(null);
   const [editingAnswerTextArea, setEditingAnswerTextArea] = useState(false);

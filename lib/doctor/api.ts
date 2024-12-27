@@ -6,7 +6,6 @@ export const getReservationsHistory = async (limit:number,page: number) => {
       const queryParams = new URLSearchParams({
         limit: limit.toString(),
         page: page.toString(),
-        date: new Date().toISOString(),
       }).toString();
       const response = await fetch(`http://localhost:3000/api/doctor/reservationsHistory?${queryParams}`, {
         method: 'GET',

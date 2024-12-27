@@ -258,7 +258,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                 <FormField
                   control={form.control}
                   name="profilePic"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem>
                       <FormLabel>Profile Picture</FormLabel>
                       <FormControl>
@@ -559,7 +559,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                 <FormField
                   control={form.control}
                   name="license"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem>
                       <FormLabel>License Photos</FormLabel>
                       <FormControl>

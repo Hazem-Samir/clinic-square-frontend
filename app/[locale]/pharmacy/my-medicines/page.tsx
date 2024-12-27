@@ -2,9 +2,6 @@ import { Suspense } from 'react'
 import ProtectedRoute from "@/components/ProtectedRoute"
 import { Skeleton } from "@/components/ui/skeleton"
 import BlurFade from '@/components/ui/blur-fade'
-import QuestionsList from '@/components/doctor/QuestionsList'
-import TestManagement from '@/components/lab/TestManagement'
-import { getAvaliableTests, getmyMedicines } from '@/lib/lab/api'
 import { getAvaliableMedicines, getMyMedicines } from '@/lib/pharmacy/api'
 import MedicineManagement from '@/components/pharmacy/MedicineManagement'
 
@@ -13,7 +10,7 @@ async function MedicinesData({ page }: { page: number }) {
   const {data:availableMedicines} = await getAvaliableMedicines();
   return (
     <MedicineManagement
-      data={myMedicines.data}
+      medicines={myMedicines.data}
       availableMedicines={availableMedicines.data}
       currentPage={page}
       totalPages={myMedicines.paginationResult.numberOfPages}

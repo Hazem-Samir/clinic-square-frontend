@@ -1,12 +1,10 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
@@ -26,38 +24,113 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { PlusCircle, Edit, Trash2, Send, Plus, X, ChevronLeft, ChevronRight, Upload } from 'lucide-react'
-import { AddTest, DeleteTest, RequestTest } from '@/lib/lab/clientApi'
+import { PlusCircle, Edit, Trash2, Send, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
-import { getUser } from '@/lib/auth'
 import Spinner from '../Spinner'
 import Image from 'next/image'
-import { FormDataHandler, ImageHandler } from '@/utils/AuthHandlers'
-import { AddMedicine, DeleteMedicine, RequestMedicine, UpdateStock } from '@/lib/pharmacy/clientApi'
+import { FormDataHandler } from '@/utils/AuthHandlers'
+import { AddMedicine, DeleteMedicine, RequestMedicine, searchMedicines, UpdateStock } from '@/lib/pharmacy/clientApi'
 import { IMedicine, IMedicineDetails } from '@/interfaces/Phamacy'
 import { MedicineSchema, MedicineValue, NewMedicineSchema, NewMedicineValue } from '@/schema/Pharmacy'
-import { UpdateCost } from '@/lib/doctor/clientApi'
+import SearchBar from '../ui/SearchBar'
+import Pagination from '../Pagination'
 
 
 
 interface IProps {
-  data: IMedicine[];
+  medicines: IMedicine[];
   currentPage: number;
   totalPages: number;
   availableMedicines: IMedicineDetails[];
 }
 
+interface IMedicinesData extends IProps{
+  medicineForm :{}
+  isLoading: boolean
+  setMedicineName: (name:string)=>void
+  setIsEditOpen: (value:boolean)=>void
+  setIsDeleteOpen: (value:boolean)=>void
+  handlePageChange:(newPage:number)=>void
+
+}
 
 
+const MedicinesData=({medicines,medicineForm,isLoading,setMedicineName,setIsEditOpen,setIsDeleteOpen,currentPage,handlePageChange,totalPages}:IMedicinesData)=>{
 
-export default function MedicineManagement({data, currentPage, totalPages, availableMedicines}: IProps) {
+return(
+  <>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          {medicines.length<=0?<div className="flex justify-center items-center">No Medicines</div>
+          :medicines.map((medicine) => (
+            <div key={medicine.id} className="bg-card text-card-foreground rounded-lg  shadow-md transition-all hover:shadow-lg border border-border rounded-md">
+              <div className="mb-4 relative w-full h-52">
+                <Image 
+                  src={medicine.medicine.photo} 
+                  alt={medicine.medicine.name} 
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-t-lg"
+                />
+              </div>
+              <div className="p-4 pt-0">
+                
+           
+              <div className="flex justify-between items-start mb-2">
+                <h2 className="text-lg font-semibold">{medicine.medicine.name}</h2>
+                <div className="flex space-x-1">
+                  <Button
+                    disabled={isLoading}
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      medicineForm.reset({
+                        id: medicine.id,
+                        stock: medicine.stock,
+                      })
+                      setMedicineName(medicine.medicine.name);
+                      setIsEditOpen(true)
+                    }}
+                  >
+                    <Edit className="h-4 w-4" />
+                    <span className="sr-only">Edit</span>
+                  </Button>
+                  <Button
+                    disabled={isLoading}
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      medicineForm.reset({
+                        id: medicine.id,
+                      })
+                      setMedicineName(medicine.medicine.name);
+                      setIsDeleteOpen(true)
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    <span className="sr-only">Delete</span>
+                  </Button>
+                </div>
+              </div>
+           
+              <p className="text-xl font-bold text-primary mb-2">{medicine.medicine.cost} EGP</p>
+              <p className="text-sm text-muted-foreground">Stock: {medicine.stock}</p>
+            </div>
+            </div>
+          ))}
+        </div>
+        <Pagination currentPage={currentPage} totalPages={totalPages}  handlePageChange={handlePageChange} />
+  
+  </>
+)
+}
+
+export default function MedicineManagement({medicines, currentPage, totalPages, availableMedicines}: IProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false)
   const [medicineName, setMedicineName] = useState('')
@@ -65,8 +138,46 @@ export default function MedicineManagement({data, currentPage, totalPages, avail
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
   const [isRequestOpen, setIsRequestOpen] = useState(false)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [isSearching, setIsSearching] = useState(false)
 
+  const [searchTerm, setSearchTerm] = useState('')
+
+    const [SearchResult, setSearchResult] = useState<{currentPage:number,totalPages:number,medicines:IMedicine[]}|null>(null)
+
+
+
+  const handleSearch = async (page:number) => {
+    setIsSearching(true);
+    if (!searchTerm) {
+      setSearchResult(null)
+      setIsSearching(false);
+      return
+    }
+
+    try {
+      const res = await searchMedicines(searchTerm, 7, page)
+      if (res.success === true) {
+        console.log(res.data)
+        setSearchResult({
+          medicines: res.data.data,
+          totalPages: res.data.paginationResult.numberOfPages,
+          currentPage: res.data.paginationResult.currentPage
+        })
+      } else {
+        res.message.forEach((err: string) => 
+          toast.error(err || 'An unexpected error occurred.', {
+            duration: 2000,
+            position: 'bottom-center',
+          })
+        )
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error('An unexpected error occurred.')
+    } finally {
+      setIsSearching(false);
+    }
+  }
   const handleEditModalOpen = () => {
     setIsEditOpen(!isEditOpen);
     setMedicineName('')
@@ -163,10 +274,14 @@ const resetMedicineForm=()=>{
     setIsLoading(false);
   }
 
-  const handlePageChange = (newPage: number) => {
-    setIsLoading(true);
-    router.push(`lab/my-medicines?page=${newPage}`);
-    setIsLoading(false);
+  const handlePageChange = async(newPage: number) => {
+    if(SearchResult!==null&&SearchResult.totalPages>1){
+      await handleSearch(newPage)
+    }
+    else{
+
+      router.push(`lab/my-medicines?page=${newPage}`);
+    }
   };
 
   const handleDeleteTest = async() => {
@@ -216,7 +331,7 @@ const resetMedicineForm=()=>{
     <>
       <div className="p-4 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row items-start justify-between mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">My Tests</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">My Medicines</h1>
           <Dialog open={isRequestOpen} onOpenChange={setIsRequestOpen}>
             <DialogTrigger asChild>
               <Button disabled={isLoading} variant="outline" size="sm" className="w-full sm:w-auto mb-4 sm:mb-0">
@@ -228,7 +343,7 @@ const resetMedicineForm=()=>{
               <DialogHeader>
                 <DialogTitle>Request New Test</DialogTitle>
                 <DialogDescription>
-                  Can't find the Medicne you're looking for? Request it here.
+                  Can&apos;t find the Medicne you&apos;re looking for? Request it here.
                 </DialogDescription>
               </DialogHeader>
               <Form {...NewMedicineForm}>
@@ -299,65 +414,10 @@ const resetMedicineForm=()=>{
             </DialogContent>
           </Dialog>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-          {data.map((medicine) => (
-            <div key={medicine.id} className="bg-card text-card-foreground rounded-lg  shadow-md transition-all hover:shadow-lg border border-border rounded-md">
-              <div className="mb-4 relative w-full h-52">
-                <Image 
-                  src={medicine.medicine.photo} 
-                  alt={medicine.medicine.name} 
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-t-lg"
-                />
-              </div>
-              <div className="p-4 pt-0">
-                
-           
-              <div className="flex justify-between items-start mb-2">
-                <h2 className="text-lg font-semibold">{medicine.medicine.name}</h2>
-                <div className="flex space-x-1">
-                  <Button
-                    disabled={isLoading}
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => {
-                      medicineForm.reset({
-                        id: medicine.id,
-                        stock: medicine.stock,
-                      })
-                      setMedicineName(medicine.medicine.name);
-                      setIsEditOpen(true)
-                    }}
-                  >
-                    <Edit className="h-4 w-4" />
-                    <span className="sr-only">Edit</span>
-                  </Button>
-                  <Button
-                    disabled={isLoading}
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => {
-                      medicineForm.reset({
-                        id: medicine.id,
-                      })
-                      setMedicineName(medicine.medicine.name);
-                      setIsDeleteOpen(true)
-                    }}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                    <span className="sr-only">Delete</span>
-                  </Button>
-                </div>
-              </div>
-           
-              <p className="text-xl font-bold text-primary mb-2">{medicine.medicine.cost} EGP</p>
-              <p className="text-sm text-muted-foreground">Stock: {medicine.stock}</p>
-            </div>
-            </div>
-          ))}
-        </div>
-        <Dialog open={isAddOpen} onOpenChange={handleAddModalOpen}>
+        <div className="flex flex-col justify-center items-center mb-4  space-y-4  border-grey-400">
+<span className="border-t-2 border-grey-400 items-center  w-full"></span>
+<div className="flex justify-between items-center w-full">
+<Dialog open={isAddOpen} onOpenChange={handleAddModalOpen}>
           <DialogTrigger asChild>
             <Button disabled={isLoading} className="w-full sm:w-auto">
               <PlusCircle className="mr-2 h-4 w-4" />
@@ -423,6 +483,44 @@ const resetMedicineForm=()=>{
           </DialogContent>
           <Toaster />
         </Dialog>
+        <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='Search for Medicine'/>
+</div>
+</div>
+
+{isSearching ? (
+      <div className="flex justify-center items-center p-8">
+        <Spinner />
+      </div>
+    ) : (
+      SearchResult === null ? (
+        <MedicinesData 
+        medicineForm={medicineForm}
+        setIsDeleteOpen={setIsDeleteOpen}
+        setMedicineName={setMedicineName}
+        setIsEditOpen={setIsEditOpen}
+          currentPage={currentPage} 
+          handlePageChange={handlePageChange} 
+          isLoading={isLoading} 
+          medicines={medicines} 
+          totalPages={totalPages} 
+          availableMedicines={availableMedicines}
+        />
+      ) : (
+        <MedicinesData 
+        medicineForm={medicineForm}
+        setIsDeleteOpen={setIsDeleteOpen}
+        setMedicineName={setMedicineName}
+        setIsEditOpen={setIsEditOpen}
+          currentPage={SearchResult.currentPage} 
+          handlePageChange={handlePageChange} 
+          isLoading={isLoading} 
+          medicines={SearchResult.medicines} 
+          totalPages={SearchResult.totalPages} 
+          availableMedicines={availableMedicines}
+        />
+      )
+    )}
+      
         <Dialog open={isEditOpen} onOpenChange={handleEditModalOpen}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
@@ -438,7 +536,7 @@ const resetMedicineForm=()=>{
                     <FormItem>
                       <FormLabel>Test Name</FormLabel>
                       <FormControl>
-                        <Input {...field} value={medicineName} disabled={isLoading} disabled />
+                        <Input {...field} value={medicineName} disabled={isLoading}  />
                       </FormControl>
                     </FormItem>
                   )}
@@ -475,7 +573,7 @@ const resetMedicineForm=()=>{
             <DialogHeader>
               <DialogTitle>Confirm Deletion</DialogTitle>
               <DialogDescription>
-                Are you sure you want to delete the test "{medicineName}"? This action cannot be undone.
+                Are you sure you want to delete the test &quot;{medicineName}&quot;? This action cannot be undone.
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>

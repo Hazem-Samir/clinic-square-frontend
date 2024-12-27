@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -9,11 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { FormDataHandler, ImageHandler } from '@/utils/AuthHandlers'
-import { PlusCircle, X, File, FileText } from 'lucide-react'
-import Link from 'next/link'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {  File, FileText } from 'lucide-react'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 interface IDoctorReservation {
   doctor:{name:string,id:string,porfilePic:string,gender:string,specialization:string}

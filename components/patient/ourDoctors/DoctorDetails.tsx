@@ -19,7 +19,9 @@ import Image from 'next/image'
 import { getUser } from '@/lib/auth'
 import { DaysOfWeek, HandleTimeFormat } from '@/schema/Essentials'
 import toast, { Toaster } from 'react-hot-toast'
-import { BookSession } from '@/lib/patient/clientApi'
+import { BookSession, DoctorOnlinePayment } from '@/lib/patient/clientApi'
+import { useRouter } from 'next/navigation'
+
 interface ScheduleDay {
   day: string;
   startTime: string;
@@ -167,6 +169,7 @@ export default function DoctorDetails({ Doctor }: IProps) {
   const [selectedDay, setSelectedDay] = useState("")
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [availableDates, setAvailableDates] = useState<Date[]>([])
+  const router = useRouter()
 
   const [isLoading, setIsLoading] = useState(false)
   const {name:PatientName, phoneNumbers:PatientPhoneNumbers} = getUser();
@@ -175,7 +178,7 @@ export default function DoctorDetails({ Doctor }: IProps) {
     const dayIndex = DaysOfWeek.indexOf(day.toLowerCase());
     const today = new Date();
     const dates: Date[] = [];
-    let currentDate = new Date(today);
+    const currentDate = new Date(today);
 
     while (dates.length < 5) {
       if (currentDate.getDay() === dayIndex) {
@@ -203,7 +206,7 @@ if(paymentMethod==="cash"){
 
 
 
-    const res = await BookSession({doctor:Doctor.id,date:new Date(selectedDate.setHours(0,0,0,0)).toISOString()})
+    const res = await BookSession({doctor:Doctor.id,date:new Date(selectedDate.setUTCHours(0,0,0,0)).toISOString()})
     if (res.success ===true) {
       console.log(res.message)
           toast.success(res.message, {
@@ -221,16 +224,29 @@ if(paymentMethod==="cash"){
 
     else if(paymentMethod==="visa"){
       console.log(new Date(new Date(selectedDate).setUTCHours(0,0,0,0)).toISOString());
+
+    const res = await DoctorOnlinePayment(Doctor.id,new Date(selectedDate.setUTCHours(0,0,0,0)).toISOString())
+    if (res.success ===true) {
+      console.log(res)
+      router.push(res?.data.session.url)
+          
+      } else {
+            res.message.forEach((err: string) => toast.error(err || 'An unexpected error occurred.', {
+                  duration: 2000,
+                  position: 'top-center',
+            }))
+      }
     }
+    
     setIsBookingOpen(false);
     setSelectedDay("");
-    setSelectedDay(null)
+    setSelectedDate(null)
     setIsLoading(false);
 
   }
   
   
-  , [selectedDay, selectedDate, Doctor.id]);
+  , [ selectedDate, Doctor.id,paymentMethod]);
 
   const formatDate = useCallback((date: Date) => {
     return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });

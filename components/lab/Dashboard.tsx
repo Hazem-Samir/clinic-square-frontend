@@ -4,7 +4,6 @@ import {  Card,
       CardTitle, } from "@/components/ui/card"
 import {Banknote,TrendingUp,Users} from "lucide-react"
 import NumberTicker from "../ui/number-ticker"
-import { cookies } from 'next/headers'; // Import cookies function from Next.js
 
 interface IProps{
   todayResults: number;
@@ -13,9 +12,6 @@ interface IProps{
 
 }
 const Dashboard =({monthResults,todayResults,prevMonthResults}:IProps)=>{
-  const cookieStore = cookies();
-  const userCookie = cookieStore.get('user'); // Assuming the user info is stored in 'user' cookie
-  const  user = JSON.parse(userCookie.value); 
   const profit =(monthResults)-(prevMonthResults);
   const profitPercentage = prevMonthResults!==0?((monthResults-prevMonthResults)/(prevMonthResults))*100: 100
       return(

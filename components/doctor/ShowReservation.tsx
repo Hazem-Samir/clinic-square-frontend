@@ -32,6 +32,7 @@ import { useRouter } from 'next/navigation'
 import { shortName } from "@/lib/utils"
 import { FormDataHandler } from "@/utils/AuthHandlers"
 import Link from 'next/link'
+import { HandleTimeFormat } from "@/schema/Essentials"
 
 interface consultaitonData {
   diagnose: string;
@@ -211,7 +212,7 @@ export default function ShowReservation({ size = "default", reservation, RID, cu
           <div className="custom-scrollbar overflow-y-auto max-h-[calc(90vh-4rem)] sm:max-h-[calc(100vh-8rem)] pr-4 p-1 ">
             <DialogHeader>
               <DialogTitle className="text-lg sm:text-xl">Reservation Details</DialogTitle>
-              <DialogDescription></DialogDescription>
+              <DialogDescription>Date: {new Date(reservation.date).toDateString()} - {reservation.state==="pending"?"new":"consultation"}</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid gap-2 sm:gap-4 py-2 sm:py-4 space-y-2">

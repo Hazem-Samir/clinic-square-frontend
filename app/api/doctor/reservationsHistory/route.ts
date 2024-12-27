@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
           }
       
           const data = await apiResponse.json();
-
+console.log("bb",data)
           return NextResponse.json({ success: true, message: 'Rservations Data', data });
       
         } catch (error) {

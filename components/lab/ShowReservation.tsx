@@ -48,10 +48,9 @@ interface IProps {
 export default function ShowReservation({ RID, patient, requestedTests }: IProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isAllUploaded, setIsAllUploaded] = useState(false);
   const router = useRouter();
 
-  const { register, control, handleSubmit, formState: { errors }, setValue, watch } = useForm<PatientTestsValues>({
+  const {  control, handleSubmit, formState: { errors }, setValue, watch } = useForm<PatientTestsValues>({
     resolver: zodResolver(PatientTestsSchema),
     defaultValues: {
       requestedTests: requestedTests.map(test => ({
@@ -61,7 +60,7 @@ export default function ShowReservation({ RID, patient, requestedTests }: IProps
     },
   })
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields } = useFieldArray({
     control,
     name: "requestedTests",
   })

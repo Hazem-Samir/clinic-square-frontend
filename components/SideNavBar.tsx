@@ -46,7 +46,7 @@ export default function SideNavBar({navItems,role}: IProps) {
         <div className="flex-1">
           <nav className="grid items-start px-2 text-xs sm:text-sm font-medium lg:px-4 space-y-2">
             {navItems.map((item) => {
-              const isActive = segment === item.href.split('/')[2] || (segment === null && item.href===`${role}`)
+              const isActive = segment === item.href.split('/')[2] || (segment === null && item.href===`/${role}`)
               const Icon = iconMap[item.icon as keyof typeof iconMap];
               return (
                 <Link

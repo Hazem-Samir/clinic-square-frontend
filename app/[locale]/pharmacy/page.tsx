@@ -3,7 +3,6 @@ import { format } from "date-fns"
 import ProtectedRoute from "@/components/ProtectedRoute"
 import { Skeleton } from "@/components/ui/skeleton"
 import BlurFade from '@/components/ui/blur-fade'
-import ReservationsTable from '@/components/lab/ReservationsTable'
 import Dashboard from '@/components/lab/Dashboard'
 import { getOrders } from '@/lib/pharmacy/api'
 import OrdersTable from '@/components/pharmacy/OrdersTable'
@@ -32,7 +31,7 @@ async function DashboardData() {
   let prevmonthRevenue=0;
   prevMonthResults.data.data.map((data)=>{
     data.requestedTests.map((test)=>{
-     ThismonthRevenue+=Number(test.testDetails.cost)
+      prevmonthRevenue+=Number(test.testDetails.cost)
     })
   })
   

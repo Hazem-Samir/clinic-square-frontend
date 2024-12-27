@@ -23,7 +23,80 @@ export const addDay = async (data)=>{
       }
     }
 
+    export const searchReservations = async (keyword:string,limit:number,page: number ) => {
+      const token = getToken();
+      if(token){
+      const queryParams = new URLSearchParams({
+        limit: limit.toString(),
+        page: page.toString(),
+        keyword,
+      }).toString();
+      const response = await fetch(`http://localhost:3000/api/lab/search/reservations?${queryParams}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        cache:"reload",
+      });
+    
+      if (!response.ok) {
+            throw new Error ('Failed to fetch reservations');
+      }
+    
+      const res = await response.json();
+      return res;
+    }
+    }
 
+    export const searchTests = async (keyword:string,limit:number,page: number ) => {
+      const token = getToken();
+      if(token){
+      const queryParams = new URLSearchParams({
+        limit: limit.toString(),
+        page: page.toString(),
+        keyword,
+      }).toString();
+      const response = await fetch(`http://localhost:3000/api/lab/search/tests?${queryParams}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        cache:"reload",
+      });
+    
+      if (!response.ok) {
+            throw new Error ('Failed to fetch reservations');
+      }
+    
+      const res = await response.json();
+      return res;
+    }
+    }
+    
+    export const searchReservationsHistory = async (keyword:string,limit:number,page: number ) => {
+      const token = getToken();
+      if(token){
+      const queryParams = new URLSearchParams({
+        limit: limit.toString(),
+        page: page.toString(),
+        keyword,
+      }).toString();
+      const response = await fetch(`http://localhost:3000/api/lab/search/reservationsHistory?${queryParams}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        cache:"reload",
+      });
+    
+      if (!response.ok) {
+            throw new Error ('Failed to fetch reservations');
+      }
+    
+      const res = await response.json();
+      return res;
+    }
+    }
 
     export const UpdateDay = async (day:DayValue)=>{
       const token = getToken();

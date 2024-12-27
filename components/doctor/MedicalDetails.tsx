@@ -27,15 +27,7 @@ interface IProps {
     export default function MedicalDetails({reservation}:IProps) {
 
     
-      const sentFiles = [
-        "Test1",
-        "Test2",
-        "X-Ray Image.png",
-        "Prescription.pdf",
-        "Insurance Card.jpg",
-        "Allergy Test Results.pdf",
-        "Previous Treatment Plan.docx",
-      ]
+
     
       return (
         <Dialog>

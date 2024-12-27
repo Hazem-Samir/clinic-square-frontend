@@ -31,7 +31,7 @@ async function DashboardData() {
   let prevmonthRevenue=0;
   prevMonthResults.data.data.map((data)=>{
     data.requestedTests.map((test)=>{
-     ThismonthRevenue+=Number(test.testDetails.cost)
+      prevmonthRevenue+=Number(test.testDetails.cost)
     })
   })
   
@@ -62,7 +62,7 @@ async function ReservationsData({ page, date }: { page: number, date: string }) 
   )
 }
 
-export default function DoctorDashboardPage({ searchParams }: { searchParams: { page?: string, date?: string } }) {
+export default function HomePage({ searchParams }: { searchParams: { page?: string, date?: string } }) {
   const page = Number(searchParams.page) || 1
   const date = searchParams.date 
     ? format(new Date(searchParams.date), 'yyyy-MM-dd') 

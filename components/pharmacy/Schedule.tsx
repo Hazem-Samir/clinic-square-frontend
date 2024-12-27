@@ -11,19 +11,16 @@ import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Trash2, Edit2, DollarSign } from "lucide-react"
-import ProtectedRoute from "@/components/ProtectedRoute"
+import { Trash2, Edit2 } from "lucide-react"
 import { ConvertTimeToDate, DaysOfWeek, DayValue, HandleTimeFormat } from "@/schema/Essentials"
 import { DoctorScheduleschema, DoctorScheduleschemaValue } from "@/schema/Doctor"
-import { FormDataHandler } from "@/utils/AuthHandlers"
-import { addDay, DeleteDay, UpdateCost, UpdateDay } from "@/lib/lab/clientApi"
+import { addDay, DeleteDay, UpdateDay } from "@/lib/lab/clientApi"
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import Spinner from "../Spinner"
 
 interface IProps {
   days: DayValue[];
-  cost: number;
 }
 
 function ScheduleForm({ onSubmit, availableDays, isLoading, initialData }: { onSubmit: (data: DayValue) => void, availableDays: string[], isLoading: boolean, initialData?: DayValue }) {
@@ -118,7 +115,7 @@ function ScheduleForm({ onSubmit, availableDays, isLoading, initialData }: { onS
   )
 }
 
-export default function Schedule({ days, cost }: IProps) {
+export default function Schedule({ days }: IProps) {
   const t = useTranslations('schedule')
   const router = useRouter()
 
@@ -126,12 +123,8 @@ export default function Schedule({ days, cost }: IProps) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
   const [currentEditingItem, setCurrentEditingItem] = useState<DayValue | null>(null)
-  const [isSessionCostModalOpen, setIsSessionCostModalOpen] = useState(false)
 
-  const costForm = useForm<{ cost: number }>({
-    resolver: zodResolver(DoctorScheduleschema.pick({ cost: true })),
-    defaultValues: { cost: cost },
-  })
+
 
   const availableDays = DaysOfWeek.filter(day => !days.find(item => item.day === day))
 

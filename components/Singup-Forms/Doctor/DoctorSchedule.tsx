@@ -37,7 +37,7 @@ interface IProps {
   onBack: () => void;
 }
 
-export default function DoctorScheduleschema({ role ,prevData,onBack}: IProps) {
+export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
   const router = useRouter()
 
   const [isLoading,SetIsLoading]=useState(false);

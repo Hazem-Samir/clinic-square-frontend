@@ -31,9 +31,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
-import { DoctorSchema, DoctorValue } from "@/schema/Doctor"
-import DoctorScheduleschema from "./DoctorScheduleschema"
+import {  DoctorSchema, DoctorValue } from "@/schema/Doctor"
 import { Textarea } from "@/components/ui/textarea"
+import DoctorSchedule from "./DoctorSchedule"
 
 
 
@@ -49,7 +49,7 @@ interface Iimages{
 }
 export default function Doctor({ role ,onBack}: IProps) {
   const [step, setStep] = useState(1);
-  const [DoctorSchema, setDoctorSchema] = useState<DoctorValue | null>(null);
+  const [Doctor, setDoctor] = useState<DoctorValue | null>(null);
   const [images, setImages] = useState<Iimages>({profilePic:null,license:[]});
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
@@ -91,7 +91,7 @@ export default function Doctor({ role ,onBack}: IProps) {
   })
 
     const onSubmitHandler=(data:DoctorValue)=>{
-      setDoctorSchema(data);
+      setDoctor(data);
       setStep(2);  
     }
 
@@ -580,7 +580,7 @@ export default function Doctor({ role ,onBack}: IProps) {
     </Form></>)
   :
 
-  <DoctorScheduleschema role={role} onBack={handleBack} prevData={DoctorSchema}/>
+  <DoctorSchedule role={role} onBack={handleBack} prevData={Doctor}/>
  
   )
 }

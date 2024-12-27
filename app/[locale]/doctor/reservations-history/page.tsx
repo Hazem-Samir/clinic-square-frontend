@@ -6,14 +6,13 @@ import ReservationsHistoryTable from '@/components/doctor/ReservationsHisotryTab
 import BlurFade from '@/components/ui/blur-fade'
 
 async function ReservationsData({ page }: { page: number }) {
-  const { data: reservations } = await getReservationsHistory(10,page);
-  console.log(reservations)
+  const { data: reservations } = await getReservationsHistory(7,page);
+  console.log("aaa",reservations)
   return (
     <ReservationsHistoryTable 
       reservations={reservations.data}
       currentPage={page}
       totalPages={reservations.paginationResult.numberOfPages}
-      numberOfResults={reservations.results}
   
     />
   )

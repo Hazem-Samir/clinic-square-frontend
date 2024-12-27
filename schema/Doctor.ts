@@ -1,4 +1,4 @@
-import * as z from "zod"
+  import * as z from "zod"
 import { ImageHandler } from "@/utils/AuthHandlers";
 import { DaySchema } from "./Essentials";
 

@@ -1,10 +1,11 @@
 import { create } from 'zustand'
-import { AddMedicineToCart, AddToCart, GetMyCart, RemoveMedicineFromCart, RemoveTestFromCart, updateMedicineQuantity } from '@/lib/patient/clientApi'
+import {  AddToCart, GetMyCart, RemoveMedicineFromCart, RemoveTestFromCart, updateMedicineQuantity } from '@/lib/patient/clientApi'
 
 interface Pharmacy {
   _id: string
   profilePic: string
   name: string
+  address:string[]
   id: string
 }
 
@@ -12,9 +13,13 @@ interface Lab {
   _id: string
   profilePic: string
   name: string
+  address:string[]
+  schedule:ILabSchedule
   id: string
 }
-
+ interface ILabSchedule {
+ schedule:{days:{day:string,startTime:string,endTime:string,limit:number}[]}
+ }
 interface Medicine {
   _id: string
   medicine: {
@@ -111,7 +116,7 @@ const useCartStore = create<CartStore>((set) => ({
     try {
       const response = await GetMyCart();
       set({ cart: response.data.data[0], isLoading: false })
-    } catch (error) {
+    } catch {
       set({ error: 'Failed to fetch cart', isLoading: false })
     }
   },
@@ -122,7 +127,7 @@ const useCartStore = create<CartStore>((set) => ({
     try {
       const response = await RemoveMedicineFromCart(medicineId);
       set({ cart: response.data.data, isLoading: false })
-    } catch (error) {
+    } catch {
       set({ error: 'Failed to remove medicine from cart', isLoading: false })
     }
   },
@@ -133,7 +138,7 @@ const useCartStore = create<CartStore>((set) => ({
       const response = await updateMedicineQuantity({type:"medicine",quantity},medicineId);
       console.log(response.data.data)
       set({ cart:  response.data.data, isLoading: false })
-    } catch (error) {
+    } catch {
       set({ error: 'Failed to update medicine quantity', isLoading: false })
     }
   },
@@ -143,7 +148,7 @@ const useCartStore = create<CartStore>((set) => ({
     try {
       const response = await RemoveTestFromCart(testId);
       set({ cart: response.data.data, isLoading: false })
-    } catch (error) {
+    } catch {
       set({ error: 'Failed to remove test from cart', isLoading: false })
     }
   },
@@ -155,7 +160,7 @@ const useCartStore = create<CartStore>((set) => ({
       set({ cart: response.data.data, isLoading: false })
       channel?.postMessage({ type: 'UPDATE_CART' })
       return {success:true}
-    } catch (error) {
+    } catch {
       console.log("dasadasd")
       set({ error: 'Failed to add test to cart', isLoading: false })
       return {success:false}

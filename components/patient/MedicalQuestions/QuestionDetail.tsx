@@ -4,9 +4,8 @@ import { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { shortName } from '@/lib/utils'
 import { getAge } from '@/utils/utils'
 import { ArrowLeft, Edit } from 'lucide-react'
@@ -143,7 +142,7 @@ export default function QuestionDetail({question}: IProps) {
                 type=""
                 {...field} />
               </FormControl>
-              <FormDescription> Make changes to your question here. Click save when you're done.</FormDescription>
+              <FormDescription> Make changes to your question here. Click save when you&apos;re done.</FormDescription>
               <FormMessage />
             </FormItem>
           )}

@@ -13,25 +13,19 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { CircleUserRound, LogOut, Menu } from 'lucide-react'
 import { ModeToggle } from '../ui/ModeToggle'
-import { getUser, removeUser } from '@/lib/auth'
+import { getUser } from '@/lib/auth'
 import LanguageSwitcherIcon from '../LanguageSwitcherIcon'
-import { useRouter } from 'next/navigation'
 import { logout } from '@/actions/logout'
 import { CartIcon } from '../CartIcon'
 
 export default function NavBar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [user, setUser] = useState({})
-  const router = useRouter();
   
   useEffect(() => {
     setUser(getUser());
   }, [])
   
-  const Logout = () => {
-    removeUser();
-    router.push("/login")
-  }
 
   const menuItems = [
     { href: "/patient", label: "Home" },

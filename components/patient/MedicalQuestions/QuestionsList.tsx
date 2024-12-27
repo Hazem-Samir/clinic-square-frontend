@@ -5,12 +5,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Button } from '@/components/ui/button'
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -18,7 +16,7 @@ import {
 import { shortName } from '@/lib/utils'
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
-import { CalendarDays, ChevronLeft, ChevronRight, PlusCircle } from "lucide-react"
+import { ChevronLeft, ChevronRight, PlusCircle } from "lucide-react"
 import {
       Form,
       FormControl,
@@ -134,7 +132,7 @@ export default function QuestionsList({ questions, currentPage, totalPages }: IP
                 {...field} />
               </FormControl>
               <FormDescription>
-                Enter your medical question below. We'll do our best to answer it promptly.
+                Enter your medical question below. We&apos;ll do our best to answer it promptly.
                 </FormDescription>
               <FormMessage />
             </FormItem>

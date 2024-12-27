@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useFieldArray } from "react-hook-form"
-import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -23,31 +22,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { cn, shortName } from "@/lib/utils"
+
+import {  shortName } from "@/lib/utils"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { CalendarIcon, ChevronLeft, ChevronRight, PlusCircle, X } from "lucide-react"
+import {  PlusCircle, X } from "lucide-react"
 import { FormDataHandler } from "@/utils/AuthHandlers"
 import { PasswordSchema, PasswordValue, LabProfileSchema, ProfileValue } from "@/schema/Profile"
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import { UpdatePassword, UpdateProfile } from "@/lib/lab/clientApi"
-import { Textarea } from "../ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Label } from "../ui/label"
-import { getAge } from "@/utils/utils"
 import { removeUser } from "@/lib/auth"
 import Spinner from "../Spinner"
 
@@ -234,7 +220,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
                 <FormField
                   control={form.control}
                   name="profilePic"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem>
                       <FormLabel>Profile Picture</FormLabel>
                       <FormControl>
@@ -377,7 +363,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
                 <FormField
                   control={form.control}
                   name="license"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem>
                       <FormLabel>License Photos</FormLabel>
                       <FormControl>

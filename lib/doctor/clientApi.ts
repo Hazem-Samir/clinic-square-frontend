@@ -137,34 +137,83 @@ export const addDay = async (data)=>{
       }
     }
 
-    export const SearchReservation = async (patient:string) => {
 
+
+    export const searchReservationsHistory = async (keyword:string,limit:number,page: number) => {
       const token = getToken();
       if(token){
-        const queryParams = new URLSearchParams({
-          patient: patient,
-        }).toString();
-        const response = await fetch(`/api/doctor/reservations?${queryParams}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-            cache:"no-store"
-            
-        });
-      
-        if (!response.ok) {
-          throw new Error('Failed to fetch reservations');
-        }
-      
-        const res = await response.json();
-        return res;
-      }
-         else {
-        console.error('No Token');
+      const queryParams = new URLSearchParams({
+        limit: limit.toString(),
+        page: page.toString(),
+        keyword,
+      }).toString();
+      const response = await fetch(`http://localhost:3000/api/doctor/search/reservationsHistory?${queryParams}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        cache:"reload",
+      });
+    
+      if (!response.ok) {
+            throw new Error ('Failed to fetch reservations');
       }
     
-    } 
+      const res = await response.json();
+      return res;
+    }
+  }
+
+  export const searchPatientQuestions = async (keyword:string,limit:number,page: number) => {
+    const token = getToken();
+    if(token){
+    const queryParams = new URLSearchParams({
+      limit: limit.toString(),
+      page: page.toString(),
+      keyword,
+    }).toString();
+    const response = await fetch(`http://localhost:3000/api/doctor/search/questions?${queryParams}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      cache:"reload",
+    });
+  
+    if (!response.ok) {
+          throw new Error ('Failed to fetch reservations');
+    }
+  
+    const res = await response.json();
+    return res;
+  }
+}
+
+
+export const searchReservations = async (keyword:string,limit:number,page: number ) => {
+  const token = getToken();
+  if(token){
+  const queryParams = new URLSearchParams({
+    limit: limit.toString(),
+    page: page.toString(),
+    keyword,
+  }).toString();
+  const response = await fetch(`http://localhost:3000/api/doctor/search/reservations?${queryParams}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    cache:"reload",
+  });
+
+  if (!response.ok) {
+        throw new Error ('Failed to fetch reservations');
+  }
+
+  const res = await response.json();
+  return res;
+}
+}
 
 
     export const AnswerQuestion = async (data)=>{

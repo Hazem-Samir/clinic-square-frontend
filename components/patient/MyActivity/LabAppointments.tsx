@@ -167,7 +167,7 @@ console.log(appointments)
             onUpdate={handleUpdate}
             />
           <Pagination currentPage={currentPage} totalPages={totalPages} handlePageChange={handlePageChange} />
-
+<Toaster />
     </div>
   )
 }

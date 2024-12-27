@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import {
   Avatar,
   AvatarFallback,
@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react"
+import { CalendarDays } from "lucide-react"
 import SearchBar from "@/components/ui/SearchBar"
 import {
   Popover,
@@ -26,6 +26,9 @@ import { EndReservationValues } from "@/schema/DoctorReservation"
 import { useRouter } from 'next/navigation'
 import ShowReservation from "./ShowReservation"
 import Pagination from "../Pagination"
+import toast, { Toaster } from 'react-hot-toast'
+import Spinner from "../Spinner"
+import { searchReservations } from "@/lib/lab/clientApi"
 
 interface IProps {
   reservations: EndReservationValues[];
@@ -33,31 +36,95 @@ interface IProps {
   totalPages: number;
   currentDate?: string;
 }
+interface IReservations extends IProps {
+  handlePageChange:(newPage:number)=>void
+  isLoading:boolean
+}
+
+const ReservationsData=({reservations,currentPage,totalPages,handlePageChange,isLoading,currentDate}:IReservations)=>{
+  return (
+    <>
+       <CardContent className="flex flex-col gap-4 sm:gap-8">
+        {reservations.length<=0?<div className="flex justify-center items-center">No Reservations</div>
+        :reservations.map((reservation) => (
+            <div key={reservation.id} className="flex items-center gap-2 sm:gap-4">
+              <Avatar className="max-[350px]:hidden sm:h-9 sm:w-9">
+                <AvatarImage src={reservation.patient.profilePic} alt="Avatar" />
+                <AvatarFallback>{shortName(reservation.patient.name)}</AvatarFallback>
+              </Avatar>
+              <div className="grid gap-0.5 sm:gap-1">
+                <p className="text-xs sm:text-sm font-medium leading-none">{reservation.patient.name}</p>
+                <p className="max-[400px]:hidden text-xs sm:text-sm text-muted-foreground">
+                  Phone: {reservation.patient.phoneNumbers.join(", ")}
+                </p>
+              </div>
+              <div className="ltr:ml-auto rtl:mr-auto font-medium">
+                <ShowReservation size="sm" patient={reservation.patient} currentPage={currentPage} currentDate={currentDate} RID={reservation.id} requestedTests={reservation.requestedTests}/>
+              </div>
+            </div>
+          ))
+        }
+      </CardContent>
+      <Pagination currentPage={currentPage} totalPages={totalPages}  handlePageChange={handlePageChange} />
+
+         </>
+  )
+}
 
 export default function ReservationsTable({reservations, currentPage, totalPages, currentDate}: IProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [SearchedReservation, setSearchedReservaion] = useState(reservations);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false)
+
     const router = useRouter();
 
-  useEffect(() => {
-    setSearchedReservaion(reservations);
-  }, [reservations]);
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    const lowercasedQuery = query.toLowerCase();
-    const filtered = reservations.filter(reservation => 
-      reservation.patient.name.toLowerCase().includes(lowercasedQuery)
-    );
-    setSearchedReservaion(filtered);
-  };
 
-  const handlePageChange = (newPage: number) => {
-    setIsLoading(true);
-    router.push(`lab?page=${newPage}&date=${currentDate}`);
-    setIsLoading(false);
+  const [searchTerm, setSearchTerm] = useState('')
+
+    const [SearchResult, setSearchResult] = useState<{currentPage:number,totalPages:number,reservations:EndReservationValues[]}|null>(null)
+
+
+
+  const handleSearch = async (page:number) => {
+    setIsSearching(true);
+    if (!searchTerm) {
+      setSearchResult(null)
+      setIsSearching(false);
+      return
+    }
+
+    try {
+      const res = await searchReservations(searchTerm, 7, page)
+      if (res.success === true) {
+        console.log(res.data)
+        setSearchResult({
+          reservations: res.data.data,
+          totalPages: res.data.paginationResult.numberOfPages,
+          currentPage: res.data.paginationResult.currentPage
+        })
+      } else {
+        res.message.forEach((err: string) => 
+          toast.error(err || 'An unexpected error occurred.', {
+            duration: 2000,
+            position: 'bottom-center',
+          })
+        )
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error('An unexpected error occurred.')
+    } finally {
+      setIsSearching(false);
+    }
+  }
+
+  const handlePageChange = async(newPage: number) => {
+    if(SearchResult!==null&&SearchResult.totalPages>1){
+      await handleSearch(newPage)
+    }
+    else{
+      router.push(`lab?page=${newPage}&date=${currentDate}`);
+    }
   };
 
   const handleDateChange = (date: Date) => {
@@ -89,7 +156,8 @@ export default function ReservationsTable({reservations, currentPage, totalPages
         <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-2 sm:gap-4">
           <CardTitle className="text-base sm:text-lg">Reservations</CardTitle>
           <div className="flex items-center gap-2">
-            <SearchBar onSearch={handleSearch} setSearchedReservaion={setSearchedReservaion} />
+          <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='Search for Patient'/>
+
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="outline" size="icon">
@@ -117,57 +185,32 @@ export default function ReservationsTable({reservations, currentPage, totalPages
           </div>
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4 sm:gap-8">
-        {isLoading ? (
-          <div className="text-center">Loading reservations...</div>
-        ) : error ? (
-          <div className="text-center text-red-500">{error}</div>
-        ) : SearchedReservation.length === 0 ? (
-          <div className="text-center">No reservations found.</div>
-        ) : (
-          reservations.map((reservation) => (
-            <div key={reservation.id} className="flex items-center gap-2 sm:gap-4">
-              <Avatar className="max-[350px]:hidden sm:h-9 sm:w-9">
-                <AvatarImage src={reservation.patient.profilePic} alt="Avatar" />
-                <AvatarFallback>{shortName(reservation.patient.name)}</AvatarFallback>
-              </Avatar>
-              <div className="grid gap-0.5 sm:gap-1">
-                <p className="text-xs sm:text-sm font-medium leading-none">{reservation.patient.name}</p>
-                <p className="max-[400px]:hidden text-xs sm:text-sm text-muted-foreground">
-                  Phone: {reservation.patient.phoneNumbers.join(", ")}
-                </p>
-              </div>
-              <div className="ltr:ml-auto rtl:mr-auto font-medium">
-                <ShowReservation size="sm" patient={reservation.patient} currentPage={currentPage} currentDate={currentDate} RID={reservation.id} requestedTests={reservation.requestedTests}/>
-              </div>
-            </div>
-          ))
-        )}
-      </CardContent>
+     
       
-      {/* <div className="flex justify-center items-center p-4 gap-4">
-        <Button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1 || isLoading}
-          size="icon"
-          variant="outline"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
-        <span className="text-sm font-medium">
-          {currentPage} / {totalPages}
-        </span>
-        <Button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages || isLoading}
-          size="icon"
-          variant="outline"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </div> */}
-      <Pagination currentPage={currentPage} totalPages={totalPages} currentDate={currentDate} isLoading={isLoading}  handlePageChange={handlePageChange} />
-
+        
+      {isSearching ? (
+      <div className="flex justify-center items-center p-8">
+        <Spinner />
+      </div>
+    ) : (
+      SearchResult === null ? (
+        <ReservationsData 
+          currentPage={currentPage} 
+          handlePageChange={handlePageChange} 
+          isLoading={isLoading} 
+          reservations={reservations} 
+          totalPages={totalPages} 
+        />
+      ) : (
+        <ReservationsData 
+          currentPage={SearchResult.currentPage} 
+          handlePageChange={handlePageChange} 
+          isLoading={isLoading} 
+          reservations={SearchResult.reservations} 
+          totalPages={SearchResult.totalPages} 
+        />
+      )
+    )}
     </Card>
   )
 }

@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import DoctorAppointments from '@/components/patient/MyActivity/DoctorsAppointments'
 import LabAppointments from '@/components/patient/MyActivity/LabAppointments'
@@ -8,7 +7,6 @@ import PharmacyOrders from '@/components/patient/MyActivity/PharmacyOrders'
 
 
 export default function MyActivity() {
-  const [activeTab, setActiveTab] = useState("doctors")
 
   return (
   <main    className="flex-grow p-4 md:p-8 space-y-8 md:space-y-12 max-w-7xl mx-auto w-full bg-background  text-foreground" >

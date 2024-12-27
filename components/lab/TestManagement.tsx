@@ -33,27 +33,96 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { PlusCircle, Edit, Trash2, Send, Plus, X, ChevronLeft, ChevronRight, } from 'lucide-react'
-import { AddTest, DeleteTest, RequestTest } from '@/lib/lab/clientApi'
+import { AddTest, DeleteTest, RequestTest, searchTests } from '@/lib/lab/clientApi'
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import { getUser } from '@/lib/auth'
 import Spinner from '../Spinner'
 import { ITest, ITestDetails } from '@/interfaces/Lab'
-interface MyTest {
-  id: string;
-  lab: string;
-  preparations: string[];
-  test: {id: string, name: string};
-  cost: string;
-}
+import SearchBar from '../ui/SearchBar'
+import Pagination from '../Pagination'
+
 
 interface IProps {
-  data: ITest[];
+  tests: ITest[];
   currentPage: number;
   totalPages: number;
   availableTests: ITestDetails[]
 }
 
+interface ITestsData extends IProps{
+  form :{}
+  isLoading: boolean
+  setTestName: (name:string)=>void
+  setIsEditOpen: (value:boolean)=>void
+  setIsDeleteOpen: (value:boolean)=>void
+  handlePageChange:(newPage:number)=>void
+
+}
+
+const TestsData=({tests,form,isLoading,setTestName,setIsEditOpen,setIsDeleteOpen,currentPage,handlePageChange,totalPages}:ITestsData)=>{
+  return (
+    <>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        {tests.length<=0?<div className="flex col-span-4 justify-center items-center">No Tests</div>
+        :tests.map((test) => (
+          <div key={test.id} className="bg-card text-card-foreground rounded-lg p-4 shadow-md transition-all hover:shadow-lg border border-border">
+            <div className="flex justify-between items-start mb-2">
+              <h2 className="text-lg font-semibold">{test.test.name}</h2>
+              <div className="flex space-x-1">
+                <Button
+                disabled={isLoading}
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    form.reset({
+                      id: test.id,
+                      cost: test.cost,
+                      preparations: test.preparations,
+                    })
+                    setTestName(test.test.name);
+                    setIsEditOpen(true)
+                  }}
+                >
+                  <Edit className="h-4 w-4" />
+                  <span className="sr-only">Edit</span>
+                </Button>
+                <Button
+                disabled={isLoading}
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    form.reset({
+                      id: test.id,
+                      cost: test.cost,
+                      preparations: test.preparations,
+                    })
+                    setTestName(test.test.name);
+                    setIsDeleteOpen(true)
+                  }}
+                >
+                  <Trash2 className="h-4 w-4" />
+                  <span className="sr-only">Delete</span>
+                </Button>
+              </div>
+            </div>
+            <p className="text-xl font-bold text-primary mb-2">{test.cost} EGP</p>
+            <div className="mt-2">
+              <h3 className="text-sm font-semibold mb-1">Preparations:</h3>
+              <ul className="list-disc list-inside text-sm text-muted-foreground">
+                {test.preparations.length > 0 ? test.preparations.map((prep, index) => (
+                  <li key={index}>{prep}</li>
+                )) : <li>none</li>}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+      <Pagination currentPage={currentPage} totalPages={totalPages}  handlePageChange={handlePageChange} />
+
+    </>
+  )
+}
 const testFormSchema = z.object({
   id: z.string().min(5, {
     message: "Test name must be at least 2 characters.",
@@ -65,15 +134,56 @@ const testFormSchema = z.object({
 })
 type TestFormValue =z.infer<typeof testFormSchema>;
 
-export default function TestManagement({data, currentPage, totalPages,availableTests}: IProps) {
+export default function TestManagement({tests, currentPage, totalPages,availableTests}: IProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false)
+  const [isSearching, setIsSearching] = useState(false)
   const [testName, setTestName] = useState('')
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
   const [isRequestOpen, setIsRequestOpen] = useState(false)
 
+
+
+  const [searchTerm, setSearchTerm] = useState('')
+
+    const [SearchResult, setSearchResult] = useState<{currentPage:number,totalPages:number,tests:ITest[]}|null>(null)
+
+
+
+  const handleSearch = async (page:number) => {
+    setIsSearching(true);
+    if (!searchTerm) {
+      setSearchResult(null)
+      setIsSearching(false);
+      return
+    }
+
+    try {
+      const res = await searchTests(searchTerm, 7, page)
+      if (res.success === true) {
+        console.log(res.data)
+        setSearchResult({
+          tests: res.data.data,
+          totalPages: res.data.paginationResult.numberOfPages,
+          currentPage: res.data.paginationResult.currentPage
+        })
+      } else {
+        res.message.forEach((err: string) => 
+          toast.error(err || 'An unexpected error occurred.', {
+            duration: 2000,
+            position: 'bottom-center',
+          })
+        )
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error('An unexpected error occurred.')
+    } finally {
+      setIsSearching(false);
+    }
+  }
   const handleEditModalOpen=()=>{
     setIsEditOpen(!isEditOpen);
     setTestName('')
@@ -148,10 +258,14 @@ const handleUpdateSubmit=(data:TestFormValue)=>{
 }
 
 
-const handlePageChange = (newPage: number) => {
-  setIsLoading(true);
-  router.push(`lab/my-tests?page=${newPage}`);
-  setIsLoading(false);
+const handlePageChange = async(newPage: number) => {
+  if(SearchResult!==null&&SearchResult.totalPages>1){
+    await handleSearch(newPage)
+  }
+  else{
+
+    router.push(`lab/my-tests?page=${newPage}`);
+  }
 };
 
 const handleDeleteTest = async() => {
@@ -200,7 +314,7 @@ const handleDeleteTest = async() => {
   return (
     <>
     <div className="p-4 max-w-7xl mx-auto">
-      <div className="flex flex-col sm:flex-row items-start justify-between mb-6">
+      <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">My Tests</h1>
         <Dialog open={isRequestOpen} onOpenChange={setIsRequestOpen}>
           <DialogTrigger asChild>
@@ -213,7 +327,7 @@ const handleDeleteTest = async() => {
             <DialogHeader>
               <DialogTitle>Request New Test</DialogTitle>
               <DialogDescription>
-                Can't find the test you're looking for? Request it here.
+                Can&apos;t find the test you&apos;re looking for? Request it here.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -239,61 +353,10 @@ const handleDeleteTest = async() => {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        {data.map((test) => (
-          <div key={test.id} className="bg-card text-card-foreground rounded-lg p-4 shadow-md transition-all hover:shadow-lg border border-border">
-            <div className="flex justify-between items-start mb-2">
-              <h2 className="text-lg font-semibold">{test.test.name}</h2>
-              <div className="flex space-x-1">
-                <Button
-                disabled={isLoading}
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => {
-                    form.reset({
-                      id: test.id,
-                      cost: test.cost,
-                      preparations: test.preparations,
-                    })
-                    setTestName(test.test.name);
-                    setIsEditOpen(true)
-                  }}
-                >
-                  <Edit className="h-4 w-4" />
-                  <span className="sr-only">Edit</span>
-                </Button>
-                <Button
-                disabled={isLoading}
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => {
-                    form.reset({
-                      id: test.id,
-                      cost: test.cost,
-                      preparations: test.preparations,
-                    })
-                    setTestName(test.test.name);
-                    setIsDeleteOpen(true)
-                  }}
-                >
-                  <Trash2 className="h-4 w-4" />
-                  <span className="sr-only">Delete</span>
-                </Button>
-              </div>
-            </div>
-            <p className="text-xl font-bold text-primary mb-2">{test.cost} EGP</p>
-            <div className="mt-2">
-              <h3 className="text-sm font-semibold mb-1">Preparations:</h3>
-              <ul className="list-disc list-inside text-sm text-muted-foreground">
-                {test.preparations.length > 0 ? test.preparations.map((prep, index) => (
-                  <li key={index}>{prep}</li>
-                )) : <li>none</li>}
-              </ul>
-            </div>
-          </div>
-        ))}
-      </div>
-      <Dialog open={isAddOpen} onOpenChange={handleAddModalOpen}>
+      <div className="flex flex-col justify-center items-center mb-4  space-y-4  border-grey-400">
+<span className="border-t-2 border-grey-400 items-center  w-full"></span>
+<div className="flex justify-between items-center w-full">
+<Dialog open={isAddOpen} onOpenChange={handleAddModalOpen}>
         <DialogTrigger asChild>
           <Button disabled={isLoading} className="w-full sm:w-auto">
             <PlusCircle className="mr-2 h-4 w-4" />
@@ -408,6 +471,45 @@ const handleDeleteTest = async() => {
         </DialogContent>
         <Toaster />
       </Dialog>
+        <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='Search for Test'/>
+</div>
+</div>
+
+{isSearching ? (
+      <div className="flex justify-center items-center p-8">
+        <Spinner />
+      </div>
+    ) : (
+      SearchResult === null ? (
+        <TestsData 
+        availableTests={availableTests}
+        form={form}
+        setIsDeleteOpen={setIsDeleteOpen}
+        setTestName={setTestName}
+        setIsEditOpen={setIsEditOpen}
+          currentPage={currentPage} 
+          handlePageChange={handlePageChange} 
+          isLoading={isLoading} 
+          tests={tests} 
+          totalPages={totalPages} 
+        />
+      ) : (
+        <TestsData 
+        form={form}
+        setIsDeleteOpen={setIsDeleteOpen}
+        setTestName={setTestName}
+        setIsEditOpen={setIsEditOpen}
+        availableTests={availableTests}
+          currentPage={SearchResult.currentPage} 
+          handlePageChange={handlePageChange} 
+          isLoading={isLoading} 
+          tests={SearchResult.tests} 
+          totalPages={SearchResult.totalPages} 
+        />
+      )
+    )}
+      
+         
       <Dialog open={isEditOpen} onOpenChange={handleEditModalOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -423,7 +525,7 @@ const handleDeleteTest = async() => {
                   <FormItem>
                     <FormLabel>Test Name</FormLabel>
                     <FormControl>
-                      <Input {...field} value={testName} disabled={isLoading} disabled />
+                      <Input {...field} value={testName} disabled={isLoading}  />
                     </FormControl>
                   </FormItem>
                 )}
@@ -508,7 +610,7 @@ const handleDeleteTest = async() => {
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete the test "{testName}"? This action cannot be undone.
+              Are you sure you want to delete the test &quot;{testName}&quot;? This action cannot be undone.
             
             </DialogDescription>
           </DialogHeader>
@@ -520,32 +622,11 @@ const handleDeleteTest = async() => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+     
+
+   
  
-        {
-          totalPages>0?
-      <div className="flex justify-center items-center p-4 gap-4">
-        <Button
-        
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1  || isLoading}
-          size="icon"
-          variant="outline"
-          >
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
-        <span className="text-sm font-medium">
-          {currentPage} / {totalPages}
-        </span>
-        <Button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages|| totalPages===0 || isLoading}
-          size="icon"
-          variant="outline"
-          >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </div>:null
-        }
+       
              <Toaster />
     </div>
       
