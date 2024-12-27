@@ -2,13 +2,93 @@
   "common": {
     "switchLanguage": "Switch language"
   },
+  "nav":{
+    "Home":"Home",
+    "Reservations History":"Reservations History",
+    "My Schedule":"My Schedule",
+    "My Tests":"My Tests",
+
+    "Medical Questions":"Medical Questions"
+  },
+  "search":{
+    "For_Patient":"Search For Patient",
+    "For_Doctor":"Search For Doctor",
+    "For_Question":"Search For Question",
+    "For_Lab":"Search For Lab",
+    "For_Pharmacy":"Search For Pharmacy"
+   
+  },
+  "ModeToogle":{
+    "title":"Toggle theme",
+    "ٍSystem":"System",
+    "Dark":"Dark",
+    "Light":"Light"     
+  },
+  "TopBarDropMenu":{
+    "MyAccount":"My Account",
+    "Profile":"Profile",
+    "Logout":"Logout"
+  },
       "doctor": {
-        "title": "Doctor Dashboard"
+        "title": "Doctor Dashboard",
+        "Questions":{
+          "title":"Patient Questions"
+        },
+        "Reservations":{
+          "title":"Reservations",
+          "History_title":"Reservations History",
+          "No_Reservations":"No Reservations",
+          "View_Details":"View Details",
+          "Details":{
+            "title":"Reservation Details",
+            "RDate":"Date",
+            "PAge":"age",
+            "FSBP":"Files Sent by Patient",
+            "No_Files":"No Files",
+            "View_File":"View File",
+            "diagnose":{
+              "title":"diagnose",
+            "placeholder":"Enter diagnose",
+            "No_Diagnosis":"No Diagnose"
+
+          },
+            "Set_Consultation_Button":"Set Consultation",
+            "End_Reservation_Button":"End Reservation",
+            "End_Reservation":{
+              "title":"End Reservation",
+            "description":"Are you sure you want to end this reservation?",
+            "Cancel":"Cancel",
+            "submit":"End Reservation"
+          },
+          "Set_Consultation":{
+            "title":"Set New Consultation Date",
+            "Date":"Date",
+            "Cancel":"Cancel",
+            "submit":"Set Date"
+          },
+            "Medicine":{
+              "title":"Medicine",
+              "Medicine_name":"Medication name",
+              "Medicine_Dose":"Dose",
+              "Add_Prescription":"Add Prescription",
+              "Prescriptions":"Prescriptions",
+            "No_Medicines":"No Medicines",
+              "Tests":{
+                "title":"Need Tests",
+                "placeholder":"Test name",
+                "button":"Add Test",
+            "No_Tests":"No Tests Required"
+              }
+            }
+          }
+        }
+       
       },
       "schedule": {
         "title": "Set Your Schedule",
         "selectDay": "Select Day",
         "startTime": "Start Time",
+        "PatientLimit": "Patient Limit",
         "endTime": "End Time",
         "addToSchedule": "Add to Schedule",
         "currentSchedule": "Current Schedule",
@@ -32,4 +112,5 @@
           "sunday": "Sunday"
         }
       }
+      
     }

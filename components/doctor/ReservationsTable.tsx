@@ -29,6 +29,7 @@ import Pagination from "../Pagination"
 import { searchReservations } from "@/lib/doctor/clientApi"
 import toast, { Toaster } from 'react-hot-toast'
 import Spinner from "../Spinner"
+import { useTranslations } from 'next-intl'
 
 interface IProps {
   reservations: EndReservationValues[];
@@ -41,10 +42,12 @@ interface IReservations extends IProps {
   isLoading:boolean
 }
 const ReservationsData=({reservations,currentPage,totalPages,handlePageChange,isLoading,currentDate}:IReservations)=>{
+  const t = useTranslations('doctor.Reservations')
+
   return (
     <>
       <CardContent className="flex flex-col gap-4 sm:gap-8">
-       {reservations.length<=0?<div className="flex justify-center items-center">No Reservations</div>:     reservations.map((reservation) => (
+       {reservations.length<=0?<div className="flex justify-center items-center">{t(`No_Reservations`)}</div>:     reservations.map((reservation) => (
             <div key={reservation.id} className="flex items-center gap-2 sm:gap-4">
               <Avatar className="max-[350px]:hidden sm:h-9 sm:w-9">
                 <AvatarImage src={reservation.patient.profilePic} alt="Avatar" />
@@ -72,6 +75,7 @@ export default function ReservationsTable({reservations, currentPage, totalPages
   const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const [isSearching, setIsSearching] = useState(false)
+    const t = useTranslations('doctor.Reservations')
 
 
   const [searchTerm, setSearchTerm] = useState('')
@@ -150,9 +154,9 @@ export default function ReservationsTable({reservations, currentPage, totalPages
     <Card>
       <CardHeader>
         <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-2 sm:gap-4">
-          <CardTitle className="text-base sm:text-lg">Reservations</CardTitle>
+          <CardTitle className="text-base sm:text-lg">{t('title')}</CardTitle>
           <div className="flex items-center gap-2">
-          <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='Search for Patient'/>
+          <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='For_Patient'/>
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="outline" size="icon">

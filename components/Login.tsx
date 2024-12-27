@@ -57,7 +57,7 @@ export default function Login({ role ,onBack}: IProps) {
     if(res.success){
       toast.success(res.message,{
         duration: 2000,
-        position: 'bottom-center',
+        position: 'top-center',
       });
       setUser(res.data.data,res.data.token);
       // Cookies.set('user', JSON.stringify(res.data.data), { expires: 7 }) 
@@ -67,7 +67,7 @@ export default function Login({ role ,onBack}: IProps) {
     else {
       res.message.forEach((err:string) => toast.error( err || 'An unexpected error occurred.',{
         duration: 2000,
-        position: 'bottom-center',
+        position: 'top-center',
       }))
       // res.error.forEach((err:string) => toast.error(err.msg || err || 'An unexpected error occurred.',{
       //   duration: 2000,

@@ -2,13 +2,93 @@
     "common": {
       "switchLanguage": "تغيير اللغة"
     },
+    "nav":{
+      "Home":"الصفحة الرئيسية",
+      "Reservations History":"الحجوزات السابقة",
+      "My Schedule":"جدول مواعيدي",
+      "My Tests":"تحاليلي",
+      "Medical Questions":"اسئلة طبية"
+    },
+    "search":{
+      "For_Patient":"ابحث عن مريض",
+      "For_Doctor":"ابحص عن دكتور",
+      "For_Question":"ابحث عن سؤال",
+      "For_Lab":"ابحث عن معمل",
+      "For_Pharmacy":"ابحث عن صيدلية"
+     
+    },
+    "ModeToogle":{
+    "title":"اختيار الثيم",
+      "ٍSystem":"الافتراضي",
+      "Dark":"داكن",
+      "Light":"فاتح"     
+    },
+    "TopBarDropMenu":{
+      "MyAccount":"حسابي",
+      "Profile":"الملف الشخصي",
+      "Logout":"تسجيل الخروج"
+    },
       "doctor": {
-        "title": "لوحة تحكم الطبيب"
+        "title": "لوحة تحكم الطبيب",
+        "Questions":{
+          "title":"اسئلة المرضي"
+        },
+        "Reservations":{
+          "title":"الحجوزات",
+          "History_title":"الحجوزات السابقة",
+          "No_Reservations":"لا يوجد حجوزات",
+          "View_Details":"التفاصيل",
+          "Details":{
+            "title":"تفاصيل الحجز",
+            "RDate":"بتاريخ",
+            "PAge":"العمر",
+            "FSBP":"ملفات ارسلها المريض",
+            "No_Files":"لا يوجد ملفات",
+            "View_File":"اعرض الملف",
+            "diagnose":{
+              "title":"التشخيص",
+            "placeholder":"ادخل التشخيص",
+            "No_Diagnosis":"لا يوجد تشخيص"
+
+          },
+            "Set_Consultation_Button":"حدد استشارة",
+            "End_Reservation_Button":"انهاء الحجز",
+            "End_Reservation":{
+              "title":"انهاء الحجز",
+            "description":"هل انت متاكد من انهاء الحجز؟",
+            "Cancel":"الغاء",
+            "submit":"انهاء الحجز"
+          },
+          "Set_Consultation":{
+            "title":"حدد تاريخ الاستشارة",
+            "Date":"التاريخ",
+            "Cancel":"الغاء",
+            "submit":"حدد التاريخ"
+          },
+            "Medicine":{
+              "title":"الدواء",
+              "Medicine_name":"اسم الدواء",
+              "Medicine_Dose":"الجرعة",
+              "Add_Prescription":"اضف روشتة",
+            "No_Medicines":"لا يوجد ادوية",
+            "Prescriptions":"الروشتة",
+              "Tests":{
+                "title":"يحتاج تحاليل او اشعة",
+                "placeholder":"اسم التحليل او الاشعة",
+                "button":"اضف تحليل",
+            "No_Tests":"لا يوجد تحاليل مطلوبة"
+
+              }
+            }
+          }
+        }
+     
       },
       "schedule": {
         "title": "تحديد جدولك",
         "selectDay": "اختر اليوم",
         "startTime": "وقت البدء",
+        "PatientLimit": "عدد المرضي",
         "endTime": "وقت الانتهاء",
         "addToSchedule": "أضف إلى الجدول",
         "currentSchedule": "الجدول الحالي",
@@ -18,18 +98,19 @@
         "cancel": "إلغاء",
         "delete": "حذف",
         "update": "تحديث",
-        "updateSchedule": "تحديث الجدول ليوم {day}",
+        "updateSchedule": "تحديث الجدول ليوم",
         "setSessionCost": "تحديد تكلفة الجلسة",
         "sessionCostLabel": "تكلفة الجلسة (جنيه مصري)",
         "setCost": "تحديد التكلفة",
         "days": {
-          "Monday": "الاثنين",
-          "Tuesday": "الثلاثاء",
-          "Wednesday": "الأربعاء",
-          "Thursday": "الخميس",
-          "Friday": "الجمعة",
-          "Saturday": "السبت",
-          "Sunday": "الأحد"
+          "monday": "الاثنين",
+          "tuesday": "الثلاثاء",
+          "wednesday": "الأربعاء",
+          "thursday": "الخميس",
+          "friday": "الجمعة",
+          "saturday": "السبت",
+          "sunday": "الأحد"
         }
       }
+     
     }

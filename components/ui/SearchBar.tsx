@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import { useRouter } from 'next/navigation'
 import { EndReservationValues } from "@/schema/DoctorReservation";
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 interface SearchBarProps {
   onSearch: (page:number) => void;
@@ -17,6 +18,7 @@ interface SearchBarProps {
 
 
 const SearchBar = ({ onSearch ,setResult,setSearchTerm,searchTerm,title}: SearchBarProps) => {
+  const t = useTranslations('search')
 
   const router = useRouter();
   const search = async (e) => {
@@ -43,7 +45,7 @@ const check=(e)=>{
         <Input
         value={searchTerm}
           type="search"
-          placeholder={title}
+          placeholder={`${t(`${title}`)}`}
           className="w-full h-9 appearance-none bg-background pl-8 pr-3 shadow-none rounded-full"
      onChange={e=>{setSearchTerm(e.target.value); check(e)}}
         />

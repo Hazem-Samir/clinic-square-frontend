@@ -12,6 +12,7 @@ import {
 import { useSelectedLayoutSegment } from 'next/navigation'
 import Link from "next/link"
 import { useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 
 interface NavItem {
@@ -38,6 +39,7 @@ const iconMap = {
 const MobileNav = ({navItems,role}:IProps) => {
   const segment = useSelectedLayoutSegment()
   const [dir, setDir] = useState('ltr')
+  const t = useTranslations('nav')
 
   useEffect(() => {
     // Access document only after component has mounted
@@ -58,7 +60,7 @@ const MobileNav = ({navItems,role}:IProps) => {
           <span className="sr-only">Toggle navigation menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side={dir === 'rtl' ? 'right' : 'left'} className="w-[80vw] sm:w-[300px] flex flex-col">
+      <SheetContent side={dir === 'rtl' ? 'right' : 'left'} className="w-[80vw] sm:w-[300px] flex flex-col p-8">
         <nav className="grid gap-1 sm:gap-2 text-sm sm:text-base font-medium space-y-2">
           <Link
             href="#"
@@ -82,7 +84,7 @@ const MobileNav = ({navItems,role}:IProps) => {
                   }`}
               >
                 <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
-                {item.label}
+                {t(`${item.label}`)}
               </Link>
             )
           })}

@@ -32,7 +32,7 @@ import { useRouter } from 'next/navigation'
 import { shortName } from "@/lib/utils"
 import { FormDataHandler } from "@/utils/AuthHandlers"
 import Link from 'next/link'
-import { HandleTimeFormat } from "@/schema/Essentials"
+import { useTranslations } from 'next-intl'
 
 interface consultaitonData {
   diagnose: string;
@@ -55,6 +55,7 @@ export default function ShowReservation({ size = "default", reservation, RID, cu
   const router = useRouter()
   const [showEndReservationDialog, setShowEndReservationDialog] = useState(false)
   const [showSetConsultationDialog, setShowSetConsultationDialog] = useState(false)
+  const t = useTranslations('doctor.Reservations')
 
   const { register, control, handleSubmit, formState: { errors }, reset, getValues } = useForm<EndReservationValues>({
     resolver: zodResolver(EndReservationSchema),
@@ -206,13 +207,13 @@ export default function ShowReservation({ size = "default", reservation, RID, cu
       `}</style>
       <Dialog open={isOpen} onOpenChange={handleResrvationModal}>
         <DialogTrigger asChild>
-          <Button disabled={isLoading} variant="outline" onClick={() => setIsOpen(true)}>View Reservation</Button>
+          <Button disabled={isLoading} variant="outline" onClick={() => setIsOpen(true)}>{t(`View_Details`)}</Button>
         </DialogTrigger>
         <DialogContent className="w-full h-[90vh] sm:h-auto sm:max-w-3xl overflow-y-auto">
           <div className="custom-scrollbar overflow-y-auto max-h-[calc(90vh-4rem)] sm:max-h-[calc(100vh-8rem)] pr-4 p-1 ">
             <DialogHeader>
-              <DialogTitle className="text-lg sm:text-xl">Reservation Details</DialogTitle>
-              <DialogDescription>Date: {new Date(reservation.date).toDateString()} - {reservation.state==="pending"?"new":"consultation"}</DialogDescription>
+              <DialogTitle className="text-lg sm:text-xl">{t('Details.title')}</DialogTitle>
+              <DialogDescription>{`${t(`Details.RDate`)}: ${new Date(reservation.date).toDateString()}`} - {reservation.state==="pending"?"new":"consultation"}</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid gap-2 sm:gap-4 py-2 sm:py-4 space-y-2">
@@ -223,28 +224,28 @@ export default function ShowReservation({ size = "default", reservation, RID, cu
                   </Avatar>
                   <div className="flex flex-col items-center">
                     <h2 className="text-lg sm:text-2xl font-bold">{reservation.patient.name}</h2>
-                    <p>age: {getAge(reservation.patient.dateOfBirth)}</p>
+                    <p>{`${t(`Details.PAge`)}: ${getAge(reservation.patient.dateOfBirth)}`}</p>
                   </div>
                 </div>
                 <div>
-                  <h3 className="mb-2 text-sm sm:text-lg font-semibold">Files Sent by Patient</h3>
+                  <h3 className="mb-2 text-sm sm:text-lg font-semibold">{t(`Details.FSBP`)}</h3>
                   <div className="flex flex-wrap gap-2">
             
                     {reservation.report.results.length>0? reservation.report.results.map((index,result)=>{
  <Link href={result} index={index} className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground text-xs sm:text-sm h-9 rounded-md px-3" >
  <File className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
- View File {index}
+ {`${t(`Details.View_File`)} ${index}`}
 </Link>
-                    }):"No Files"}
+                    }):t(`Details.No_Files`)}
                   </div>
                 </div>
                 <div>
-                  <h3 className="mb-2 text-sm sm:text-lg font-semibold">diagnose</h3>
+                  <h3 className="mb-2 text-sm sm:text-lg font-semibold">{t(`Details.diagnose.title`)}</h3>
                   <div className="space-y-2 mb-4">
                     <Textarea
                       aria-describedby="diagnose field"
                       disabled={isLoading}
-                      placeholder="Enter diagnose"
+                      placeholder={`${t(`Details.diagnose.placeholder`)}`}
                       {...register("diagnose")}
                       className="w-full text-xs sm:text-sm"
                     />
@@ -254,19 +255,19 @@ export default function ShowReservation({ size = "default", reservation, RID, cu
                   </div>
                 </div>
                 <div>
-                  <h3 className="mb-2 text-sm sm:text-lg font-semibold">Medicine</h3>
+                  <h3 className="mb-2 text-sm sm:text-lg font-semibold">{t(`Details.Medicine.title`)}</h3>
                   <div className="space-y-2">
                     {medicineFields.map((field, index) => (
                       <div key={field.id} className="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-2">
                         <Input
                           disabled={isLoading}
-                          placeholder="Medication name"
+                          placeholder={`${t(`Details.Medicine.Medicine_name`)}`}
                           {...register(`medicine.${index}.name`)}
                           className="w-full sm:w-1/2 text-xs sm:text-sm"
                         />
                         <Input
                           disabled={isLoading}
-                          placeholder="Dose"
+                          placeholder={`${t(`Details.Medicine.Medicine_Dose`)}`}
                           {...register(`medicine.${index}.dose`)}
                           className="w-full sm:w-1/3 text-xs sm:text-sm"
                         />
@@ -294,18 +295,18 @@ export default function ShowReservation({ size = "default", reservation, RID, cu
                       className="text-xs sm:text-sm w-full sm:w-auto"
                     >
                       <PlusCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                      Add Prescription
+                      {t(`Details.Medicine.Add_Prescription`)}
                     </Button>
                   </div>
                 </div>
                 <div>
-                  <h3 className="mb-2 text-sm sm:text-lg font-semibold">Need Tests</h3>
+                  <h3 className="mb-2 text-sm sm:text-lg font-semibold">{t(`Details.Medicine.Tests.title`)}</h3>
                   <div className="space-y-2">
                     {testFields.map((field, index) => (
                       <div key={field.id} className="flex items-center gap-2 mb-2">
                         <Input
                           disabled={isLoading}
-                          placeholder="Test name"
+                          placeholder={t(`Details.Medicine.Tests.placeholder`)}
                           {...register(`requestedTests.${index}`)}
                           className="w-full text-xs sm:text-sm"
                         />
@@ -333,17 +334,17 @@ export default function ShowReservation({ size = "default", reservation, RID, cu
                       className="text-xs sm:text-sm w-full sm:w-auto"
                     >
                       <PlusCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                      Add Test
+                      {t(`Details.Medicine.Tests.button`)}
                     </Button>
                   </div>
                 </div>
               </div>
               <DialogFooter className="flex-col sm:flex-row gap-2">
                 <Button disabled={isLoading} type="button" onClick={handleSetConsultation} className="w-full sm:w-auto text-xs sm:text-sm">
-                  Set Consultation
+                  {t(`Details.Set_Consultation_Button`)}
                 </Button>
                 <Button disabled={isLoading} type="submit" variant="destructive" className="w-full sm:w-auto text-xs sm:text-sm">
-                  End Reservation
+                {t(`Details.End_Reservation_Button`)}
                 </Button>
               </DialogFooter>
             </form>
@@ -354,16 +355,16 @@ export default function ShowReservation({ size = "default", reservation, RID, cu
       <Dialog open={showEndReservationDialog} onOpenChange={setShowEndReservationDialog}>
         <DialogContent className="w-full sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-lg sm:text-xl">End Reservation</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl">{t(`Details.End_Reservation.title`)}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to end this reservation? </DialogDescription>
+            {t(`Details.End_Reservation.description`)} </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-col sm:flex-row gap-2">
             <Button disabled={isLoading} type="button" onClick={() => setShowEndReservationDialog(false)} variant="outline" className="w-full sm:w-auto text-xs sm:text-sm">
-              Cancel
+            {t(`Details.End_Reservation.Cancel`)} 
             </Button>
             <Button disabled={isLoading} onClick={handleEndReservation} variant="destructive" className="w-full sm:w-auto text-xs sm:text-sm">
-              {isLoading ? <Spinner /> : "End Reservation"}
+              {isLoading ? <Spinner /> :   t(`Details.End_Reservation.submit`)}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -372,7 +373,7 @@ export default function ShowReservation({ size = "default", reservation, RID, cu
       <Dialog open={showSetConsultationDialog} onOpenChange={handleConsultaionModal}>
         <DialogContent className="w-full sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-lg sm:text-xl">Set New Consultation Date</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl">{t(`Details.Set_Consultation.title`)}</DialogTitle>
             <DialogDescription>
             </DialogDescription>
           </DialogHeader>
@@ -380,7 +381,7 @@ export default function ShowReservation({ size = "default", reservation, RID, cu
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="consultationDate" className="text-right text-xs sm:text-sm">
-                  Date
+                {t(`Details.Set_Consultation.Date`)}
                 </Label>
                 <Input
                   disabled={isLoading}
@@ -396,9 +397,9 @@ export default function ShowReservation({ size = "default", reservation, RID, cu
             </div>
             <DialogFooter className="flex-col sm:flex-row gap-2">
               <Button disabled={isLoading} type="button" onClick={handleCancelConsultationDate} variant="outline" className="w-full sm:w-auto text-xs sm:text-sm">
-                Cancel
+              {t(`Details.Set_Consultation.Cancel`)}
               </Button>
-              <Button disabled={isLoading} type="submit" className="w-full sm:w-auto text-xs sm:text-sm">{isLoading ? <Spinner /> : "Set Date"}</Button>
+              <Button disabled={isLoading} type="submit" className="w-full sm:w-auto text-xs sm:text-sm">{isLoading ? <Spinner /> : t(`Details.Set_Consultation.submit`)}</Button>
             </DialogFooter>
           </form>
         </DialogContent>

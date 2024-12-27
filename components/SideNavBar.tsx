@@ -9,6 +9,7 @@ import {
   Hospital,
   MessageCircleQuestion,FlaskConical,BriefcaseMedical,
 } from "lucide-react"
+import { useTranslations } from 'next-intl'
 
 interface NavItem {
   href: string;
@@ -33,6 +34,7 @@ const iconMap = {
 
 export default function SideNavBar({navItems,role}: IProps) {
   const segment = useSelectedLayoutSegment()
+  const t = useTranslations('nav')
 
   return (
     <div className="hidden border-r bg-muted/40 md:block">
@@ -59,7 +61,7 @@ export default function SideNavBar({navItems,role}: IProps) {
                     }`}
                 >
                   <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
-                  {item.label}
+                  {t(`${item.label}`)}
                 </Link>
               )
             })}

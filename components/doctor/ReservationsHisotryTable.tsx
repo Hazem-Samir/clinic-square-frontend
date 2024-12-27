@@ -12,6 +12,7 @@ import { useState } from 'react'
 import { searchReservationsHistory } from '@/lib/doctor/clientApi'
 import Spinner from '../Spinner'
 import toast, { Toaster } from 'react-hot-toast'
+import { useTranslations } from 'next-intl'
 
 
 interface IProps  {
@@ -27,10 +28,12 @@ interface IReservation extends IProps {
 
 
 const ReservationsHistoryData=({reservations,currentPage,totalPages,handlePageChange,isLoading}:IReservation)=>{
+  const t = useTranslations('doctor.Reservations')
+  
   return (
     <>
       <CardContent className="grid gap-4 sm:gap-8">
-          {reservations.length<=0?<div className="flex justify-center items-center">No Reservations</div>
+          {reservations.length<=0?<div className="flex justify-center items-center">{t(`No_Reservations`)}</div>
           :reservations.map((reservation) => (
             <div key={reservation.id} className="flex items-center gap-2 sm:gap-4">
               <Avatar className="max-[350px]:hidden sm:h-9 sm:w-9">
@@ -68,6 +71,7 @@ export default function ReservationsHistoryTable({
     const [SearchResult, setSearchResult] = useState<{currentPage:number,totalPages:number,reservations:EndReservationValues[]}|null>(null)
     const [isLoading, setIsLoading] = useState(false);
   const router = useRouter()
+  const t = useTranslations('doctor.Reservations')
 
 
   const handleSearch = async (page:number) => {
@@ -117,8 +121,8 @@ export default function ReservationsHistoryTable({
     <Card>
     <CardHeader>
       <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-2 sm:gap-0">
-        <CardTitle className="text-base sm:text-lg">Reservations History</CardTitle>
-        <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='Search for patient'/>
+        <CardTitle className="text-base sm:text-lg">{t(`History_title`)}</CardTitle>
+        <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='For_Patient'/>
       </div>
     </CardHeader>
     {isSearching ? (
