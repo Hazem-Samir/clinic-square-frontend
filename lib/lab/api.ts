@@ -8,7 +8,7 @@ export const getReservationsHistory = async (limit:number,page: number) => {
         page: page.toString(),
         date: new Date().toISOString(),
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/lab/reservationsHistory?${queryParams}`, {
+      const response = await fetch(`/api/lab/reservationsHistory?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -35,7 +35,7 @@ export const getReservationsHistory = async (limit:number,page: number) => {
         endOfDay,
         state,
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/lab/reservations?${queryParams}`, {
+      const response = await fetch(`/api/lab/reservations?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -56,7 +56,7 @@ export const getReservationsHistory = async (limit:number,page: number) => {
     export const getSchedule = async () => {
       const cookieStore = cookies()
       const token = JSON.parse (cookieStore.get('token').value)
-      const response = await fetch(`http://localhost:3000/api/lab/schedule`, {
+      const response = await fetch(`/api/lab/schedule`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -76,7 +76,7 @@ export const getReservationsHistory = async (limit:number,page: number) => {
     export const getAvaliableTests = async () => {
       const cookieStore = cookies()
       const token = JSON.parse (cookieStore.get('token').value)
-      const response = await fetch(`http://localhost:3000/api/lab/tests/available`, {
+      const response = await fetch(`/api/lab/tests/available`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -104,7 +104,7 @@ export const getReservationsHistory = async (limit:number,page: number) => {
         limit: limit.toString(),
         page: page.toString(),
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/lab/tests?${queryParams}`, {
+      const response = await fetch(`/api/lab/tests?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,

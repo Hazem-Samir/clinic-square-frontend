@@ -8,7 +8,7 @@ export const getAllDoctors = async (limit:number,page: number) => {
         page: page.toString(),
         state: "true"
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/patient/doctors?${queryParams}`, {
+      const response = await fetch(`/api/patient/doctors?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -34,7 +34,7 @@ export const SearchForActor = async (keyword:string,actor:string,page:number) =>
       actor,
       page:page.toString()||`1`
     }).toString();
-    const response = await fetch(`http://localhost:3000/api/patient/search/actors?${queryParams}`, {
+    const response = await fetch(`/api/patient/search/actors?${queryParams}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -64,7 +64,7 @@ export const SearchForActor = async (keyword:string,actor:string,page:number) =>
         limit: limit.toString(),
         page: page.toString(),
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/patient/myActivity/doctors?${queryParams}`, {
+      const response = await fetch(`/api/patient/myActivity/doctors?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -89,7 +89,7 @@ export const SearchForActor = async (keyword:string,actor:string,page:number) =>
         limit: limit.toString(),
         page: page.toString(),
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/patient/myActivity/pharmacies?${queryParams}`, {
+      const response = await fetch(`/api/patient/myActivity/pharmacies?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -112,7 +112,7 @@ export const SearchForActor = async (keyword:string,actor:string,page:number) =>
         limit: limit.toString(),
         page: page.toString(),
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/patient/myActivity/labs?${queryParams}`, {
+      const response = await fetch(`/api/patient/myActivity/labs?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -136,7 +136,7 @@ export const SearchForActor = async (keyword:string,actor:string,page:number) =>
         id,
         state: "true"
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/patient/doctors/oneDoctor?${queryParams}`, {
+      const response = await fetch(`/api/patient/doctors/oneDoctor?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -160,7 +160,7 @@ export const SearchForActor = async (keyword:string,actor:string,page:number) =>
         id,
         state: "true"
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/patient/labs/oneLab?${queryParams}`, {
+      const response = await fetch(`/api/patient/labs/oneLab?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -184,7 +184,7 @@ export const getAllLabs = async (limit:number,page: number) => {
     page: page.toString(),
     state: "true"
   }).toString();
-  const response = await fetch(`http://localhost:3000/api/patient/labs?${queryParams}`, {
+  const response = await fetch(`/api/patient/labs?${queryParams}`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -207,7 +207,7 @@ export const GetLabTests = async (id:string) => {
   const queryParams = new URLSearchParams({
     id
   }).toString();
-  const response = await fetch(`http://localhost:3000/api/patient/labs/oneLab/test?${queryParams}`, {
+  const response = await fetch(`/api/patient/labs/oneLab/test?${queryParams}`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -232,7 +232,7 @@ export const getAllPharmacies = async (limit:number,page: number) => {
     page: page.toString(),
     state: "true"
   }).toString();
-  const response = await fetch(`http://localhost:3000/api/patient/pharmacies?${queryParams}`, {
+  const response = await fetch(`/api/patient/pharmacies?${queryParams}`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -257,7 +257,7 @@ export const getOnePharmacy = async (id:string) => {
     id,
     state: "true"
   }).toString();
-  const response = await fetch(`http://localhost:3000/api/patient/pharmacies/onePharmacy?${queryParams}`, {
+  const response = await fetch(`/api/patient/pharmacies/onePharmacy?${queryParams}`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -283,7 +283,7 @@ const token = JSON.parse (cookieStore.get('token').value)
 const queryParams = new URLSearchParams({
 id
 }).toString();
-const response = await fetch(`http://localhost:3000/api/patient/pharmacies/onePharmacy/medicine?${queryParams}`, {
+const response = await fetch(`/api/patient/pharmacies/onePharmacy/medicine?${queryParams}`, {
 method: 'GET',
 headers: {
   'Authorization': `Bearer ${token}`,
@@ -309,7 +309,7 @@ return res;
         endOfDay,
         state,
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/lab/reservations?${queryParams}`, {
+      const response = await fetch(`/api/lab/reservations?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -330,7 +330,7 @@ return res;
     export const getSchedule = async () => {
       const cookieStore = cookies()
       const token = JSON.parse (cookieStore.get('token').value)
-      const response = await fetch(`http://localhost:3000/api/lab/schedule`, {
+      const response = await fetch(`/api/lab/schedule`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -350,7 +350,7 @@ return res;
     export const getAvaliableTests = async () => {
       const cookieStore = cookies()
       const token = JSON.parse (cookieStore.get('token').value)
-      const response = await fetch(`http://localhost:3000/api/lab/tests/available`, {
+      const response = await fetch(`/api/lab/tests/available`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -378,7 +378,7 @@ return res;
         limit: limit.toString(),
         page: page.toString(),
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/lab/tests?${queryParams}`, {
+      const response = await fetch(`/api/lab/tests?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
