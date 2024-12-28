@@ -153,7 +153,7 @@ export default function ReservationsTable({reservations, currentPage, totalPages
         <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-2 sm:gap-4">
           <CardTitle className="text-base sm:text-lg">Reservations</CardTitle>
           <div className="flex items-center gap-2">
-          <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='Search for Patient'/>
+          <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='For_Patient'/>
 
             <Popover>
               <PopoverTrigger asChild>
@@ -161,7 +161,7 @@ export default function ReservationsTable({reservations, currentPage, totalPages
                   <CalendarDays className="h-4 w-4" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent disabled={isLoading} className="w-auto p-0" align="end">
+              <PopoverContent disabled={isSearching} className="w-auto p-0" align="end">
                 <div className="flex flex-col">
                   {dayOptions.map((option) => (
                     <Button
