@@ -1,18 +1,20 @@
-import { useLocale } from 'next-intl'
 import BlurFade from "@/components/ui/blur-fade"
 import Navbar from '@/components/patient/Navbar'
 import Footer from '@/components/patient/Footer'
+import { setRequestLocale } from 'next-intl/server'
+export function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'ar' }]
+}
 
-
-
-export default function DoctorLayout({
+export default function PatientLayout({
   children,
+  params: { locale }
 }: {
   children: React.ReactNode
+  params: { locale: string }
 }) {
-  const locale = useLocale()
-
-
+  // Enable static rendering
+  setRequestLocale(locale)
   return (
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <body>

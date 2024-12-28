@@ -1,7 +1,7 @@
-import { useLocale } from 'next-intl'
 import BlurFade from "@/components/ui/blur-fade"
 import TopNavBar from "@/components/TopNavBar"
 import SideNavBar from "@/components/SideNavBar"
+import { setRequestLocale } from 'next-intl/server'
 
 
 
@@ -11,12 +11,16 @@ const navItems = [
   { href: `/doctor/my-schedule`, icon: 'CalendarCheck', label: "My Schedule" },
   { href: `/doctor/medical-questions`, icon: 'MessageCircleQuestion', label: "Medical Questions" },
 ]
+
 export default function DoctorLayout({
   children,
+  params: { locale }
 }: {
   children: React.ReactNode
+  params: { locale: string }
 }) {
-  const locale = useLocale()
+  // Enable static rendering
+  setRequestLocale(locale)
 
 
   return (

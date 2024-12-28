@@ -1,7 +1,7 @@
-import { useLocale } from 'next-intl'
 import BlurFade from "@/components/ui/blur-fade"
 import TopNavBar from "@/components/TopNavBar"
 import SideNavBar from "@/components/SideNavBar"
+import { setRequestLocale } from 'next-intl/server'
 
 
 const navItems = [
@@ -12,13 +12,19 @@ const navItems = [
 
 ]
 
+export function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'ar' }]
+}
+
 export default function LabLayout({
   children,
+  params: { locale }
 }: {
   children: React.ReactNode
+  params: { locale: string }
 }) {
-  const locale = useLocale()
 
+  setRequestLocale(locale)
   return (
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <body>

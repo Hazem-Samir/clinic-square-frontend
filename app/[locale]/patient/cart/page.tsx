@@ -48,7 +48,7 @@ export default function CartPage() {
     const reservationDate = new Date(selectedDate).toISOString()
     try {
       if (paymentMethod === 'visa') {
-        const res = await TestOnlinePayment(reservationDate, cart.id)
+        const res = await TestOnlinePayment(reservationDate, cart!.id)
         if (res?.success) {
           router.push(res?.data.session.url)
         } else {
@@ -89,7 +89,7 @@ export default function CartPage() {
     setIsCheckingOut(true)
     try {
       if (paymentMethod === 'visa') {
-        const res = await MedicineOnlinePayment(cart.id)
+        const res = await MedicineOnlinePayment(cart!.id)
         if (res) {
           router.push(res?.data.session.url)
         } else {
@@ -136,7 +136,7 @@ export default function CartPage() {
 
   const renderMedicines = () => (
     <>
-      {cart.medicines.map((pharmacy) => (
+      {cart!.medicines.map((pharmacy) => (
         <div key={pharmacy.id} className="mb-8">
           <div className="flex items-center space-x-2 mb-2">
             <Avatar className="h-8 w-8">
