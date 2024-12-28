@@ -1,3 +1,4 @@
+import { FRONT_URL } from '@/schema/Essentials';
 import { cookies } from 'next/headers'
 
 export const getReservationsHistory = async (limit:number,page: number) => {
@@ -7,7 +8,7 @@ export const getReservationsHistory = async (limit:number,page: number) => {
         limit: limit.toString(),
         page: page.toString(),
       }).toString();
-      const response = await fetch(`/api/doctor/reservationsHistory?${queryParams}`, {
+      const response = await fetch(`${FRONT_URL}/api/doctor/reservationsHistory?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -34,7 +35,7 @@ export const getReservationsHistory = async (limit:number,page: number) => {
         endOfDay,
         state,
       }).toString();
-      const response = await fetch(`/api/doctor/reservations?${queryParams}`, {
+      const response = await fetch(`${FRONT_URL}/api/doctor/reservations?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -54,7 +55,7 @@ export const getReservationsHistory = async (limit:number,page: number) => {
     export const getSchedule = async () => {
       const cookieStore = cookies()
       const token = JSON.parse (cookieStore.get('token').value)
-      const response = await fetch(`/api/doctor/schedule`, {
+      const response = await fetch(`${FRONT_URL}/api/doctor/schedule`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -78,7 +79,7 @@ export const getReservationsHistory = async (limit:number,page: number) => {
         limit: limit.toString(),
         page: page.toString(),
       }).toString();
-      const response = await fetch(`/api/medicalQuestions?${queryParams}`, {
+      const response = await fetch(`${FRONT_URL}/api/medicalQuestions?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -103,7 +104,7 @@ export const getReservationsHistory = async (limit:number,page: number) => {
       const queryParams = new URLSearchParams({
         id
       }).toString();
-      const response = await fetch(`/api/medicalQuestions/questionDetails?${queryParams}`, {
+      const response = await fetch(`${FRONT_URL}/api/medicalQuestions/questionDetails?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,

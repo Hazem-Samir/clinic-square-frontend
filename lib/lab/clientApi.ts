@@ -31,7 +31,7 @@ export const addDay = async (data)=>{
         page: page.toString(),
         keyword,
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/lab/search/reservations?${queryParams}`, {
+      const response = await fetch(`/api/lab/search/reservations?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -56,7 +56,7 @@ export const addDay = async (data)=>{
         page: page.toString(),
         keyword,
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/lab/search/tests?${queryParams}`, {
+      const response = await fetch(`/api/lab/search/tests?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -81,7 +81,7 @@ export const addDay = async (data)=>{
         page: page.toString(),
         keyword,
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/lab/search/reservationsHistory?${queryParams}`, {
+      const response = await fetch(`/api/lab/search/reservationsHistory?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -200,7 +200,7 @@ export const addDay = async (data)=>{
         const queryParams = new URLSearchParams({
           patient: patient,
         }).toString();
-        const response = await fetch(`http://localhost:3000/api/lab/reservations?${queryParams}`, {
+        const response = await fetch(`/api/lab/reservations?${queryParams}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,

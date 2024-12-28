@@ -147,7 +147,7 @@ export const addDay = async (data)=>{
         page: page.toString(),
         keyword,
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/doctor/search/reservationsHistory?${queryParams}`, {
+      const response = await fetch(`/api/doctor/search/reservationsHistory?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -172,7 +172,7 @@ export const addDay = async (data)=>{
       page: page.toString(),
       keyword,
     }).toString();
-    const response = await fetch(`http://localhost:3000/api/doctor/search/questions?${queryParams}`, {
+    const response = await fetch(`/api/doctor/search/questions?${queryParams}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -198,7 +198,7 @@ export const searchReservations = async (keyword:string,limit:number,page: numbe
     page: page.toString(),
     keyword,
   }).toString();
-  const response = await fetch(`http://localhost:3000/api/doctor/search/reservations?${queryParams}`, {
+  const response = await fetch(`/api/doctor/search/reservations?${queryParams}`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,

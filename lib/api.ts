@@ -1,3 +1,4 @@
+import { FRONT_URL } from '@/schema/Essentials';
 import { cookies } from 'next/headers'
 
 export const getQuestions = async (limit:number,page: number) => {
@@ -7,7 +8,7 @@ export const getQuestions = async (limit:number,page: number) => {
         limit: limit.toString(),
         page: page.toString(),
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/medicalQuestions?${queryParams}`, {
+      const response = await fetch(`${FRONT_URL}/api/medicalQuestions?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -28,7 +29,7 @@ export const getQuestions = async (limit:number,page: number) => {
       const cookieStore = cookies()
       const token = JSON.parse (cookieStore.get('token').value)
       
-      const response = await fetch(`http://localhost:3000/api/logout`, {
+      const response = await fetch(`${FRONT_URL}/api/logout`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -53,7 +54,7 @@ export const getQuestions = async (limit:number,page: number) => {
       const queryParams = new URLSearchParams({
         id
       }).toString();
-      const response = await fetch(`http://localhost:3000/api/medicalQuestions/questionDetails?${queryParams}`, {
+      const response = await fetch(`${FRONT_URL}/api/medicalQuestions/questionDetails?${queryParams}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -26,7 +26,7 @@ export const BookSession = async (data:{doctor:string,date:string})=>{
 
     export const GetMyCart = async () => {
       const token = getToken();
-      const response = await fetch(`http://localhost:3000/api/patient/cart`, {
+      const response = await fetch(`/api/patient/cart`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -50,7 +50,7 @@ export const BookSession = async (data:{doctor:string,date:string})=>{
           type:"test"
         }).toString();
         try {
-          const response = await fetch(`http://localhost:3000/api/patient/cart?${queryParams}`, {
+          const response = await fetch(`/api/patient/cart?${queryParams}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -74,7 +74,7 @@ export const BookSession = async (data:{doctor:string,date:string})=>{
           type:"medicine"
         }).toString();
         try {
-          const response = await fetch(`http://localhost:3000/api/patient/cart?${queryParams}`, {
+          const response = await fetch(`/api/patient/cart?${queryParams}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -153,7 +153,7 @@ export const BookSession = async (data:{doctor:string,date:string})=>{
           id,
         }).toString();
         try {
-          const response = await fetch(`http://localhost:3000/api/patient/cart/checkout/medicine?${queryParams}`, {
+          const response = await fetch(`/api/patient/cart/checkout/medicine?${queryParams}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -197,7 +197,7 @@ export const BookSession = async (data:{doctor:string,date:string})=>{
           reservationDate,
         }).toString();
         try {
-          const response = await fetch(`http://localhost:3000/api/patient/cart/checkout/test?${queryParams}`, {
+          const response = await fetch(`/api/patient/cart/checkout/test?${queryParams}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -222,7 +222,7 @@ export const BookSession = async (data:{doctor:string,date:string})=>{
           reservationDate,
         }).toString();
         try {
-          const response = await fetch(`http://localhost:3000/api/patient/cart/checkout/doctor?${queryParams}`, {
+          const response = await fetch(`/api/patient/cart/checkout/doctor?${queryParams}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -363,7 +363,7 @@ export const BookSession = async (data:{doctor:string,date:string})=>{
         const queryParams = new URLSearchParams({
           patient: patient,
         }).toString();
-        const response = await fetch(`http://localhost:3000/api/lab/reservations?${queryParams}`, {
+        const response = await fetch(`/api/lab/reservations?${queryParams}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -685,7 +685,7 @@ export const SearchForTest = async (keyword:string,page:number) => {
       keyword,
       page:page.toString()||`1`
     }).toString();
-    const response = await fetch(`http://localhost:3000/api/patient/search/tests?${queryParams}`, {
+    const response = await fetch(`/api/patient/search/tests?${queryParams}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -715,7 +715,7 @@ export const SearchForLab = async (keyword:string,page:number) => {
       keyword,
       page:page.toString()||`1`
     }).toString();
-    const response = await fetch(`http://localhost:3000/api/patient/search/labs?${queryParams}`, {
+    const response = await fetch(`/api/patient/search/labs?${queryParams}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -744,7 +744,7 @@ export const SearchForPharmacy = async (keyword:string,page:number) => {
       keyword,
       page:page.toString()||`1`
     }).toString();
-    const response = await fetch(`http://localhost:3000/api/patient/search/pharmacy?${queryParams}`, {
+    const response = await fetch(`/api/patient/search/pharmacy?${queryParams}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -774,7 +774,7 @@ export const SearchForMedicine = async (keyword:string,page:number) => {
       keyword,
       page:page.toString()||`1`
     }).toString();
-    const response = await fetch(`http://localhost:3000/api/patient/search/medicines?${queryParams}`, {
+    const response = await fetch(`/api/patient/search/medicines?${queryParams}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -806,7 +806,7 @@ export const SearchForActor = async (keyword:string,actor:string,page:number) =>
       actor,
       page:page.toString()||`1`
     }).toString();
-    const response = await fetch(`http://localhost:3000/api/patient/search/actors?${queryParams}`, {
+    const response = await fetch(`/api/patient/search/actors?${queryParams}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

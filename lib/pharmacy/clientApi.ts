@@ -12,7 +12,7 @@ export const searchOrders = async (keyword:string,limit:number,page: number,stat
     state,
     keyword,
   }).toString();
-  const response = await fetch(`http://localhost:3000/api/pharmacy/search/orders?${queryParams}`, {
+  const response = await fetch(`/api/pharmacy/search/orders?${queryParams}`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -37,7 +37,7 @@ export const searchMedicines = async (keyword:string,limit:number,page: number) 
     page: page.toString(),
     keyword,
   }).toString();
-  const response = await fetch(`http://localhost:3000/api/pharmacy/search/medicines?${queryParams}`, {
+  const response = await fetch(`/api/pharmacy/search/medicines?${queryParams}`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -179,7 +179,7 @@ export const addDay = async (data)=>{
         const queryParams = new URLSearchParams({
           patient: patient,
         }).toString();
-        const response = await fetch(`http://localhost:3000/api/lab/reservations?${queryParams}`, {
+        const response = await fetch(`/api/lab/reservations?${queryParams}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
