@@ -41,7 +41,7 @@ const OrdersHistoryData=({orders,currentPage,totalPages,handlePageChange,isLoadi
                 </p>
               </div>
               <div className="ltr:ml-auto rtl:mr-auto font-medium">
-                <OrderDetails size="sm"  order={order}/>
+                <OrderDetails   order={order}/>
               </div>
             </div>
           ))}
@@ -60,7 +60,6 @@ export default function OrdersHistoryTable({
  const [isSearching, setIsSearching] = useState(false)
 
     const [SearchResult, setSearchResult] = useState<{currentPage:number,totalPages:number,orders:EndReservationValues[]}|null>(null)
-    const [isLoading, setIsLoading] = useState(false);
   const router = useRouter()
 
 
@@ -127,7 +126,7 @@ export default function OrdersHistoryTable({
         <OrdersHistoryData 
           currentPage={currentPage} 
           handlePageChange={handlePageChange} 
-          isLoading={isLoading} 
+          isLoading={isSearching} 
           orders={orders} 
           totalPages={totalPages} 
         />
@@ -135,12 +134,13 @@ export default function OrdersHistoryTable({
         <OrdersHistoryData 
           currentPage={SearchResult.currentPage} 
           handlePageChange={handlePageChange} 
-          isLoading={isLoading} 
+          isLoading={isSearching} 
           orders={SearchResult.orders} 
           totalPages={SearchResult.totalPages} 
         />
       )
     )}
+    <Toaster />
       </Card>
   )
 }

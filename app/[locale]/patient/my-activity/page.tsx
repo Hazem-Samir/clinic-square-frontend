@@ -40,15 +40,8 @@ async function MyPharmaciesResrvations({ page }: { page: number }) {
   )
 }
 
-interface ISearchParams  { 
-  doctorsPage?: string;
-  labsPage?: string;
-  pharmaciesPage?: string;
-  activeTab?: activeTabOptions;
-};
 
-
-export default function MyActivityPage({ searchParams }: ISearchParams) {
+export default function MyActivityPage({ searchParams }: {searchParams:{doctorsPage?: string,labsPage?: string,pharmaciesPage?: string,activeTab?: activeTabOptions}}) {
   const doctorsPage = Number(searchParams.doctorsPage) || 1;
   const labsPage = Number(searchParams.labsPage) || 1;
   const pharmaciesPage = Number(searchParams.pharmaciesPage) || 1;

@@ -32,7 +32,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { PlusCircle, Edit, Trash2, Send, Plus, X, ChevronLeft, ChevronRight, } from 'lucide-react'
+import { PlusCircle, Edit, Trash2, Send, Plus, X, } from 'lucide-react'
 import { AddTest, DeleteTest, RequestTest, searchTests } from '@/lib/lab/clientApi'
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
@@ -51,7 +51,7 @@ interface IProps {
 }
 
 interface ITestsData extends IProps{
-  form :{}
+  form :object
   isLoading: boolean
   setTestName: (name:string)=>void
   setIsEditOpen: (value:boolean)=>void

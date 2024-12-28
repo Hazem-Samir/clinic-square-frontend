@@ -48,6 +48,7 @@ import { Label } from "../ui/label"
 import { getAge } from "@/utils/utils"
 import { removeUser } from "@/lib/auth"
 import { UpdatePassword, UpdateProfile } from "@/lib/patient/clientApi"
+import Spinner from "../Spinner"
 
 interface Iimages {
   profilePic: File | string | null;
@@ -126,7 +127,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
     if(data.email===profile.email){
       delete data.email;
     }
-    // setIsLoading(true);
+    setIsLoading(true);
    const formData= FormDataHandler(data);
     const res = await UpdateProfile(formData)
     if (res.success ===true) {
@@ -175,6 +176,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
 
    
       <div className="container mx-auto flex-grow">
+        {isLoading?<Spinner />:
           <Card className="w-full border-none">
             <CardHeader>
               <CardTitle className="text-2xl font-bold text-center">User Profile</CardTitle>
@@ -583,6 +585,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
               </div>
             </CardContent>
           </Card>
+}
           <Toaster />
         </div>
 

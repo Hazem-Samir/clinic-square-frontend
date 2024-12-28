@@ -51,7 +51,7 @@ interface IProps {
 }
 
 interface IMedicinesData extends IProps{
-  medicineForm :{}
+  medicineForm :object
   isLoading: boolean
   setMedicineName: (name:string)=>void
   setIsEditOpen: (value:boolean)=>void

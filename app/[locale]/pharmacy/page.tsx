@@ -3,47 +3,47 @@ import { format } from "date-fns"
 import ProtectedRoute from "@/components/ProtectedRoute"
 import { Skeleton } from "@/components/ui/skeleton"
 import BlurFade from '@/components/ui/blur-fade'
-import Dashboard from '@/components/lab/Dashboard'
+// import Dashboard from '@/components/lab/Dashboard'
 import { getOrders } from '@/lib/pharmacy/api'
 import OrdersTable from '@/components/pharmacy/OrdersTable'
 
-async function DashboardData() {
-  const today = new Date()
-  const firstDayOfPreviousMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1)
-  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
-  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999)
-  const lastDayOfPreviousMonth = new Date(firstDayOfMonth.getTime() - 1)
-  const startOfDay = new Date(today.setHours(0, 0, 0, 0))
-  const endOfDay = new Date(today.setHours(23, 59, 59, 999))
+// async function DashboardData() {
+//   const today = new Date()
+//   const firstDayOfPreviousMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1)
+//   const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
+//   const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999)
+//   const lastDayOfPreviousMonth = new Date(firstDayOfMonth.getTime() - 1)
+//   const startOfDay = new Date(today.setHours(0, 0, 0, 0))
+//   const endOfDay = new Date(today.setHours(23, 59, 59, 999))
 
-  const [monthResults, todayResults, prevMonthResults] = await Promise.all([
-    getOrders(10000000, 1, firstDayOfMonth.toISOString(), lastDayOfMonth.toISOString(),"completed"),
-    getOrders(10000000, 1, startOfDay.toISOString(), endOfDay.toISOString(),"new"),
-    getOrders(10000000, 1, firstDayOfPreviousMonth.toISOString(), lastDayOfPreviousMonth.toISOString(),"completed")
-  ])
- let ThismonthRevenue=0;
-  monthResults.data.data.map((data)=>{
-    data.requestedTests.map((test)=>{
-     ThismonthRevenue+=Number(test.testDetails.cost)
-    })
-  })
+//   const [monthResults, todayResults, prevMonthResults] = await Promise.all([
+//     getOrders(10000000, 1, firstDayOfMonth.toISOString(), lastDayOfMonth.toISOString(),"completed"),
+//     getOrders(10000000, 1, startOfDay.toISOString(), endOfDay.toISOString(),"new"),
+//     getOrders(10000000, 1, firstDayOfPreviousMonth.toISOString(), lastDayOfPreviousMonth.toISOString(),"completed")
+//   ])
+//  let ThismonthRevenue=0;
+//   monthResults.data.data.map((data)=>{
+//     data.requestedTests.map((test)=>{
+//      ThismonthRevenue+=Number(test.testDetails.cost)
+//     })
+//   })
 
-  let prevmonthRevenue=0;
-  prevMonthResults.data.data.map((data)=>{
-    data.requestedTests.map((test)=>{
-      prevmonthRevenue+=Number(test.testDetails.cost)
-    })
-  })
+//   let prevmonthRevenue=0;
+//   prevMonthResults.data.data.map((data)=>{
+//     data.requestedTests.map((test)=>{
+//       prevmonthRevenue+=Number(test.testDetails.cost)
+//     })
+//   })
   
 
-  return (
-    <Dashboard 
-      monthResults={ThismonthRevenue}
-      todayResults={todayResults.data.results}
-      prevMonthResults={prevmonthRevenue}
-    />
-  )
-}
+//   return (
+//     <Dashboard 
+//       monthResults={ThismonthRevenue}
+//       todayResults={todayResults.data.results}
+//       prevMonthResults={prevmonthRevenue}
+//     />
+//   )
+// }
 
 async function ReservationsData({ page }: { page: number }) {
 

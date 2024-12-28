@@ -3,10 +3,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { shortName } from '@/lib/utils';
 import {useState} from 'react';
-import { Button } from '../ui/button';
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
-import { ChevronLeft, ChevronRight } from "lucide-react"
 import SearchBar from "../ui/SearchBar";
 import toast, { Toaster } from 'react-hot-toast'
 import { searchPatientQuestions } from "@/lib/doctor/clientApi";
@@ -69,9 +67,7 @@ export default function QuestionsList({ questions,currentPage,totalPages  }: IPr
   const [isSearching, setIsSearching] = useState(false)
 
     const [SearchResult, setSearchResult] = useState<{currentPage:number,totalPages:number,questions:Question[]}|null>(null)
-    const [isLoading, setIsLoading] = useState(false);
-    const t1 = useTranslations('doctor.Questions')
-    const t2 = useTranslations('search')
+    const t = useTranslations('doctor.Questions')
 
 
 
@@ -124,7 +120,7 @@ export default function QuestionsList({ questions,currentPage,totalPages  }: IPr
    
     <div className="container mx-auto p-4">
           <div className="flex flex-col mb-6 sm:flex-row items-center  justify-between gap-2 sm:gap-0">
-      <h1 className="text-2xl font-bold ">{t1(`title`)}</h1>
+      <h1 className="text-2xl font-bold ">{t(`title`)}</h1>
       <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='For_Question'/>
           </div>
     
@@ -137,7 +133,7 @@ export default function QuestionsList({ questions,currentPage,totalPages  }: IPr
         <QuestionsData 
           currentPage={currentPage} 
           handlePageChange={handlePageChange} 
-          isLoading={isLoading} 
+          isLoading={isSearching} 
           questions={questions} 
           totalPages={totalPages} 
         />
@@ -145,12 +141,13 @@ export default function QuestionsList({ questions,currentPage,totalPages  }: IPr
         <QuestionsData 
           currentPage={SearchResult.currentPage} 
           handlePageChange={handlePageChange} 
-          isLoading={isLoading} 
+          isLoading={isSearching} 
           questions={SearchResult.questions} 
           totalPages={SearchResult.totalPages} 
         />
       )
     )}
+    <Toaster />
     </div>
     
     )

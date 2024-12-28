@@ -19,7 +19,7 @@ import Spinner from '@/components/Spinner'
 
 export default function CartPage() {
   const [isCheckingOut, setIsCheckingOut] = useState(false)
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
+  const [selectedDate, setSelectedDate] = useState<string >('')
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'visa'>('cash')
   const { cart, isLoading, error, fetchCart, removeMedicine, updateMedicineQuantity, removeTest } = useCartStore()
   const router = useRouter()
@@ -43,7 +43,7 @@ export default function CartPage() {
   }, [fetchCart, handleCartUpdate])
 
   const handleTestCheckout = async () => {
-    if (cart.tests.length > 0 && !selectedDate) return
+    if (cart&&cart.tests.length > 0 && !selectedDate) return
     setIsCheckingOut(true)
     const reservationDate = new Date(selectedDate).toISOString()
     try {

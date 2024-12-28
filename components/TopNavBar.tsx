@@ -1,24 +1,7 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { ModeToggle } from "./ui/ModeToggle"
 import { WelcomeUser } from "./WelcomUser"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
 import { cookies } from 'next/headers'; // Import cookies function from Next.js
-import { shortName } from "@/lib/utils"
 import LanguageSwitcherIcon from "./LanguageSwitcherIcon"
-import { logout } from "@/actions/logout"
 import MobileNav from "./MobileNav"
 import TopNavBarMenu from "./TopNavBarMenu"
 interface NavItem {

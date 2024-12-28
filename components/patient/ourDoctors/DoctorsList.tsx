@@ -1,6 +1,6 @@
 "use client"
 
-import { Star, MapPin, ChevronLeft, ChevronRight,Search } from 'lucide-react'
+import { Star, MapPin,Search } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
@@ -14,11 +14,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Input } from "@/components/ui/input"
-import toast, { Toaster } from 'react-hot-toast'
-import { SearchForTest } from '@/lib/patient/clientApi'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Pagination from '@/components/Pagination'
-import Spinner from '@/components/Spinner'
 import { Doctors_Specializations } from '@/schema/Essentials'
 interface Doctor {
   id: string;
@@ -166,7 +163,7 @@ export default function DoctorsList({ Doctors, currentPage, totalPages,searchPar
                   <SelectContent>
                     {Doctors_Specializations.map(spec => (
 
-                    <SelectItem  value={`${spec}`}>{spec}</SelectItem>
+                    <SelectItem  key={spec} value={`${spec}`}>{spec}</SelectItem>
                     ))}
                  
                   </SelectContent>

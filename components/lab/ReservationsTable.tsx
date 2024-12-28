@@ -65,14 +65,13 @@ const ReservationsData=({reservations,currentPage,totalPages,handlePageChange,is
           ))
         }
       </CardContent>
-      <Pagination currentPage={currentPage} totalPages={totalPages}  handlePageChange={handlePageChange} />
+      <Pagination currentPage={currentPage} totalPages={totalPages}  handlePageChange={handlePageChange} isLoading={isLoading} />
 
          </>
   )
 }
 
 export default function ReservationsTable({reservations, currentPage, totalPages, currentDate}: IProps) {
-  const [isLoading, setIsLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false)
 
     const router = useRouter();
@@ -129,9 +128,7 @@ export default function ReservationsTable({reservations, currentPage, totalPages
 
   const handleDateChange = (date: Date) => {
     const newDate = format(date, "yyyy-MM-dd");
-    setIsLoading(true);
     router.push(`lab?page=${currentPage}&date=${newDate}`);
-    setIsLoading(false);
   };
   
   const getDayOptions = () => {
@@ -197,7 +194,7 @@ export default function ReservationsTable({reservations, currentPage, totalPages
         <ReservationsData 
           currentPage={currentPage} 
           handlePageChange={handlePageChange} 
-          isLoading={isLoading} 
+          isLoading={isSearching} 
           reservations={reservations} 
           totalPages={totalPages} 
         />
@@ -205,12 +202,14 @@ export default function ReservationsTable({reservations, currentPage, totalPages
         <ReservationsData 
           currentPage={SearchResult.currentPage} 
           handlePageChange={handlePageChange} 
-          isLoading={isLoading} 
+          isLoading={isSearching} 
           reservations={SearchResult.reservations} 
           totalPages={SearchResult.totalPages} 
         />
       )
     )}
+    <Toaster />
+
     </Card>
   )
 }

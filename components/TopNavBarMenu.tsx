@@ -16,16 +16,9 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
-import { cookies } from 'next/headers'; // Import cookies function from Next.js
 import { shortName } from "@/lib/utils"
-import LanguageSwitcherIcon from "./LanguageSwitcherIcon"
 import { logout } from "@/actions/logout"
-import MobileNav from "./MobileNav"
-interface NavItem {
-  href: string;
-  icon: string;
-  label: string;
-}
+
 
 interface IProps {
  user:{role:string,name:string,profilePic:string}

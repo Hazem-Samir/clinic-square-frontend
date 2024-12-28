@@ -72,7 +72,6 @@ export default function OrdersTable({orders, currentPage, totalPages}: IProps) {
  const [isSearching, setIsSearching] = useState(false)
 
     const [SearchResult, setSearchResult] = useState<{currentPage:number,totalPages:number,orders:EndReservationValues[]}|null>(null)
-    const [isLoading, setIsLoading] = useState(false);
   const router = useRouter()
 
 
@@ -157,7 +156,7 @@ export default function OrdersTable({orders, currentPage, totalPages}: IProps) {
         <OrdersData 
           currentPage={currentPage} 
           handlePageChange={handlePageChange} 
-          isLoading={isLoading} 
+          isLoading={isSearching} 
           orders={orders} 
           totalPages={totalPages} 
         />
@@ -165,12 +164,13 @@ export default function OrdersTable({orders, currentPage, totalPages}: IProps) {
         <OrdersData 
           currentPage={SearchResult.currentPage} 
           handlePageChange={handlePageChange} 
-          isLoading={isLoading} 
+          isLoading={isSearching} 
           orders={SearchResult.orders} 
           totalPages={SearchResult.totalPages} 
         />
       )
     )}
+    <Toaster />
     </Card>
   )
 }

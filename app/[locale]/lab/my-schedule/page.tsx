@@ -10,7 +10,6 @@ async function ScheduleData() {
   return (
     <Schedule 
       days={schedule.days}
-      cost={schedule.cost}
   
     />
   )

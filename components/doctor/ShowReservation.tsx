@@ -22,7 +22,6 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
-import { PatientValue } from "@/schema/Patient"
 import { EndReservationSchema, EndReservationValues } from "@/schema/DoctorReservation"
 import Spinner from "../Spinner"
 import toast, { Toaster } from 'react-hot-toast';
@@ -42,14 +41,14 @@ interface consultaitonData {
 
 interface IProps {
   size: string;
-  reservation: {};
+  reservation: object;
   RID: string;
   currentPage: number;
   currentDate?: string;
   consultaion?: consultaitonData | null;
 }
 
-export default function ShowReservation({ size = "default", reservation, RID, currentPage, currentDate, consultaion }: IProps) {
+export default function ShowReservation({  reservation, RID, currentPage, currentDate, consultaion }: IProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -143,7 +142,7 @@ export default function ShowReservation({ size = "default", reservation, RID, cu
   const handleEndReservation = async () => {
     setIsLoading(true);
     const currentValues = getValues();
-    const { consultationDate, ...rest } = currentValues;
+    const {  ...rest } = currentValues;
     const treatment = { report: { ...rest }, state: 'completed' };
     const body = FormDataHandler(treatment);
     const token = getToken();

@@ -69,7 +69,6 @@ export default function ReservationsHistoryTable({
   const [isSearching, setIsSearching] = useState(false)
 
     const [SearchResult, setSearchResult] = useState<{currentPage:number,totalPages:number,reservations:EndReservationValues[]}|null>(null)
-    const [isLoading, setIsLoading] = useState(false);
   const router = useRouter()
   const t = useTranslations('doctor.Reservations')
 
@@ -134,7 +133,7 @@ export default function ReservationsHistoryTable({
         <ReservationsHistoryData 
           currentPage={currentPage} 
           handlePageChange={handlePageChange} 
-          isLoading={isLoading} 
+          isLoading={isSearching} 
           reservations={reservations} 
           totalPages={totalPages} 
         />
@@ -142,12 +141,13 @@ export default function ReservationsHistoryTable({
         <ReservationsHistoryData 
           currentPage={SearchResult.currentPage} 
           handlePageChange={handlePageChange} 
-          isLoading={isLoading} 
+          isLoading={isSearching} 
           reservations={SearchResult.reservations} 
           totalPages={SearchResult.totalPages} 
         />
       )
     )}
+    <Toaster />
   </Card>
   )
 }

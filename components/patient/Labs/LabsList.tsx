@@ -12,7 +12,7 @@ import Pagination from '@/components/Pagination'
 import toast, { Toaster } from 'react-hot-toast'
 import { SearchForLab, SearchForTest } from '@/lib/patient/clientApi'
 import useCartStore from '@/lib/cart'
-import { MapPin, Phone, TestTubeDiagonal, ShoppingCart,Search } from 'lucide-react'
+import {TestTubeDiagonal, ShoppingCart,Search } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Spinner from '@/components/Spinner'
 

@@ -26,20 +26,18 @@ import { MarkDelivered } from "@/lib/pharmacy/clientApi"
 
 interface IProps {
   OID: string;
-  order:{};
+  order:object;
 }
 
-export default function ShowOrders({ OID ,order}: IProps) {
+export default function ShowOrders({ order}: IProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const [showEndReservationDialog, setShowEndReservationDialog] = useState(false)
-  const [showSetConsultationDialog, setShowSetConsultationDialog] = useState(false)
 
 
   const handleMarkDelivered = async () => {
     setIsLoading(true);
-    console.log(order.id)
     try{
     const res = await MarkDelivered({state:"delivered"},order.id);
     if (res.success === true) {

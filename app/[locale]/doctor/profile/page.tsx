@@ -7,14 +7,19 @@ import { cookies } from 'next/headers'; // Import cookies function from Next.js
 
 async function ProfileData() {
   const cookieStore = cookies();
-  const userCookie = cookieStore.get('user'); // Assuming the user info is stored in 'user' cookie
-  const  user = JSON.parse(userCookie.value); 
+  const userCookie = cookieStore.get('user'); 
+  
+  const  user =userCookie? JSON.parse(userCookie.value):null; 
+  if(user!==null){
+
+  
   return (
     <UserProfile 
       profile={user}
   
     />
   )
+}
 }
 
 export default function Page() {

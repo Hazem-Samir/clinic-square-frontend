@@ -8,7 +8,7 @@ interface AIThinkingProps {
   message?: string
 }
 
-export default function AIThinking({ message = "Analyzing your symptoms..." }: AIThinkingProps) {
+export default function AIThinking({  }: AIThinkingProps) {
   const [currentMessage, setCurrentMessage] = useState(0)
   
   const messages = [

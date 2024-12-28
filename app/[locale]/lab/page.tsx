@@ -22,14 +22,14 @@ async function DashboardData() {
     getReservations(10000000, 1, firstDayOfPreviousMonth.toISOString(), lastDayOfPreviousMonth.toISOString(),"completed")
   ])
  let ThismonthRevenue=0;
-  monthResults.data.data.map((data)=>{
+  monthResults.data.data.map((data:{requestedTests:{testDetails:{cost:number}}[]})=>{
     data.requestedTests.map((test)=>{
      ThismonthRevenue+=Number(test.testDetails.cost)
     })
   })
 
   let prevmonthRevenue=0;
-  prevMonthResults.data.data.map((data)=>{
+  prevMonthResults.data.data.map((data:{requestedTests:{testDetails:{cost:number}}[]})=>{
     data.requestedTests.map((test)=>{
       prevmonthRevenue+=Number(test.testDetails.cost)
     })

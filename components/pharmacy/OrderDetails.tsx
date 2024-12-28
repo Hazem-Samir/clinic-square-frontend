@@ -16,68 +16,18 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
-import toast, { Toaster } from 'react-hot-toast';
-import { useRouter } from 'next/navigation'
 import { shortName } from "@/lib/utils"
-import { MarkDelivered } from "@/lib/pharmacy/clientApi"
 
 
 
 interface IProps {
-  size: string;
-  OID: string;
-  currentPage: number;
-  order:{};
+  order:object;
 }
 
-export default function OrderDetails({ size = "default", OID, currentPage ,order}: IProps) {
+export default function OrderDetails({order}: IProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
-  const [showEndReservationDialog, setShowEndReservationDialog] = useState(false)
-  const [showSetConsultationDialog, setShowSetConsultationDialog] = useState(false)
+  
 
-  console.log(order)
-
-  const handleResrvationModal = () => {
-    setIsOpen(!isOpen)
-  }
-  const handleMarkDelivered = async () => {
-    setIsLoading(true);
-    console.log(order.id)
-    try{
-    const res = await MarkDelivered({state:"delivered"},order.id);
-    if (res.success === true) {
-      toast.success(res.message, {
-        duration: 2000,
-        position: 'bottom-center',
-      })
-      setIsOpen(false);
-      setShowEndReservationDialog(false)
-      router.refresh();
-    } else {
-      res.message.forEach((err: string) => toast.error(err || 'An unexpected error occurred.', {
-        duration: 2000,
-        position: 'bottom-center',
-      }))
-    }
-    setIsLoading(false);
-    } catch (error) {
-      toast.error(error || 'An unexpected error occurred.', {
-        duration: 2000,
-        position: 'bottom-center',
-      })
-    }
-  }
-
-  const handleCancelConsultationDate = () => {
-    const currentValues = getValues();
-    reset({
-      ...currentValues,
-      consultationDate: null,
-    })
-    setShowSetConsultationDialog(false)
-  }
 
   return (
     <>
@@ -99,7 +49,7 @@ export default function OrderDetails({ size = "default", OID, currentPage ,order
       `}</style>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button disabled={isLoading} variant="outline" onClick={() => setIsOpen(true)}>View Order</Button>
+          <Button  variant="outline" onClick={() => setIsOpen(true)}>View Order</Button>
         </DialogTrigger>
         <DialogContent className="w-full sm:max-w-md">
           <DialogHeader>
@@ -156,7 +106,6 @@ export default function OrderDetails({ size = "default", OID, currentPage ,order
       </Dialog>
 
 
-      <Toaster />
     </>
   )
 }

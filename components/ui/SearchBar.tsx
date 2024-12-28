@@ -1,10 +1,6 @@
 "use client"
 import { Input } from "@/components/ui/input"
 import { Search } from "lucide-react"
-import { useRef } from 'react';
-import { useRouter } from 'next/navigation'
-import { EndReservationValues } from "@/schema/DoctorReservation";
-import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 
 interface SearchBarProps {
@@ -20,7 +16,6 @@ interface SearchBarProps {
 const SearchBar = ({ onSearch ,setResult,setSearchTerm,searchTerm,title}: SearchBarProps) => {
   const t = useTranslations('search')
 
-  const router = useRouter();
   const search = async (e) => {
     e.preventDefault()
     if (searchTerm.trim().length > 0) {

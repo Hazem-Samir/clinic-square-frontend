@@ -21,6 +21,7 @@ import { DaysOfWeek, HandleTimeFormat } from '@/schema/Essentials'
 import toast, { Toaster } from 'react-hot-toast'
 import { BookSession, DoctorOnlinePayment } from '@/lib/patient/clientApi'
 import { useRouter } from 'next/navigation'
+import Spinner from '@/components/Spinner'
 
 interface ScheduleDay {
   day: string;
@@ -417,7 +418,7 @@ if(paymentMethod==="cash"){
                       </RadioGroup>
                     </div>
           <DialogFooter>
-            <Button onClick={handleBook} disabled={!selectedDay || !selectedDate}>Confirm Booking</Button>
+            <Button onClick={handleBook} disabled={!selectedDay || !selectedDate || isLoading}>{isLoading?<Spinner />:"Confirm Booking"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

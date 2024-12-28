@@ -46,7 +46,7 @@ const ReservationsData=({reservations,currentPage,totalPages,handlePageChange,is
             </div>
           ))}
         </CardContent>
-      <Pagination currentPage={currentPage} totalPages={totalPages}  handlePageChange={handlePageChange} />
+      <Pagination currentPage={currentPage} totalPages={totalPages}  handlePageChange={handlePageChange} isLoading={isLoading} />
 
     </>
   )
@@ -57,7 +57,6 @@ export default function ReservationsHistoryTable({
   currentPage, 
   totalPages
 }: IProps) {
- const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
     const [isSearching, setIsSearching] = useState(false)
@@ -129,7 +128,7 @@ export default function ReservationsHistoryTable({
         <ReservationsData 
           currentPage={currentPage} 
           handlePageChange={handlePageChange} 
-          isLoading={isLoading} 
+          isLoading={isSearching} 
           reservations={reservations} 
           totalPages={totalPages} 
         />
@@ -137,12 +136,13 @@ export default function ReservationsHistoryTable({
         <ReservationsData 
           currentPage={SearchResult.currentPage} 
           handlePageChange={handlePageChange} 
-          isLoading={isLoading} 
+          isLoading={isSearching} 
           reservations={SearchResult.reservations} 
           totalPages={SearchResult.totalPages} 
         />
       )
     )}
+    <Toaster />
  </Card>
   )
 }
