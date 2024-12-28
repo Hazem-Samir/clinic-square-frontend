@@ -20,7 +20,6 @@ export default function UnAuthLayout({
       <body>
         <BlurFade delay={0} className="min-h-screen flex items-center justify-center p-4" inView>
             {children}
-          </div>
         </BlurFade>
       </body>
     </html>
