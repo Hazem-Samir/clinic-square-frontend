@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 import createIntlMiddleware from 'next-intl/middleware'
 
 const locales = ['en', 'ar']
-const publicPages = ['/login', '/signup']
+const publicPages = ['/login', '/signup','/unauthorized']
 const loggedInRestrictedPages = ['/login', '/signup']
 
 const intlMiddleware = createIntlMiddleware({
