@@ -125,13 +125,14 @@ export default function CartPage() {
     return (
       <div className="flex-grow p-4 md:p-8 space-y-8 md:space-y-12 max-w-7xl mx-auto w-full bg-background text-foreground  flex items-center justify-center">
 
-      <Spinner />
+      <Spinner invert />
       </div>
     )
   }
 
   if (error) {
-    return <div className="text-red-500">{error}</div>
+    return      <div className="flex-grow p-4 md:p-8 space-y-8 md:space-y-12 max-w-7xl mx-auto w-full bg-background text-foreground  flex items-center justify-center">
+{error}</div>
   }
 
   const renderMedicines = () => (

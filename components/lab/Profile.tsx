@@ -22,7 +22,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-
+import { useTranslations } from 'next-intl'
 import {  shortName } from "@/lib/utils"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import {  PlusCircle, X } from "lucide-react"
@@ -52,6 +52,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [images, setImages] = useState<Iimages>({ profilePic: null, license: [] })
   const router = useRouter();
+  const tprofile = useTranslations('profile')
 
 
   const form = useForm<ProfileValue>({
@@ -154,7 +155,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
       <div className="container mx-auto flex-grow">
           <Card className="w-full border-none">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold text-center">User Profile</CardTitle>
+              <CardTitle className="text-2xl font-bold text-center">{tprofile(`user_profile`)}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-8">
@@ -166,7 +167,6 @@ export default function LabProfileUpdate({ profile }: IProps) {
                   <div className="text-center">
                     <h2 className="text-3xl font-bold">{profile.name}</h2>
                     <p className="text-xl text-gray-500">{profile.email}</p>
-                    <p className="text-sm text-gray-500">{profile.specialization}</p>
                   </div>
                 </div>
                 <div className="space-y-6">
@@ -174,7 +174,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
                   
                  
                   <div>
-                    <Label className="text-lg">Address</Label>
+                    <Label className="text-lg">{tprofile(`address`)}</Label>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {profile.address.map((address, index) => (
                     <p  key={index} className="text-xl mt-1">{address} - </p>
@@ -183,7 +183,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
                     </div>
                   </div>
                   <div>
-                    <Label className="text-lg">Phone Numbers</Label>
+                    <Label className="text-lg">{tprofile(`phoneNumbers`)}</Label>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {profile.phoneNumbers.map((phone, index) => (
                     <p  key={index} className="text-xl mt-1">{phone} - </p>
@@ -193,7 +193,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
                   </div>
             
                   <div>
-                    <Label className="text-lg">License </Label>
+                    <Label className="text-lg">{tprofile(`license`)}</Label>
                     <div className="flex flex-wrap gap-4 mt-2">
                       {profile.license.map((pic, index) => (
                         <Image  key={index} priority src={pic} alt={`License ${index + 1}`} width={192} height={144} className=" h-auto object-cover rounded" />
@@ -205,11 +205,11 @@ export default function LabProfileUpdate({ profile }: IProps) {
 
                 <Dialog open={isOpenUpdateProfile} onOpenChange={setIsOpenUpdateProfile}>
       <DialogTrigger asChild>
-        <Button  disabled={isLoading}>Update Profile</Button>
+        <Button  disabled={isLoading}>{tprofile(`update_profile.button`)}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Update Lab Profile</DialogTitle>
+          <DialogTitle>{tprofile(`update_profile.title`)}</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -222,7 +222,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
                   name="profilePic"
                   render={() => (
                     <FormItem>
-                      <FormLabel>Profile Picture</FormLabel>
+                      <FormLabel>{tprofile(`update_profile.Profile_Pic`)}</FormLabel>
                       <FormControl>
                         <div className="flex items-center space-x-4">
                         <div className="relative w-28 h-20 rounded-full overflow-hidden bg-muted">
@@ -253,7 +253,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Full Name</FormLabel>
+                      <FormLabel>{tprofile(`update_profile.Full_Name`)}</FormLabel>
                       <FormControl>
                         <Input  disabled={isLoading} {...field} />
                       </FormControl>
@@ -267,7 +267,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{tprofile(`update_profile.email`)}</FormLabel>
                       <FormControl>
                         <Input  disabled={isLoading} {...field} type="email" />
                       </FormControl>
@@ -288,7 +288,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
                     name={`phoneNumbers.${index}`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{index === 0 ? "Phone Number" : `Phone Number ${index + 1}`}</FormLabel>
+                        <FormLabel>{`${tprofile(`update_profile.phoneNumber`,{index:index+1})}`}</FormLabel>
                         <FormControl>
                           <div className="flex items-center space-x-2">
                             <Input  disabled={isLoading} {...field} />
@@ -317,7 +317,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
                   size="sm"
                   onClick={() => appendPhone("")}
                 >
-                  Add Another Phone Number
+                  {tprofile(`update_profile.Add_Another_Phone_Button`)}
                 </Button>
 
                 {addressFields.map((field, index) => (
@@ -327,7 +327,8 @@ export default function LabProfileUpdate({ profile }: IProps) {
                     name={`address.${index}`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{index === 0 ? "Address" : `Address ${index + 1}`}</FormLabel>
+                               <FormLabel>{`${tprofile(`update_profile.address`,{index:index+1})}`}</FormLabel>
+               
                         
                         <FormControl>
                           <div className="flex items-center space-x-2">
@@ -357,7 +358,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
                   size="sm"
                   onClick={() => appendAddress("")}
                 >
-                  Add Another Address
+                  {tprofile(`update_profile.Add_Another_Address_Button`)}
                 </Button>
 
                 <FormField
@@ -365,7 +366,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
                   name="license"
                   render={() => (
                     <FormItem>
-                      <FormLabel>License Photos</FormLabel>
+                      <FormLabel>{tprofile(`update_profile.License_Photo`)}</FormLabel>
                       <FormControl>
                         <div className="space-y-2">
                           <ScrollArea className="h-30 w-full rounded-md border">
@@ -396,7 +397,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
                           <Button  disabled={isLoading} type="button" variant="outline" size="sm" className="text-xs sm:text-sm">
                             <label htmlFor="license" className="flex w-full h-full items-center cursor-pointer">
                               <PlusCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                              Upload License Photo
+                              {tprofile(`update_profile.Upload_License`)}
                             </label>
                           </Button>
                           <Input
@@ -416,7 +417,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
                 />
               </div>
             </ScrollArea>
-            <Button type="submit" className="w-full">{isLoading?<Spinner/>:"Update Profile"}</Button>
+            <Button type="submit" className="w-full">{isLoading?<Spinner/>:tprofile(`update_profile.submit`)}</Button>
           </form>
         </Form>
         <Toaster />
@@ -425,11 +426,11 @@ export default function LabProfileUpdate({ profile }: IProps) {
 
     <Dialog open={isOpenUpdatePassword} onOpenChange={setIsOpenUpdatePassword}>
       <DialogTrigger asChild>
-        <Button  disabled={isLoading}>Update Password</Button>
+        <Button  disabled={isLoading}>{tprofile(`change_password.button`)}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Update Lab Password</DialogTitle>
+          <DialogTitle>{tprofile(`change_password.title`)}</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <Form {...passwordForm}>
@@ -444,11 +445,11 @@ export default function LabProfileUpdate({ profile }: IProps) {
                   name="currentPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Current Password</FormLabel>
+                      <FormLabel>{tprofile(`change_password.current_Password`)}</FormLabel>
                       <FormControl>
                         <Input  disabled={isLoading}{...field} type="password"/>
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage translate={"errors"} />
                     </FormItem>
                   )}
                 />
@@ -458,11 +459,11 @@ export default function LabProfileUpdate({ profile }: IProps) {
                   name="newPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>New Password</FormLabel>
+                      <FormLabel>{tprofile(`change_password.new_Password`)}</FormLabel>
                       <FormControl>
                         <Input  disabled={isLoading}{...field} type="password" />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage translate={"errors"} />
                     </FormItem>
                   )}
                 />
@@ -471,11 +472,11 @@ export default function LabProfileUpdate({ profile }: IProps) {
                   name="passwordConfirm"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Confirm New Password</FormLabel>
+                      <FormLabel>{tprofile(`change_password.confirm_new_Password`)}</FormLabel>
                       <FormControl>
                         <Input  disabled={isLoading} {...field} type="password" />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage translate={"errors"}/>
                     </FormItem>
                   )}
                 />
@@ -484,7 +485,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
               
               </div>
             </ScrollArea>
-            <Button type="submit" className="w-full">{isLoading?<Spinner/>:"Update Password"}</Button>
+            <Button type="submit" className="w-full">{isLoading?<Spinner/>:tprofile(`change_password.submit`)}</Button>
           </form>
         </Form>
             <Toaster />

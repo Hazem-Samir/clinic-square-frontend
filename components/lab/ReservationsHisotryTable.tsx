@@ -12,6 +12,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import { useState } from "react"
 import { searchReservationsHistory } from '@/lib/lab/clientApi'
 import Spinner from '../Spinner'
+import { useTranslations } from 'next-intl'
 
 interface IProps  {
   reservations: EndReservationValues[];
@@ -41,7 +42,7 @@ const ReservationsData=({reservations,currentPage,totalPages,handlePageChange,is
                 </p>
               </div>
               <div className="ltr:ml-auto rtl:mr-auto font-medium">
-                <ReservationDetails size="sm"  reservation={reservation}/>
+                <ReservationDetails  reservation={reservation}/>
               </div>
             </div>
           ))}
@@ -61,6 +62,7 @@ export default function ReservationsHistoryTable({
 
     const [isSearching, setIsSearching] = useState(false)
 
+    const t = useTranslations('Reservations')
 
   const [searchTerm, setSearchTerm] = useState('')
 
@@ -113,8 +115,8 @@ export default function ReservationsHistoryTable({
       <Card>
         <CardHeader>
           <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-2 sm:gap-0">
-            <CardTitle className="text-base sm:text-lg">Reservations History</CardTitle>
-          <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='Search for Patient'/>
+            <CardTitle className="text-base sm:text-lg">{t(`History_title`)}</CardTitle>
+          <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='For_Patient'/>
 
           </div>
         </CardHeader>

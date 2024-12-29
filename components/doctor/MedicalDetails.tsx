@@ -28,7 +28,7 @@ interface IProps {
 
     export default function MedicalDetails({reservation}:IProps) {
 
-  const t = useTranslations('doctor.Reservations')
+  const t = useTranslations('Reservations')
     
 
     

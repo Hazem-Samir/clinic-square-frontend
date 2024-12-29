@@ -1,6 +1,8 @@
 {
     "common": {
-      "switchLanguage": "تغيير اللغة"
+      "switchLanguage": "تغيير اللغة",
+    "EGP":"جنيه مصري"
+
     },
     "nav":{
       "Home":"الصفحة الرئيسية",
@@ -17,7 +19,8 @@
       "For_Doctor":"ابحص عن دكتور",
       "For_Question":"ابحث عن سؤال",
       "For_Lab":"ابحث عن معمل",
-      "For_Pharmacy":"ابحث عن صيدلية"
+      "For_Pharmacy":"ابحث عن صيدلية",
+    "For_Test":"ابحث عن تحليل"
      
     },
     "ModeToogle":{
@@ -35,57 +38,94 @@
         "title": "لوحة تحكم الطبيب",
         "Questions":{
           "title":"اسئلة المرضي"
+        }
+      
+     
+      },
+      "Reservations":{
+        "title":"الحجوزات",
+        "History_title":"الحجوزات السابقة",
+        "No_Reservations":"لا يوجد حجوزات",
+        "View_Details":"التفاصيل",
+        "Details":{
+          "title":"تفاصيل الحجز",
+          "RDate":"بتاريخ",
+          "PAge":"العمر",
+          "FSBP":"ملفات ارسلها المريض",
+          "No_Files":"لا يوجد ملفات",
+          "View_File":"اعرض الملف",
+          "Test_Results":"نتائج التحاليلي",
+          "No_Results":"لا يوجد نتائج",
+
+          "diagnose":{
+            "title":"التشخيص",
+          "placeholder":"ادخل التشخيص",
+          "No_Diagnosis":"لا يوجد تشخيص"
+
         },
-        "Reservations":{
-          "title":"الحجوزات",
-          "History_title":"الحجوزات السابقة",
-          "No_Reservations":"لا يوجد حجوزات",
-          "View_Details":"التفاصيل",
-          "Details":{
-            "title":"تفاصيل الحجز",
-            "RDate":"بتاريخ",
-            "PAge":"العمر",
-            "FSBP":"ملفات ارسلها المريض",
-            "No_Files":"لا يوجد ملفات",
-            "View_File":"اعرض الملف",
-            "diagnose":{
-              "title":"التشخيص",
-            "placeholder":"ادخل التشخيص",
-            "No_Diagnosis":"لا يوجد تشخيص"
+          "Set_Consultation_Button":"حدد استشارة",
+          "End_Reservation_Button":"انهاء الحجز",
+          "End_Reservation":{
+            "title":"انهاء الحجز",
+          "description":"هل انت متاكد من انهاء الحجز؟",
+          "Cancel":"الغاء",
+          "submit":"انهاء الحجز"
+        },
+        "Set_Consultation":{
+          "title":"حدد تاريخ الاستشارة",
+          "Date":"التاريخ",
+          "Cancel":"الغاء",
+          "submit":"حدد التاريخ"
+        },
+          "Medicine":{
+            "title":"الدواء",
+            "Medicine_name":"اسم الدواء",
+            "Medicine_Dose":"الجرعة",
+            "Add_Prescription":"اضف روشتة",
+          "No_Medicines":"لا يوجد ادوية",
+          "Prescriptions":"الروشتة",
+            "Tests":{
+              "title":"يحتاج تحاليل او اشعة",
+              "placeholder":"اسم التحليل او الاشعة",
+              "button":"اضف تحليل",
+          "No_Tests":"لا يوجد تحاليل مطلوبة"
 
-          },
-            "Set_Consultation_Button":"حدد استشارة",
-            "End_Reservation_Button":"انهاء الحجز",
-            "End_Reservation":{
-              "title":"انهاء الحجز",
-            "description":"هل انت متاكد من انهاء الحجز؟",
-            "Cancel":"الغاء",
-            "submit":"انهاء الحجز"
-          },
-          "Set_Consultation":{
-            "title":"حدد تاريخ الاستشارة",
-            "Date":"التاريخ",
-            "Cancel":"الغاء",
-            "submit":"حدد التاريخ"
-          },
-            "Medicine":{
-              "title":"الدواء",
-              "Medicine_name":"اسم الدواء",
-              "Medicine_Dose":"الجرعة",
-              "Add_Prescription":"اضف روشتة",
-            "No_Medicines":"لا يوجد ادوية",
-            "Prescriptions":"الروشتة",
-              "Tests":{
-                "title":"يحتاج تحاليل او اشعة",
-                "placeholder":"اسم التحليل او الاشعة",
-                "button":"اضف تحليل",
-            "No_Tests":"لا يوجد تحاليل مطلوبة"
-
-              }
             }
           }
         }
-     
+      },
+      "Tests":{
+        "title":"تحاليلي",
+        "preps":"التجهيزات",
+        "none":"لا يوجد",
+    
+        "Add_Test":{
+          "title":"اضف تحليل جديد",
+          "Edit_Test":"تعديل التحليل",
+          "Save":"حفظ التغييرات",
+          "Select_Test":"اختار تحليل",
+          "Test_Name":"اسم التحليل",
+          "cost":"التكلفة",
+          "preps":"التجهيزات",
+          "preps_desc":"اضف التجهيزات لعمل التحليل",
+          "preps_edit_desc":"عدل التجهزيات لعمل التحليل",
+          "prep_add_button":"اضف تجهيز",
+          "submit":"اضف تحليل",
+          "Cancel":"الغاء"
+        },
+        "Request_Test":{
+          "title":"اطلب تحليل جديد",
+          "description":"لا تجد التحليل الذي تبحث عنه؟ اطلب تحليل جديد",
+          "Test_Name":"اسم التحليل",
+          "submit":"ارسال طلب",
+          "Cancel":"الغاء"
+        },
+        "Delete_Test":{
+          "title":"تاكيد المسح",
+          "description":"هل انت متاكد من مسح {testName} هذه العملية لا يكمن الرجع منها",
+          "submit":"مسح",
+          "Cancel":"الغاء"
+        }
       },
       "schedule": {
         "title": "تحديد جدولك",
@@ -114,6 +154,50 @@
           "saturday": "السبت",
           "sunday": "الأحد"
         }
+      },
+      "profile":{
+        "user_profile":"الملف الشخصي",
+        "about_me":"عني",
+        "gender":"الجنس",
+        "male":"ذكر",
+        "female":"انثي",
+        "address":"العنوان",
+        "phoneNumbers":"ارقام التليفون",
+        "license":"الشهادات",
+        "age":"العمر",
+        "update_profile":{
+          "button":"تحديث البيانات",
+          "about_placeholder":"حدثنا عن نفسك",
+          "gender_placeholder":"اختر الجنس",
+          "DOB":"تاريخ الميلاد",
+          "spec":"التخصص",
+          "title":"تحديث بيانات",
+          "Profile_Pic":"الصورة الشخصية",
+          "Full_Name":"الاسم كامل",
+          "email":"الايميل",
+          "phoneNumber":"رقم تليفون {index}",
+          "Add_Another_Phone_Button":"اضف رقم تليفون اخر",
+          "Add_Another_Address_Button":"اضف عنوان اخر",
+
+        "address":"العنوان {index}",
+        "License_Photo":"صور الشهادة",
+        "Upload_License":"رفم صورة الشهادة",
+          "submit":"تحديث البيانات"
+          
+        },
+        "change_password":{
+          "button":"تغيير كلمة السر",
+          "submit":"تغير كلمة السر",
+
+          "title":"تغيير كلمة سر",
+          "current_Password":"كلمة السر الحالية",
+          "new_Password":"كلمة السر الجديدة",
+          "confirm_new_Password":"تاكيد كلمة السرالجديدة"
+        }
+      },
+      "errors":{
+        "password_8chars":"كلمة السر يجب انت تكون 8 احرف علي الاقل",
+        "password_not_match":"كلمة السر غير متطابقة"
       }
      
     }

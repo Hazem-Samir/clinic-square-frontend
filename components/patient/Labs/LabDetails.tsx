@@ -7,6 +7,8 @@ import { toast, Toaster } from 'react-hot-toast'
 import Image from 'next/image'
 import { HandleTimeFormat } from '@/schema/Essentials'
 import useCartStore from '@/lib/cart'
+import { useState } from "react"
+import Spinner from '@/components/Spinner'
 
 interface Test {
   id: string;
@@ -51,8 +53,12 @@ interface IProps {
 export default function LabDetails({ Lab, Tests }: IProps) {
   // const [currentLicenseIndex, setCurrentLicenseIndex] = useState(0)
   const { addToCart } = useCartStore()
+  const [isLoading, setIsLoading] = useState(false)
+  const [testId,setTestID] = useState<string|null>(null)
+
 console.log(Tests)
   const handleAddToCart = async (testId: string) => {
+    setIsLoading(true)
     const res = await addToCart({ testId })
     if (!res.success) {
       toast.error("You have added this test before.", {
@@ -65,6 +71,7 @@ console.log(Tests)
         position: 'bottom-center',
       })
     }
+    setIsLoading(false)
   }
 
   // const nextLicense = () => {
@@ -187,10 +194,14 @@ console.log(Tests)
               <p className="text-2xl font-bold">{test.cost} EGP</p>
             </CardContent>
             <CardFooter>
-              <Button className="w-full" onClick={() => handleAddToCart(test.id)}>
-                <ShoppingCart className="w-4 h-4 mr-2" />
-                Add to Cart
-              </Button>
+              <Button className="w-full" onClick={() => {setTestID(test.id); handleAddToCart(test.id)}} disabled={isLoading}>
+                { isLoading && testId!==null && testId===test.id?<Spinner />:
+                <>
+                <ShoppingCart className="w-4 h-4 mr-2" disabled={isLoading} />
+              Add to Cart             
+                </>
+                }
+               </Button>
             </CardFooter>
           </Card>
         ))}

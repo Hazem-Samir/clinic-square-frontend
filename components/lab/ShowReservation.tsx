@@ -20,6 +20,8 @@ import { FormDataHandler } from "@/utils/AuthHandlers"
 import { MarkCompleted, UploadResults } from "@/lib/lab/clientApi"
 import toast, { Toaster } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
+import { getAge } from "@/utils/utils"
 
 // Zod schema
 const TestResultSchema = z.object({
@@ -37,6 +39,7 @@ interface Patient {
   name: string
   age: number
   profilePic: string
+  dateOfBirth: string
 }
 
 interface IProps {
@@ -49,6 +52,7 @@ export default function ShowReservation({ RID, patient, requestedTests }: IProps
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const t = useTranslations('Reservations')
 
   const {  control, handleSubmit, formState: { errors }, setValue, watch } = useForm<PatientTestsValues>({
     resolver: zodResolver(PatientTestsSchema),
@@ -121,11 +125,11 @@ export default function ShowReservation({ RID, patient, requestedTests }: IProps
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" onClick={() => setIsOpen(true)}>View Patient Tests</Button>
+        <Button variant="outline" onClick={() => setIsOpen(true)}>{t(`View_Details`)}</Button>
       </DialogTrigger>
       <DialogContent className="w-full sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-lg sm:text-xl">Patient Test Results</DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl">{t(`Details.title`)}</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-center gap-4 py-4">
           <Avatar className="h-24 w-24">
@@ -134,7 +138,7 @@ export default function ShowReservation({ RID, patient, requestedTests }: IProps
           </Avatar>
           <div className="text-center">
             <h2 className="text-xl font-bold">{patient.name}</h2>
-            <p>Age: {patient.age}</p>
+            <p>{`${t('Details.PAge')}: ${getAge(patient.dateOfBirth)}`}</p>
           </div>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>

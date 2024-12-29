@@ -22,7 +22,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
-import { EndReservationSchema, EndReservationValues } from "@/schema/DoctorReservation"
+import { EnReservationschema, EndReservationValues } from "@/schema/DoctorReservation"
 import Spinner from "../Spinner"
 import toast, { Toaster } from 'react-hot-toast';
 import { getToken } from "@/lib/auth"
@@ -54,10 +54,10 @@ export default function ShowReservation({  reservation, RID, currentPage, curren
   const router = useRouter()
   const [showEndReservationDialog, setShowEndReservationDialog] = useState(false)
   const [showSetConsultationDialog, setShowSetConsultationDialog] = useState(false)
-  const t = useTranslations('doctor.Reservations')
+  const t = useTranslations('Reservations')
 
   const { register, control, handleSubmit, formState: { errors }, reset, getValues } = useForm<EndReservationValues>({
-    resolver: zodResolver(EndReservationSchema),
+    resolver: zodResolver(EnReservationschema),
     defaultValues: {
       diagnose: consultaion ? consultaion.diagnose : "",
       medicine: consultaion ? consultaion.medicine : [],

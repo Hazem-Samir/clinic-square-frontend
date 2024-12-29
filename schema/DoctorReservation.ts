@@ -3,7 +3,7 @@ import * as z from "zod"
 
 
 
-export const EndReservationSchema = z.object({
+export const EnReservationschema = z.object({
       diagnose: z.string().min(3, "Diagnosis is required"),
       medicine: z.array(z.object({
             name: z.string().min(3, "Medication name is required"),
@@ -29,6 +29,6 @@ export const EndReservationSchema = z.object({
     
     // Export the schema for use in your form
 
-   export type EndReservationValues = z.infer<typeof EndReservationSchema>
+   export type EndReservationValues = z.infer<typeof EnReservationschema>
     
     

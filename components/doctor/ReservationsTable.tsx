@@ -42,7 +42,7 @@ interface IReservations extends IProps {
   isLoading:boolean
 }
 const ReservationsData=({reservations,currentPage,totalPages,handlePageChange,isLoading,currentDate}:IReservations)=>{
-  const t = useTranslations('doctor.Reservations')
+  const t = useTranslations('Reservations')
 
   return (
     <>
@@ -74,7 +74,7 @@ const ReservationsData=({reservations,currentPage,totalPages,handlePageChange,is
 export default function ReservationsTable({reservations, currentPage, totalPages, currentDate}: IProps) {
     const router = useRouter();
     const [isSearching, setIsSearching] = useState(false)
-    const t = useTranslations('doctor.Reservations')
+    const t = useTranslations('Reservations')
 
 
   const [searchTerm, setSearchTerm] = useState('')
@@ -160,7 +160,7 @@ export default function ReservationsTable({reservations, currentPage, totalPages
                   <CalendarDays className="h-4 w-4" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent disabled={isLoading} className="w-auto p-0" align="end">
+              <PopoverContent  className="w-auto p-0" align="end">
                 <div className="flex flex-col">
                   {dayOptions.map((option) => (
                     <Button

@@ -60,7 +60,8 @@ export default function DoctorAppointments({appointments,currentPage,totalPages}
         duration: 3000,
         position: 'top-center',
       });
-      router.push(`my-activity?doctorsPage=${currentPage}&activeTab=doctors`);
+      router.refresh()
+      // router.push(`my-activity?doctorsPage=${currentPage}&activeTab=doctors`);
     } else {
       res.message.forEach((err: string) => toast.error(err || 'An unexpected error occurred.', {
         duration: 3000,

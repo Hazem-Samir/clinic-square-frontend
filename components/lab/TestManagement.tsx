@@ -41,6 +41,7 @@ import Spinner from '../Spinner'
 import { ITest, ITestDetails } from '@/interfaces/Lab'
 import SearchBar from '../ui/SearchBar'
 import Pagination from '../Pagination'
+import { useTranslations } from 'next-intl'
 
 
 interface IProps {
@@ -61,6 +62,9 @@ interface ITestsData extends IProps{
 }
 
 const TestsData=({tests,form,isLoading,setTestName,setIsEditOpen,setIsDeleteOpen,currentPage,handlePageChange,totalPages}:ITestsData)=>{
+  const t = useTranslations('Tests')
+  const t2 = useTranslations('common')
+
   return (
     <>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
@@ -106,13 +110,13 @@ const TestsData=({tests,form,isLoading,setTestName,setIsEditOpen,setIsDeleteOpen
                 </Button>
               </div>
             </div>
-            <p className="text-xl font-bold text-primary mb-2">{test.cost} EGP</p>
+            <p className="text-xl font-bold text-primary mb-2">{`${test.cost} ${t2(`EGP`)}`} </p>
             <div className="mt-2">
-              <h3 className="text-sm font-semibold mb-1">Preparations:</h3>
+              <h3 className="text-sm font-sempibold mb-1">{`${t(`preps`)}:`}</h3>
               <ul className="list-disc list-inside text-sm text-muted-foreground">
                 {test.preparations.length > 0 ? test.preparations.map((prep, index) => (
                   <li key={index}>{prep}</li>
-                )) : <li>none</li>}
+                )) : <li>{t(`none`)}</li>}
               </ul>
             </div>
           </div>
@@ -145,6 +149,7 @@ export default function TestManagement({tests, currentPage, totalPages,available
   const [isRequestOpen, setIsRequestOpen] = useState(false)
 
 
+  const t = useTranslations('Tests')
 
   const [searchTerm, setSearchTerm] = useState('')
 
@@ -315,25 +320,25 @@ const handleDeleteTest = async() => {
     <>
     <div className="p-4 max-w-7xl mx-auto">
       <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">My Tests</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">{t(`title`)}</h1>
         <Dialog open={isRequestOpen} onOpenChange={setIsRequestOpen}>
           <DialogTrigger asChild>
             <Button disabled={isLoading} variant="outline" size="sm" className="w-full sm:w-auto mb-4 sm:mb-0">
-              <Send className="mr-2 h-4 w-4" />
-              Request New Test
+              <Send className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
+              {t(`Request_Test.title`)}
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Request New Test</DialogTitle>
+              <DialogTitle>{t(`Request_Test.title`)}</DialogTitle>
               <DialogDescription>
-                Can&apos;t find the test you&apos;re looking for? Request it here.
+              {t(`Request_Test.description`)}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="requestTest" className="text-right">
-                  Test Name
+                {t(`Request_Test.Test_Name`)}
                 </Label>
                 <Input
                 disabled={isLoading}
@@ -346,9 +351,9 @@ const handleDeleteTest = async() => {
             </div>
             <DialogFooter>
               <Button disabled={isLoading} variant="outline" onClick={() => setIsRequestOpen(false)}>
-                Cancel
+                {t(`Request_Test.Cancel`)}
               </Button>
-              <Button disabled={isLoading} onClick={handleRequestTest}>{isLoading?<Spinner/>:"Send Request"}</Button>
+              <Button disabled={isLoading} onClick={handleRequestTest}>{isLoading?<Spinner/>:t(`Request_Test.submit`)}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -360,12 +365,12 @@ const handleDeleteTest = async() => {
         <DialogTrigger asChild>
           <Button disabled={isLoading} className="w-full sm:w-auto">
             <PlusCircle className="mr-2 h-4 w-4" />
-            Add New Test
+            {t(`Add_Test.title`)}
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add New Test</DialogTitle>
+            <DialogTitle>  {t(`Add_Test.title`)}</DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
           <Form {...form}>
@@ -375,11 +380,11 @@ const handleDeleteTest = async() => {
                 name="id"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Test Name</FormLabel>
+                    <FormLabel>  {t(`Add_Test.Test_Name`)}</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger disabled={isLoading}>
-                          <SelectValue placeholder="Select a test" />
+                          <SelectValue placeholder= {t(`Add_Test.Select_Test`)} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -401,7 +406,7 @@ const handleDeleteTest = async() => {
                   <FormItem>
                     <FormLabel>Cost</FormLabel>
                     <FormControl>
-                      <Input disabled={isLoading} type="number" {...field} />
+                      <Input disabled={isLoading} type="number" {...field} placeholder="123" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -412,8 +417,8 @@ const handleDeleteTest = async() => {
                 name="preparations"
                 render={() => (
                   <FormItem>
-                    <FormLabel>Preparations</FormLabel>
-                    <FormDescription>Add preparation steps for the test.</FormDescription>
+                    <FormLabel> {t(`Add_Test.preps`)}</FormLabel>
+                    <FormDescription> {t(`Add_Test.preps_desc`)}</FormDescription>
                     {form.watch("preparations").map((prep, index) => (
                       <FormField
                         key={index}
@@ -453,7 +458,7 @@ const handleDeleteTest = async() => {
                         form.setValue("preparations", [...currentPreps, ""])
                       }}
                     >
-                      <Plus className="h-4 w-4 mr-2" /> Add Preparation
+                      <Plus className="h-4 w-4 mr-2" />  {t(`Add_Test.prep_add_button`)}
                     </Button>
                   </FormItem>
                 )}
@@ -462,16 +467,16 @@ const handleDeleteTest = async() => {
                 <Button disabled={isLoading} type="button" variant="outline" onClick={() => {
                  handleAddModalOpen()
                 }}>
-                  Cancel
+                  {t(`Add_Test.Cancel`)}
                 </Button>
-                <Button disabled={isLoading} type="submit">{isLoading?<Spinner/>:"Add Test"}</Button>
+                <Button disabled={isLoading} type="submit">{isLoading?<Spinner/>:t(`Add_Test.submit`)}</Button>
               </DialogFooter>
             </form>
           </Form>
         </DialogContent>
         <Toaster />
       </Dialog>
-        <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='Search for Test'/>
+        <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='For_Test'/>
 </div>
 </div>
 
@@ -513,7 +518,7 @@ const handleDeleteTest = async() => {
       <Dialog open={isEditOpen} onOpenChange={handleEditModalOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Edit Test</DialogTitle>
+            <DialogTitle>{t(`Add_Test.Edit_Test`)}</DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
           <Form {...form}>
@@ -523,9 +528,9 @@ const handleDeleteTest = async() => {
                 name="id"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Test Name</FormLabel>
+                    <FormLabel>{t(`Add_Test.Test_Name`)}</FormLabel>
                     <FormControl>
-                      <Input {...field} value={testName} disabled={isLoading}  />
+                      <Input {...field} value={testName} disabled  />
                     </FormControl>
                   </FormItem>
                 )}
@@ -535,7 +540,7 @@ const handleDeleteTest = async() => {
                 name="cost"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Cost</FormLabel>
+                    <FormLabel>{t(`Add_Test.cost`)}</FormLabel>
                     <FormControl>
                       <Input disabled={isLoading} type="number" {...field} />
                     </FormControl>
@@ -548,8 +553,8 @@ const handleDeleteTest = async() => {
                 name="preparations"
                 render={() => (
                   <FormItem>
-                    <FormLabel>Preparations</FormLabel>
-                    <FormDescription>Edit preparation steps for the test.</FormDescription>
+                    <FormLabel>{t(`Add_Test.preps`)}</FormLabel>
+                    <FormDescription>{t(`Add_Test.preps_edit_desc`)}</FormDescription>
                     {form.watch("preparations").map((prep, index) => (
                       <FormField
                         key={index}
@@ -588,7 +593,7 @@ const handleDeleteTest = async() => {
                         form.setValue("preparations", [...currentPreps, ""])
                       }}
                     >
-                      <Plus className="h-4 w-4 mr-2" /> Add Preparation
+                      <Plus className="h-4 w-4 mr-2" /> {t(`Add_Test.prep_add_button`)}
                     </Button>
                   </FormItem>
                 )}
@@ -597,9 +602,9 @@ const handleDeleteTest = async() => {
                 <Button disabled={isLoading} type="button" variant="outline" onClick={() => {
                       handleEditModalOpen()
                 }}>
-                  Cancel
+                  {t(`Add_Test.Cancel`)}
                 </Button>
-                <Button  disabled={isLoading}type="submit">{isLoading?<Spinner/>:"Save Changes"}</Button>
+                <Button  disabled={isLoading}type="submit">{isLoading?<Spinner/>:t(`Add_Test.Save`)}</Button>
               </DialogFooter>
             </form>
           </Form>
@@ -608,17 +613,17 @@ const handleDeleteTest = async() => {
       <Dialog open={isDeleteOpen} onOpenChange={handleDeleteModal}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogTitle>{t(`Delete_Test.title`)}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete the test &quot;{testName}&quot;? This action cannot be undone.
+           {t(`Delete_Test.description`,{testName})}
             
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button disabled={isLoading} type="button" variant="outline" onClick={() => {handleDeleteModal()}}>
-              Cancel
+            {t(`Delete_Test.Cancel`)}
             </Button>
-            <Button disabled={isLoading} variant="destructive" onClick={handleDeleteTest}>{isLoading?<Spinner />:"Delete"}</Button>
+            <Button disabled={isLoading} variant="destructive" onClick={handleDeleteTest}>{isLoading?<Spinner />:t(`Delete_Test.submit`)}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -46,11 +46,11 @@ export const DoctorProfileSchema = z.object({
 
     export const PasswordSchema = z.object({
      
-      currentPassword: z.string().min(6, "Password must be at least 8 characters"),
-      newPassword: z.string().min(6, "Password must be at least 8 characters"),
-      passwordConfirm: z.string().min(6, "Password must be at least 8 characters"),
+      currentPassword: z.string().min(6, "password_8chars"),
+      newPassword: z.string().min(6, "password_8chars"),
+      passwordConfirm: z.string().min(6, "password_8chars"),
     }).refine((data) => data.newPassword === data.passwordConfirm, {
-      message: "Passwords do not match",
+      message: "password_not_match",
       path: ["passwordConfirm"],
     });
     type DoctorProfileValue = z.infer<typeof DoctorProfileSchema>

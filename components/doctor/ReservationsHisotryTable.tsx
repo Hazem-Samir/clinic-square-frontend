@@ -28,7 +28,7 @@ interface IReservation extends IProps {
 
 
 const ReservationsHistoryData=({reservations,currentPage,totalPages,handlePageChange,isLoading}:IReservation)=>{
-  const t = useTranslations('doctor.Reservations')
+  const t = useTranslations('Reservations')
   
   return (
     <>
@@ -70,7 +70,7 @@ export default function ReservationsHistoryTable({
 
     const [SearchResult, setSearchResult] = useState<{currentPage:number,totalPages:number,reservations:EndReservationValues[]}|null>(null)
   const router = useRouter()
-  const t = useTranslations('doctor.Reservations')
+  const t = useTranslations('Reservations')
 
 
   const handleSearch = async (page:number) => {

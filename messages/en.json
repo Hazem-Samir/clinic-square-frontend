@@ -1,6 +1,7 @@
 {
   "common": {
-    "switchLanguage": "Switch language"
+    "switchLanguage": "Switch language",
+    "EGP":"EGP"
   },
   "nav":{
     "Home":"Home",
@@ -16,8 +17,9 @@
     "For_Doctor":"Search For Doctor",
     "For_Question":"Search For Question",
     "For_Lab":"Search For Lab",
-    "For_Pharmacy":"Search For Pharmacy"
-   
+    "For_Pharmacy":"Search For Pharmacy",
+    "For_Test":"Search For Test"
+    
   },
   "ModeToogle":{
     "title":"Toggle theme",
@@ -34,54 +36,6 @@
         "title": "Doctor Dashboard",
         "Questions":{
           "title":"Patient Questions"
-        },
-        "Reservations":{
-          "title":"Reservations",
-          "History_title":"Reservations History",
-          "No_Reservations":"No Reservations",
-          "View_Details":"View Details",
-          "Details":{
-            "title":"Reservation Details",
-            "RDate":"Date",
-            "PAge":"age",
-            "FSBP":"Files Sent by Patient",
-            "No_Files":"No Files",
-            "View_File":"View File",
-            "diagnose":{
-              "title":"diagnose",
-            "placeholder":"Enter diagnose",
-            "No_Diagnosis":"No Diagnose"
-
-          },
-            "Set_Consultation_Button":"Set Consultation",
-            "End_Reservation_Button":"End Reservation",
-            "End_Reservation":{
-              "title":"End Reservation",
-            "description":"Are you sure you want to end this reservation?",
-            "Cancel":"Cancel",
-            "submit":"End Reservation"
-          },
-          "Set_Consultation":{
-            "title":"Set New Consultation Date",
-            "Date":"Date",
-            "Cancel":"Cancel",
-            "submit":"Set Date"
-          },
-            "Medicine":{
-              "title":"Medicine",
-              "Medicine_name":"Medication name",
-              "Medicine_Dose":"Dose",
-              "Add_Prescription":"Add Prescription",
-              "Prescriptions":"Prescriptions",
-            "No_Medicines":"No Medicines",
-              "Tests":{
-                "title":"Need Tests",
-                "placeholder":"Test name",
-                "button":"Add Test",
-            "No_Tests":"No Tests Required"
-              }
-            }
-          }
         }
        
       },
@@ -112,6 +66,131 @@
           "saturday": "Saturday",
           "sunday": "Sunday"
         }
+      },
+      "Reservations":{
+        "title":"Reservations",
+        "History_title":"Reservations History",
+        "No_Reservations":"No Reservations",
+        "View_Details":"View Details",
+        "Details":{
+          "title":"Reservation Details",
+          "RDate":"Date",
+          "PAge":"age",
+          "FSBP":"Files Sent by Patient",
+          "No_Files":"No Files",
+          "View_File":"View File",
+          "Test_Results":"Test Results",
+          "No_Results":"No Results",
+
+          "diagnose":{
+            "title":"diagnose",
+          "placeholder":"Enter diagnose",
+          "No_Diagnosis":"No Diagnose"
+
+        },
+          "Set_Consultation_Button":"Set Consultation",
+          "End_Reservation_Button":"End Reservation",
+          "End_Reservation":{
+            "title":"End Reservation",
+          "description":"Are you sure you want to end this reservation?",
+          "Cancel":"Cancel",
+          "submit":"End Reservation"
+        },
+        "Set_Consultation":{
+          "title":"Set New Consultation Date",
+          "Date":"Date",
+          "Cancel":"Cancel",
+          "submit":"Set Date"
+        },
+          "Medicine":{
+            "title":"Medicine",
+            "Medicine_name":"Medication name",
+            "Medicine_Dose":"Dose",
+            "Add_Prescription":"Add Prescription",
+            "Prescriptions":"Prescriptions",
+          "No_Medicines":"No Medicines",
+            "Tests":{
+              "title":"Need Tests",
+              "placeholder":"Test name",
+              "button":"Add Test",
+          "No_Tests":"No Tests Required"
+            }
+          }
+        }
+      },
+      "Tests":{
+        "title":"My Tests",
+        "preps":"Preperations",
+        "none":"none",
+    
+        "Add_Test":{
+          "title":"Add New Test",
+          "Edit_Test":"Edit Test",
+          "Save":"Save Changes",
+          "Select_Test":"Select Test",
+          "Test_Name":"Test Name",
+          "cost":"Cost",
+          "preps":"Preperations",
+          "preps_desc":"Add preparation steps for the test.",
+          "preps_edit_desc":"Edit preparation steps for the test.",
+          "prep_add_button":"Add Preperation",
+          "submit":"Add Test",
+          "Cancel":"Cancel"
+        },
+        "Request_Test":{
+          "title":"Request New Test",
+          "description":"Can't find the test you're looking for? Request it here.",
+          "Test_Name":"Test Name",
+          "submit":"Send Request",
+          "Cancel":"Cancel"
+        },
+        "Delete_Test":{
+          "title":"Confirm Deletion",
+          "description":"Are you sure you want to delete the test {testName}? This action cannot be undone.",
+          "submit":"Delete",
+          "Cancel":"Cancel"
+        }
+      },
+      "profile":{
+        "user_profile":"User Profile",
+        "address":"Address",
+        "about_me":"About Me",
+        "gender":"Gender",
+        "male":"male",
+        "female":"female",
+        "phoneNumbers":"Phone Numbers",
+        "license":"License",
+        "age":"Age",
+        "update_profile":{
+          "button":"Update Profile",
+          "about_placeholder":"Tell us about you",
+          "gender_placeholder":"Select Gender",
+          "title":"Update Profile",
+          "Profile_Pic":"Profile Picture",
+          "Full_Name":"Full Name",
+          "DOB":"Date of Birth",
+          "spec":"Specialization",
+
+          "email":"Email",
+          "phoneNumber":"Phone Number {index}",
+          "Add_Another_Phone_Button":"Add Another Phone Number",
+          "address":"Address {index}",
+          "Add_Another_Address_Button":"Add Another Phone Number",
+        "License_Photo":"License Photo",
+        "Upload_License":"Upload License Photo",
+          "submit":"Update Profile"
+        },
+        "change_password":{
+          "button":"Change Password",
+          "submit":"Change Password",
+          "title":" Change Password",
+          "current_Password":"Current Password",
+          "new_Password":"New password",
+          "confirm_new_Password":"Confirm New Password"
+        }
+      },
+      "errors":{
+        "password_8chars":"Password must be at least 8 characters",
+        "password_not_match":"Passwords do not match"
       }
-      
     }

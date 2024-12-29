@@ -17,20 +17,23 @@ import { EndReservationValues } from "@/schema/DoctorReservation"
 import { getAge } from "@/utils/utils"
 import { shortName } from "@/lib/utils"
 import Link from "next/link"
+import { useTranslations } from 'next-intl'
 
 interface IProps {
   reservation: EndReservationValues;
 }
 
 export default function ReservationDetails({ reservation }: IProps) {
+  const t = useTranslations('Reservations')
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">View Details</Button>
+        <Button variant="outline">{t(`View_Details`)}</Button>
       </DialogTrigger>
       <DialogContent className="w-full sm:max-w-[425px] max-h-[80vh] p-0">
         <DialogHeader className="px-4 pt-5 pb-4">
-          <DialogTitle className="text-lg sm:text-xl">Reservation Details</DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl">{t(`Details.title`)}</DialogTitle>
         </DialogHeader>
         <ScrollArea className="max-h-[calc(80vh-7rem)] px-4 pb-6">
           <div className="space-y-6 p-1">
@@ -41,12 +44,12 @@ export default function ReservationDetails({ reservation }: IProps) {
               </Avatar>
               <div className="text-center">
                 <h2 className="text-lg sm:text-2xl font-bold">{reservation.patient.name}</h2>
-                <p className="text-sm text-muted-foreground">Age: {getAge(reservation.patient.dateOfBirth)}</p>
+                <p className="text-sm text-muted-foreground">{`${t('Details.PAge')}: ${getAge(reservation.patient.dateOfBirth)}`}</p>
               </div>
             </div>
          
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Test Results</h3>
+              <h3 className="text-lg font-semibold">{t(`Details.Test_Results`)}</h3>
               {reservation.requestedTests.map((test, testIndex) => (
                 <div key={testIndex} className="space-y-2">
                   <ScrollArea className="w-full whitespace-nowrap rounded-md border">
@@ -67,13 +70,13 @@ export default function ReservationDetails({ reservation }: IProps) {
                             <div className="rounded-full bg-primary/10 p-2">
                               <File className="h-6 w-6 text-primary" />
                             </div>
-                            <span className="text-sm font-medium">Result {index + 1}</span>
+                            <span className="text-sm font-medium"> {`${t('Details.View_File')} ${index + 1}`}</span>
                           </Link>
                         ))}
                       </div>
                       </>
                     ) : (
-                      <p className="text-sm text-muted-foreground italic p-4">No results available</p>
+                      <p className="text-sm text-muted-foreground italic p-4">{t(`Details.No_Results`)}</p>
                     )}
                     <ScrollBar orientation="horizontal" />
                     </ScrollArea>

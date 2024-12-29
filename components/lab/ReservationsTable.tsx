@@ -29,6 +29,7 @@ import Pagination from "../Pagination"
 import toast, { Toaster } from 'react-hot-toast'
 import Spinner from "../Spinner"
 import { searchReservations } from "@/lib/lab/clientApi"
+import { useTranslations } from 'next-intl'
 
 interface IProps {
   reservations: EndReservationValues[];
@@ -59,7 +60,7 @@ const ReservationsData=({reservations,currentPage,totalPages,handlePageChange,is
                 </p>
               </div>
               <div className="ltr:ml-auto rtl:mr-auto font-medium">
-                <ShowReservation size="sm" patient={reservation.patient} currentPage={currentPage} currentDate={currentDate} RID={reservation.id} requestedTests={reservation.requestedTests}/>
+                <ShowReservation  patient={reservation.patient} currentPage={currentPage} currentDate={currentDate} RID={reservation.id} requestedTests={reservation.requestedTests}/>
               </div>
             </div>
           ))
@@ -73,6 +74,7 @@ const ReservationsData=({reservations,currentPage,totalPages,handlePageChange,is
 
 export default function ReservationsTable({reservations, currentPage, totalPages, currentDate}: IProps) {
   const [isSearching, setIsSearching] = useState(false)
+  const t = useTranslations('Reservations')
 
     const router = useRouter();
 
@@ -151,7 +153,7 @@ export default function ReservationsTable({reservations, currentPage, totalPages
     <Card>
       <CardHeader>
         <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-2 sm:gap-4">
-          <CardTitle className="text-base sm:text-lg">Reservations</CardTitle>
+          <CardTitle className="text-base sm:text-lg">{t(`title`)}</CardTitle>
           <div className="flex items-center gap-2">
           <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='For_Patient'/>
 
