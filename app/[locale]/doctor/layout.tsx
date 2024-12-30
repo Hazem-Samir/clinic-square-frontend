@@ -6,10 +6,10 @@ import { setRequestLocale } from 'next-intl/server'
 
 
 const navItems = [
-  { href: `/doctor`, icon: 'Home', label: "Home" },
-  { href: `/doctor/reservations-history`, icon: 'History', label: "Reservations History" },
-  { href: `/doctor/my-schedule`, icon: 'CalendarCheck', label: "My Schedule" },
-  { href: `/doctor/medical-questions`, icon: 'MessageCircleQuestion', label: "Medical Questions" },
+  { href: 'doctor', icon: 'Home', label: "Home" },
+  { href: 'doctor/reservations-history', icon: 'History', label: "Reservations History" },
+  { href: 'doctor/my-schedule', icon: 'CalendarCheck', label: "My Schedule" },
+  { href: 'doctor/medical-questions', icon: 'MessageCircleQuestion', label: "Medical Questions" },
 ]
 
 export default function DoctorLayout({
@@ -37,3 +37,4 @@ export default function DoctorLayout({
     </html>
   )
 }
+

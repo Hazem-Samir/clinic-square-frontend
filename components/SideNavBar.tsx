@@ -2,14 +2,8 @@
 
 import Link from "next/link"
 import { useSelectedLayoutSegment } from 'next/navigation'
-import {
-  Home,
-  History,
-  CalendarCheck,
-  Hospital,
-  MessageCircleQuestion,FlaskConical,BriefcaseMedical,
-} from "lucide-react"
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { Home, History, CalendarCheck, Hospital, MessageCircleQuestion, FlaskConical, BriefcaseMedical } from 'lucide-react'
 
 interface NavItem {
   href: string;
@@ -35,12 +29,13 @@ const iconMap = {
 export default function SideNavBar({navItems,role}: IProps) {
   const segment = useSelectedLayoutSegment()
   const t = useTranslations('nav')
+  const locale = useLocale()
 
   return (
     <div className="hidden border-r bg-muted/40 md:block">
       <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-12 sm:h-14 items-center border-b px-2 sm:px-4 lg:h-[60px] lg:px-6">
-          <Link href={`/${role}`} className="flex items-center gap-2 font-semibold">
+          <Link href={`/${locale}/${role}`} className="flex items-center gap-2 font-semibold">
             <Hospital className="h-4 w-4 sm:h-6 sm:w-6" />
             <span className="text-sm sm:text-base">Clinic Square</span>
           </Link>
@@ -53,7 +48,7 @@ export default function SideNavBar({navItems,role}: IProps) {
               return (
                 <Link
                   key={item.href}
-                  href={item.href}
+                  href={`/${locale}/${item.href}`}
                   className={`flex items-center gap-3 rounded-lg px-2 sm:px-3 py-1 sm:py-2 transition-all
                     ${isActive 
                       ? 'bg-primary text-primary-foreground shadow-[0_0_10px_rgba(var(--primary),0.5)]' 
@@ -71,3 +66,4 @@ export default function SideNavBar({navItems,role}: IProps) {
     </div>
   )
 }
+

@@ -12,7 +12,7 @@ import {
 import { useSelectedLayoutSegment } from 'next/navigation'
 import Link from "next/link"
 import { useEffect, useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 
 interface NavItem {
@@ -40,6 +40,7 @@ const MobileNav = ({navItems,role}:IProps) => {
   const segment = useSelectedLayoutSegment()
   const [dir, setDir] = useState('ltr')
   const t = useTranslations('nav')
+  const locale = useLocale()
 
   useEffect(() => {
     // Access document only after component has mounted
@@ -76,7 +77,7 @@ const MobileNav = ({navItems,role}:IProps) => {
             return (
               <Link
                 key={item.href}
-                href={item.href}
+                href={`/${locale}/${item.href}`}
                 className={`flex items-center gap-3 rounded-lg px-2 sm:px-3 py-1 sm:py-2 transition-all
                   ${isActive 
                     ? 'bg-primary text-primary-foreground shadow-[0_0_10px_rgba(var(--primary),0.5)]' 
