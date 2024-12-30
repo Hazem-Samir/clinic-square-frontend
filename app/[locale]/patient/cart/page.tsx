@@ -16,14 +16,63 @@ import { MedicineCashPayment, MedicineOnlinePayment, TestCashPayment, TestOnline
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import Spinner from '@/components/Spinner'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { DaysOfWeek, HandleTimeFormat } from '@/schema/Essentials'
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { cartFormSchema, type CartFormData, type LabSchedule } from "@/schema/cart-form"
+
 
 export default function CartPage() {
   const [isCheckingOut, setIsCheckingOut] = useState(false)
-  const [selectedDate, setSelectedDate] = useState<string >('')
-  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'visa'>('cash')
+  // const [selectedDate, setSelectedDate] = useState<string >('')
+  // const [selectedDay, setSelectedDay] = useState("")
   const { cart, isLoading, error, fetchCart, removeMedicine, updateMedicineQuantity, removeTest } = useCartStore()
   const router = useRouter()
+  const [availableDatesMap, setAvailableDatesMap] = useState<Record<string, Date[]>>({})
 
+  const form = useForm<CartFormData>({
+    resolver: zodResolver(cartFormSchema),
+    defaultValues: {
+      labSchedules: cart?.tests.map(lab => ({
+        labId: lab.id,
+        selectedDay: "",
+        selectedDate: ""
+      })) || [],
+      paymentMethod: "cash"
+    }
+  })
+
+
+  const getNextFiveDates = useCallback((day: string) => {
+    const dayIndex = DaysOfWeek.indexOf(day.toLowerCase());
+    const today = new Date();
+    const dates: Date[] = [];
+    const currentDate = new Date(today);
+
+    while (dates.length < 5) {
+      if (currentDate.getDay() === dayIndex) {
+        dates.push(new Date(currentDate));
+      }
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return dates;
+  }, []);
+
+
+
+  useEffect(() => {
+    form.watch("labSchedules").forEach((schedule, index) => {
+      if (schedule.selectedDay && !availableDatesMap[schedule.labId]) {
+        const dates = getNextFiveDates(schedule.selectedDay);
+        setAvailableDatesMap(prev => ({
+          ...prev,
+          [schedule.labId]: dates
+        }));
+      }
+    });
+  }, [form.watch("labSchedules"), getNextFiveDates]);
   const handleCartUpdate = useCallback((event: MessageEvent) => {
     const { type } = event.data
     if (type === 'UPDATE_CART') {
@@ -31,10 +80,12 @@ export default function CartPage() {
     }
   }, [fetchCart])
 
- 
+
   useEffect(() => {
+    console.log(cart)
     fetchCart()
     const channel = new BroadcastChannel('cart_channel')
+    channel?.postMessage({ type: 'UPDATE_CART' })
     channel.addEventListener('message', handleCartUpdate)
     return () => {
       channel.removeEventListener('message', handleCartUpdate)
@@ -43,12 +94,20 @@ export default function CartPage() {
   }, [fetchCart, handleCartUpdate])
 
   const handleTestCheckout = async () => {
-    if (cart&&cart.tests.length > 0 && !selectedDate) return
+    const values = form.getValues()
+    if (values.labSchedules.length<=0) {
+      toast.error("You Didn't Choose Day and Date of some lab", {
+                duration: 2000,
+                position: 'bottom-center',
+              })
+              return
+    }
+    const data:{labId:string,date:string}=values.labSchedules.map(lab => {return {labId:lab.labId,date:lab.selectedDate}})
+    console.log({data})
     setIsCheckingOut(true)
-    const reservationDate = new Date(selectedDate).toISOString()
     try {
-      if (paymentMethod === 'visa') {
-        const res = await TestOnlinePayment(reservationDate, cart!.id)
+      if (values.paymentMethod === 'visa') {
+        const res = await TestOnlinePayment(cart!.id,{data})
         if (res?.success) {
           router.push(res?.data.session.url)
         } else {
@@ -57,8 +116,8 @@ export default function CartPage() {
             position: 'bottom-center',
           })
         }
-      } else if (paymentMethod === 'cash') {
-        const res = await TestCashPayment({ date: reservationDate })
+      } else if (values.paymentMethod === 'cash') {
+        const res = await TestCashPayment({data})
         if (res?.success) {
           toast.success(res.data.message, {
             duration: 2000,
@@ -68,7 +127,7 @@ export default function CartPage() {
             fetchCart()
           }, 4000)
         } else {
-          toast.error("You have reserved this test with same day before", {
+          toast.error(res.message? res.message:"You have reserved this test with same day before", {
             duration: 2000,
             position: 'bottom-center',
           })
@@ -88,14 +147,14 @@ export default function CartPage() {
   const handleMedicineCheckout = async () => {
     setIsCheckingOut(true)
     try {
-      if (paymentMethod === 'visa') {
+      if (form.watch("paymentMethod") === 'visa') {
         const res = await MedicineOnlinePayment(cart!.id)
         if (res) {
           router.push(res?.data.session.url)
         } else {
           throw new Error("Invalid response from MedicineOnlinePayment")
         }
-      } else if (paymentMethod === 'cash') {
+      } else if (form.watch("paymentMethod") === 'cash') {
         const res = await MedicineCashPayment()
         if (res) {
           toast.success(res.data.message, {
@@ -119,20 +178,23 @@ export default function CartPage() {
       setIsCheckingOut(false)
     }
   }
+  const formatDate = useCallback((date: Date) => {
+    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+  }, []);
 
   if (isLoading) {
- 
+
     return (
       <div className="flex-grow p-4 md:p-8 space-y-8 md:space-y-12 max-w-7xl mx-auto w-full bg-background text-foreground  flex items-center justify-center">
 
-      <Spinner invert />
+        <Spinner invert />
       </div>
     )
   }
 
   if (error) {
-    return      <div className="flex-grow p-4 md:p-8 space-y-8 md:space-y-12 max-w-7xl mx-auto w-full bg-background text-foreground  flex items-center justify-center">
-{error}</div>
+    return <div className="flex-grow p-4 md:p-8 space-y-8 md:space-y-12 max-w-7xl mx-auto w-full bg-background text-foreground  flex items-center justify-center">
+      {error}</div>
   }
 
   const renderMedicines = () => (
@@ -146,8 +208,8 @@ export default function CartPage() {
             </Avatar>
             <div>
 
-            <h3 className="text-xl font-semibold">{pharmacy.pharmacyId.name}</h3>
-            <p className="text-xs text-muted-foreground">Locations: {pharmacy.pharmacyId.address}</p>
+              <h3 className="text-xl font-semibold">{pharmacy.pharmacyId.name}</h3>
+              <p className="text-xs text-muted-foreground">Locations: {pharmacy.pharmacyId.address}</p>
             </div>
           </div>
           {pharmacy.purchasedMedicines.map((medicine) => (
@@ -202,7 +264,7 @@ export default function CartPage() {
 
   const renderTests = () => (
     <>
-      {cart.tests.map((lab) => (
+      {cart.tests.map((lab, index) => (
         <div key={lab.id} className="mb-8">
           <div className="flex items-center space-x-2 mb-2">
             <Avatar className="h-8 w-8">
@@ -211,7 +273,7 @@ export default function CartPage() {
             </Avatar>
             <h3 className="text-xl font-semibold">{lab.labId.name}</h3>
           </div>
-          {lab.purchasedTests.map((test) => (
+          {lab.purchasedTests.map((test, testIndex) => (
             <Card key={test.id} className="mb-4">
               <CardHeader>
                 <div className="flex items-center space-x-2">
@@ -240,8 +302,57 @@ export default function CartPage() {
                   Remove
                 </Button>
               </CardFooter>
+          
             </Card>
+            
           ))}
+              <div className="flex items-center gap-2 mt-4">
+                <div className="w-full">
+                  <Label>Select Day</Label>
+                  <Select
+                    onValueChange={(value) => {
+                      form.setValue(`labSchedules.${index}.selectedDay`, value)
+                      form.setValue(`labSchedules.${index}.labId`, lab.labId.id)
+                      const dates = getNextFiveDates(value)
+                      setAvailableDatesMap(prev => ({
+                        ...prev,
+                        [lab.id]: dates
+                      }))
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a day" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {lab.labId.schedule.days.map((day) => (
+                        <SelectItem key={day.day} value={day.day}>
+                          {`${day.day} (${HandleTimeFormat(day.startTime)} - ${HandleTimeFormat(day.endTime)})`}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="w-full">
+                  <Label>Select Date</Label>
+                  <Select
+                    disabled={!form.watch(`labSchedules.${index}.selectedDay`)}
+                    onValueChange={(value) => {
+                      form.setValue(`labSchedules.${index}.selectedDate`, value)
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a date" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableDatesMap[lab.id]?.map((date) => (
+                        <SelectItem key={date.toISOString()} value={date.toISOString()}>
+                          {formatDate(date)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
         </div>
       ))}
     </>
@@ -268,9 +379,9 @@ export default function CartPage() {
                     </div>
                     <div className="mb-4">
                       <h3 className="text-lg font-semibold mb-2">Payment Method</h3>
-                      <RadioGroup 
-                        value={paymentMethod} 
-                        onValueChange={(value) => setPaymentMethod(value as 'cash' | 'visa')}
+                      <RadioGroup
+                        value={form.watch("paymentMethod")}
+                        onValueChange={(value) => form.setValue("paymentMethod", value as 'cash' | 'visa')}
                         className="flex space-x-4"
                       >
                         <div className="flex items-center">
@@ -320,9 +431,9 @@ export default function CartPage() {
                         </div>
                       </RadioGroup>
                     </div>
-                    <Button 
-                      className="w-full" 
-                      size="lg" 
+                    <Button
+                      className="w-full"
+                      size="lg"
                       onClick={handleMedicineCheckout}
                       disabled={isCheckingOut}
                     >
@@ -353,21 +464,10 @@ export default function CartPage() {
                       <p className="text-2xl font-bold">{cart.totalTestPrice} EGP</p>
                     </div>
                     <div className="mb-4">
-                      <label htmlFor="test-date" className="block text-sm font-medium text-gray-700 mb-1">
-                        Select Test Date
-                      </label>
-                      <DatePicker
-                        id="test-date"
-                        selected={selectedDate}
-                        onSelect={setSelectedDate}
-                        className="w-full"
-                      />
-                    </div>
-                    <div className="mb-4">
                       <h3 className="text-lg font-semibold mb-2">Payment Method</h3>
-                      <RadioGroup 
-                        value={paymentMethod} 
-                        onValueChange={(value) => setPaymentMethod(value as 'cash' | 'visa')}
+                      <RadioGroup
+                        value={form.watch("paymentMethod")}
+                        onValueChange={(value) => form.setValue("paymentMethod", value as 'cash' | 'visa')}
                         className="flex space-x-4"
                       >
                         <div className="flex items-center">
@@ -417,11 +517,11 @@ export default function CartPage() {
                         </div>
                       </RadioGroup>
                     </div>
-                    <Button 
-                      className="w-full" 
-                      size="lg" 
+                    <Button
+                      className="w-full"
+                      size="lg"
                       onClick={handleTestCheckout}
-                      disabled={isCheckingOut || !selectedDate}
+                      disabled={isCheckingOut || !form.watch("labSchedules").every(schedule => schedule.selectedDate)}
                     >
                       {isCheckingOut ? 'Processing...' : 'Proceed to Checkout'}
                     </Button>

@@ -8,7 +8,9 @@ interface Pharmacy {
   address:string[]
   id: string
 }
-
+interface ILabSchedule {
+  schedule:{days:{day:string,startTime:string,endTime:string,limit:number}[]}
+  }
 interface Lab {
   _id: string
   profilePic: string
@@ -17,9 +19,7 @@ interface Lab {
   schedule:ILabSchedule
   id: string
 }
- interface ILabSchedule {
- schedule:{days:{day:string,startTime:string,endTime:string,limit:number}[]}
- }
+ 
 interface Medicine {
   _id: string
   medicine: {

@@ -190,19 +190,20 @@ export const BookSession = async (data:{doctor:string,date:string})=>{
         }
       }
 
-      export const TestOnlinePayment = async (reservationDate:string, id:string)=>{
+      export const TestOnlinePayment   = async (id:string,data:{data:{labId:string,date:string}})=>{
         const token = getToken();
         const queryParams = new URLSearchParams({
           id,
-          reservationDate,
         }).toString();
         try {
-          const response = await fetch(`/api/patient/cart/checkout/test?${queryParams}`, {
-            method: 'GET',
+          const response = await fetch(`/api/patient/cart/checkout/test/online?${queryParams}`, {
+            method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
+              'Content-Type': 'application/json',
             },
+            body: JSON.stringify(data),
+
           })
     
         
@@ -210,10 +211,9 @@ export const BookSession = async (data:{doctor:string,date:string})=>{
       const res = await response.json();
       return res;
         } catch (error) {
-          console.log('Error Add Schedule:', error)
+          console.error('Error Add Schedule:', error)
         }
-      }  
-
+      }
 
       export const DoctorOnlinePayment = async ( id:string,reservationDate:string)=>{
         const token = getToken();
@@ -239,10 +239,10 @@ export const BookSession = async (data:{doctor:string,date:string})=>{
         }
       } 
 
-      export const TestCashPayment   = async (data:{date:string})=>{
+      export const TestCashPayment   = async (data:{data:{labId:string,date:string}})=>{
         const token = getToken();
         try {
-          const response = await fetch(`/api/patient/cart/checkout/test`, {
+          const response = await fetch(`/api/patient/cart/checkout/test/cash`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
