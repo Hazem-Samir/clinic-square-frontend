@@ -9,7 +9,6 @@ import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { shortName } from '@/lib/utils'
 import useCartStore from '@/lib/cart'
-import { DatePicker } from "@/components/ui/date-picker"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { MedicineCashPayment, MedicineOnlinePayment, TestCashPayment, TestOnlinePayment } from '@/lib/patient/clientApi'
@@ -20,7 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { DaysOfWeek, HandleTimeFormat } from '@/schema/Essentials'
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { cartFormSchema, type CartFormData, type LabSchedule } from "@/schema/cart-form"
+import { cartFormSchema, type CartFormData } from "@/schema/cart-form"
 
 
 export default function CartPage() {
@@ -63,7 +62,7 @@ export default function CartPage() {
 
 
   useEffect(() => {
-    form.watch("labSchedules").forEach((schedule, index) => {
+    form.watch("labSchedules").forEach((schedule) => {
       if (schedule.selectedDay && !availableDatesMap[schedule.labId]) {
         const dates = getNextFiveDates(schedule.selectedDay);
         setAvailableDatesMap(prev => ({
@@ -273,7 +272,7 @@ export default function CartPage() {
             </Avatar>
             <h3 className="text-xl font-semibold">{lab.labId.name}</h3>
           </div>
-          {lab.purchasedTests.map((test, testIndex) => (
+          {lab.purchasedTests.map((test) => (
             <Card key={test.id} className="mb-4">
               <CardHeader>
                 <div className="flex items-center space-x-2">
