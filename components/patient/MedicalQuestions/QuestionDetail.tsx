@@ -111,7 +111,7 @@ export default function QuestionDetail({question}: IProps) {
             <CardTitle>{question.patient.name}</CardTitle>
             <p className="text-sm text-muted-foreground">Age: {getAge(question.patient.dateOfBirth)} | Gender: {question.patient.gender}</p>
           </div>
-     {user.id===question.patient.id? 
+     {user.id===question.patient.id&&question.answers.length <= 0? 
          <Dialog open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen}>
          <DialogTrigger asChild>
            <Button variant="outline" size="sm">

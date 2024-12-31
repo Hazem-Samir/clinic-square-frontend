@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowLeft, ShieldX } from 'lucide-react'
+import { ArrowLeft, ArrowRight,ShieldX } from 'lucide-react'
 import { cookies } from 'next/headers'; // Import cookies function from Next.js
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 export default function Unauthorized() {
   const cookieStore = cookies();
   const userCookie = cookieStore.get('user'); // Assuming the user info is stored in 'user' cookie
-  
+
   // Extract the user name if the cookie exists
 let user;
   if (userCookie) {
@@ -33,7 +33,9 @@ let user;
           </Button>
           <Button asChild variant="ghost">
             <Link href={`/${user.role}`} className="flex items-center gap-2">
-              <ArrowLeft className="h-4 w-4" />
+         
+              <ArrowLeft className="h-4 w-4 rtl:hidden" />
+              <ArrowRight className="h-4 w-4 ltr:hidden" />
               Return Home
             </Link>
           </Button>

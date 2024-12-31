@@ -36,8 +36,19 @@
         "title": "Doctor Dashboard",
         "Questions":{
           "title":"Patient Questions"
-        }
-       
+        },
+       "Question_Details":{
+        "PAge":"Age",
+        "PGender":"Gender",
+        "Question":"Question",
+        "Answers":"Answers",
+        "submit":"Submit Answer",
+        "Cancel":"Cancel",
+        "male":"male",
+        "female":"female",
+        "Save":"Save",
+        "Back":"Back"
+       }
       },
       "schedule": {
         "title": "Set Your Schedule",

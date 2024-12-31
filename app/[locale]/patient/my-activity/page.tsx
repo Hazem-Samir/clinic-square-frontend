@@ -10,6 +10,7 @@ type activeTabOptions= "doctors"|"labs"|"pharmacies";
 
 async function MyDoctorsResrvations({ page }: { page: number }) {
   const {data:doctors} = await getMyDoctorsResrvations(10,page);
+  console.log("docotrs",doctors.data)
   return (
    <DoctorAppointments
    currentPage={page}

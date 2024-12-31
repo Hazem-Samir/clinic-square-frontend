@@ -119,7 +119,7 @@ function ScheduleForm({ onSubmit, availableDays, isLoading, initialData }: { onS
 }
 
 export default function Schedule({ days, cost }: IProps) {
-  const t = useTranslations('doctor.schedule')
+  const t = useTranslations('schedule')
   const router = useRouter()
 
   const [isLoading, setIsLoading] = useState(false)

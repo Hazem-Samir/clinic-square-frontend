@@ -219,7 +219,7 @@ export const searchReservations = async (keyword:string,limit:number,page: numbe
     export const AnswerQuestion = async (data)=>{
       const token = getToken();
       try {
-        const response = await fetch(`/api/medicalQuestions`, {
+        const response = await fetch(`/api/medicalQuestions/answer`, {
           method: 'POST',
           headers: {
               'Authorization': `Bearer ${token}`,
@@ -241,7 +241,7 @@ export const searchReservations = async (keyword:string,limit:number,page: numbe
       const token = getToken();
       if (token){
         try {
-          const response = await fetch(`/api/medicalQuestions`, {
+          const response = await fetch(`/api/medicalQuestions/answer`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

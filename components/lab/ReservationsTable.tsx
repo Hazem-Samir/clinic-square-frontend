@@ -73,10 +73,10 @@ const ReservationsData=({reservations,currentPage,totalPages,handlePageChange,is
 }
 
 export default function ReservationsTable({reservations, currentPage, totalPages, currentDate}: IProps) {
-  const [isSearching, setIsSearching] = useState(false)
   const t = useTranslations('Reservations')
-
-    const router = useRouter();
+  
+  const router = useRouter();
+  const [isSearching, setIsSearching] = useState(false)
 
 
 

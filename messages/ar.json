@@ -38,8 +38,20 @@
         "title": "لوحة تحكم الطبيب",
         "Questions":{
           "title":"اسئلة المرضي"
-        }
-      
+        },
+      "Question_Details":{
+        "PAge":"العمر",
+        "PGender":"الجنس",
+        "Question":"السؤال",
+        "Answers":"الاجابات",
+        "submit":"اضف الاجابة",
+        "Cancel":"الغاء",
+        "male":"ذكر",
+        "female":"انثي",
+        "Save":"حفظ",
+        "Back":"رجوع"
+
+       }
      
       },
       "Reservations":{

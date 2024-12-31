@@ -17,11 +17,16 @@ import Pagination from '@/components/Pagination'
 
 
 interface IDoctorReservation {
-  doctor:{name:string,id:string,porfilePic:string,gender:string,specialization:string,phoneNumbers:string[]}
+  doctor:{name:string,id:string,porfilePic:string,gender:string,specialization:string,phoneNumbers:string[], schedule: {
+    days:    {day: string,startTime: string,endTime: string,limit: string}[]
+    cost: number;
+  }}
   id:string
   state:string
   report:{diagnose: string|null,requestedTests:string[],results:string[],medicine:string[]}
   date:string
+ 
+    
 }
 
 interface IProps {
@@ -33,9 +38,10 @@ interface IProps {
 export default function DoctorAppointments({appointments,currentPage,totalPages}:IProps) {
 
   const router = useRouter();
-
+console.log(appointments)
   const [cancelModalOpen, setCancelModalOpen] = useState(false)
   const [detailModalOpen, setDetailModalOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [selectedAppointment, setSelectedAppointment] = useState<IDoctorReservation | null>(null)
 
   const handleCancel = (appointment: IDoctorReservation) => {
@@ -69,20 +75,20 @@ export default function DoctorAppointments({appointments,currentPage,totalPages}
       }));
     }
     }
-    setCancelModalOpen(false)
-    setSelectedAppointment(null)
+ handleCloseDetailModal()
   }
 
   const handleUpdate = async(data:{date:string,files:File[]}) => {
+    setIsLoading(true)
     let formData;
     if(data.files.length>0){
       formData=FormDataHandler({date:new Date(data.date).toISOString(),"report.results":data.files});
     }
     else {
-
+      
       formData=FormDataHandler({date:new Date(data.date).toISOString()});
     }
-
+    
     const res = await UpdateMyDoctorReservation(formData,selectedAppointment.id);
     if (res.success === true) {
       toast.success(res.message, {
@@ -96,6 +102,8 @@ export default function DoctorAppointments({appointments,currentPage,totalPages}
         position: 'bottom-center',
       }));
     }
+    setIsLoading(false)
+    handleCloseDetailModal()
   }
 
   const handleCloseDetailModal = () => {
@@ -145,6 +153,7 @@ export default function DoctorAppointments({appointments,currentPage,totalPages}
       {selectedAppointment && (
         <DoctorAppointmentDetailModal 
         isOpen={detailModalOpen}
+        isLoading={isLoading}
         onClose={handleCloseDetailModal}
         appointment={selectedAppointment}
         onUpdate={handleUpdate}

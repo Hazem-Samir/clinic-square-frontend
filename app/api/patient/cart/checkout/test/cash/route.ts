@@ -29,7 +29,7 @@ import { SERVER_URL } from '@/schema/Essentials';
   
       if (!apiResponse.ok) {
         const errorData = await apiResponse.json();
-        console.log("a",errorData)
+        console.log(errorData)
         return NextResponse.json({ success: false, message: errorData.message, error: errorData.errors }, { status: apiResponse.status });
       }
   

@@ -38,9 +38,9 @@ const iconMap = {
 
 const MobileNav = ({navItems,role}:IProps) => {
   const segment = useSelectedLayoutSegment()
-  const [dir, setDir] = useState('ltr')
   const t = useTranslations('nav')
   const locale = useLocale()
+  const [dir, setDir] = useState('ltr')
 
   useEffect(() => {
     // Access document only after component has mounted

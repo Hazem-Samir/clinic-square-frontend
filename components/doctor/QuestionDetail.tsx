@@ -12,8 +12,9 @@ import { AnswerQuestion, UpdateAnswer } from '@/lib/doctor/clientApi'
 import { getUser } from '@/lib/auth'
 import toast, { Toaster } from 'react-hot-toast'
 import Spinner from '../Spinner'
-import { ArrowLeft, Edit, Check, X } from "lucide-react"
+import { ArrowLeft, Edit, Check, X,ArrowRight } from "lucide-react"
 import Link from "next/link"
+import { useTranslations } from 'next-intl'
 
 interface IProps {
   question: {
@@ -46,6 +47,7 @@ export default function QuestionDetail({question}: IProps) {
   // const [editingAnswer, setEditingAnswer] = useState("");
   // const [editedAnswers, setEditedAnswers] = useState<{[key: string]: string}>({});
   const user = getUser();
+  const t = useTranslations('doctor.Question_Details')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,8 +105,9 @@ export default function QuestionDetail({question}: IProps) {
   return (
     <div className="container mx-auto p-4">
       <Link href="/doctor/medical-questions" className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 mb-4">
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        Back
+        <ArrowLeft className="mr-2 h-4 w-4 rtl:hidden" />
+        <ArrowRight className="ml-1 h-4 w-4 ltr:hidden" />
+        {t(`Back`)}
       </Link>
       
       <Card className="mb-6">
@@ -115,16 +118,16 @@ export default function QuestionDetail({question}: IProps) {
           </Avatar>
           <div>
             <CardTitle>{question.patient.name}</CardTitle>
-            <p className="text-sm text-muted-foreground">Age: {getAge(question.patient.dateOfBirth)} | Gender: {question.patient.gender}</p>
+            <p className="text-sm text-muted-foreground">{`${t('PAge')}: ${getAge(question.patient.dateOfBirth)}`} | {`${t(`PGender`)}: ${t(`${question.patient.gender}`)}`}</p>
           </div>
         </CardHeader>
         <CardContent>
-          <h2 className="text-xl font-semibold mb-2">Question:</h2>
+          <h2 className="text-xl font-semibold mb-2">{t(`Question`)}:</h2>
           <p className="mb-4">{question.question}</p>
         </CardContent>
       </Card>
 
-      <h2 className="text-xl font-bold mb-4">Answers:</h2>
+      <h2 className="text-xl font-bold mb-4">{t(`Answers`)}:</h2>
       {question.answers.map((answer) => (
         <Card key={answer.id} className="mb-4">
           <CardHeader className="flex flex-row items-center justify-between">
@@ -143,7 +146,7 @@ export default function QuestionDetail({question}: IProps) {
             )}
           </CardHeader>
           <CardContent>
-            {editingAnswerTextArea ? (
+            {editingAnswerTextArea &&user?.id === answer.doctor.id  ? (
               <div>
                 <Textarea
                 value={editingAnswer}
@@ -152,11 +155,11 @@ export default function QuestionDetail({question}: IProps) {
                 />
                 <div className="flex justify-end gap-2">
                   <Button variant="outline" size="sm" onClick={handleCancelEdit} disabled={isLoading}>
-                    <X className="h-4 w-4 mr-2" />
-                    Cancel
+                    <X className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
+                    {t(`Cancel`)}
                   </Button>
                   <Button size="sm" onClick={() => handleSaveEdit(answer.id)} disabled={isLoading}>
-                    {isLoading ? <Spinner /> : <><Check className="h-4 w-4 mr-2" />Save</>}
+                    {isLoading ? <Spinner /> : <><Check className="h-4 w-4 ltr:mr-2 rtl:ml-1" />{t(`Save`)}</>}
                   </Button>
                 </div>
               </div>
@@ -176,7 +179,7 @@ export default function QuestionDetail({question}: IProps) {
           className="mb-4"
         />
         <Button disabled={isLoading} type="submit">
-          {isLoading ? <Spinner /> : "Submit Answer"}
+          {isLoading ? <Spinner /> : t(`submit`)}
         </Button>
       </form>
       <Toaster />
