@@ -29,7 +29,83 @@ export const AcceptProduct = async (data:{id:string,type:productType})=>{
   }
 }
 
+export const SearchProducts = async (keyword:string,limit:number,page: number,product:productType,state:string) => {
+  const token = getToken();
+  if(token){
+  const queryParams = new URLSearchParams({
+    limit: limit.toString(),
+    page: page.toString(),
+    product,
+    state,
+    keyword,
+  }).toString();
+  const response = await fetch(`/api/admin/product/search?${queryParams}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    cache:"reload",
+  });
 
+  if (!response.ok) {
+        throw new Error ('Failed to fetch Doctors');
+  }
+
+  const res = await response.json();
+  return res;
+}
+}
+export const searchActors = async (keyword:string,limit:number,page: number,state:string,actor:string) => {
+  const token = getToken();
+  if(token){
+  const queryParams = new URLSearchParams({
+    limit: limit.toString(),
+    page: page.toString(),
+    state,
+    keyword,
+    actor
+  }).toString();
+  const response = await fetch(`/api/admin/actor/search?${queryParams}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    cache:"reload",
+  });
+
+  if (!response.ok) {
+        throw new Error ('Failed to fetch reservations');
+  }
+
+  const res = await response.json();
+  return res;
+}
+}
+
+export const searchPatients = async (keyword:string,limit:number,page: number) => {
+  const token = getToken();
+  if(token){
+  const queryParams = new URLSearchParams({
+    limit: limit.toString(),
+    page: page.toString(),
+    keyword,
+  }).toString();
+  const response = await fetch(`/api/admin/patient/search?${queryParams}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    cache:"reload",
+  });
+
+  if (!response.ok) {
+        throw new Error ('Failed to fetch reservations');
+  }
+
+  const res = await response.json();
+  return res;
+}
+}
 
 export const DeclineProduct = async (data:{id:string,type:productType})=>{
   const token = getToken();

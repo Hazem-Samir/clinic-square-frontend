@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "../globals.css";
 import { ThemeProvider } from "@/components/theme-provider"
 import { NextIntlClientProvider } from 'next-intl'
+import { setRequestLocale } from 'next-intl/server'
 
 const geistSans = localFont({
   src: "../fonts/GeistMonoVF.woff",
@@ -31,6 +32,9 @@ export default async function RootLayout({
   children: React.ReactNode
   params: { locale: string }
 }) {
+  // Enable static rendering
+  setRequestLocale(locale)
+
   let messages
   try {
     messages = (await import(`../../messages/${locale}.json`)).default
@@ -42,16 +46,17 @@ export default async function RootLayout({
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <NextIntlClientProvider locale={locale} messages={messages}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
           </NextIntlClientProvider>
       </body>
     </html>
   );
 }
+

@@ -1,13 +1,10 @@
  "use client"
 import Image from "next/image"
-
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { shortName } from "@/lib/utils"
 import { ScrollArea, ScrollBar } from "../ui/scroll-area"
 import { Button } from "@/components/ui/button"
-import { Accept } from "@/lib/admin/clientApi"
-import { getAge } from "@/utils/utils"
 interface IProduct {
   id:string
   name: string

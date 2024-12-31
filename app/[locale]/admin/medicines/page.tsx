@@ -1,28 +1,18 @@
-import { Suspense } from 'react'
 import ProtectedRoute from "@/components/ProtectedRoute"
-import { Skeleton } from "@/components/ui/skeleton"
-import { getQuestions } from '@/lib/doctor/api'
 import BlurFade from '@/components/ui/blur-fade'
-import QuestionsList from '@/components/doctor/QuestionsList'
-import { ActorsHeader } from '@/components/new/actors-header'
-import { getAllActorData, getAllDoctors, getAllmedicines, getAllProductData, getAllReservations } from '@/lib/api'
+import {  getAllOrders, getAllProductData } from '@/lib/api'
 import { StatisticsCards } from '@/components/new/statistics-cards'
-import { medicinesTable } from '@/components/new/medicines-table'
-import { ActorsTable } from '@/components/new/actors-table'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import SearchBar from '@/components/ui/SearchBar'
 import { ProductsTable } from '@/components/new/products-table'
-import { DashboardHeader } from '@/components/new/components_dashboard-header'
 import { ProductsHeader } from '@/components/new/products-header'
 
 async function MedicinesStats() {
   
-  const [ {data:AcceptedMedicines},{data:PendingMedicines},{data:allReservations}] = await Promise.all([
+  const [ {data:AcceptedMedicines},{data:PendingMedicines},{data:allOrders}] = await Promise.all([
     getAllProductData(500000,1,"medicines","true"),
     getAllProductData(500000,1,"medicines","false"),
-    getAllReservations(50000,1,"lab")
+    getAllOrders(50000,1)
   ])
   return (
     
@@ -30,7 +20,7 @@ async function MedicinesStats() {
       {title:"Total Medicines",icon:"Users",value:(AcceptedMedicines.data.length+PendingMedicines.data.length),paragragph:(<p className="text-xs text-muted-foreground">On The App</p>)},
       {title:"Approved Medicines",icon:"UserCheck",value:AcceptedMedicines.data.length,paragragph:(<p className="text-xs text-muted-foreground">On The App</p>)},
       {title:"Pending Medicines",icon:"UserPlus",value:PendingMedicines.data.length,paragragph:(<p className="text-xs text-muted-foreground">On The App</p>)},
-      // {title:"Total Reservations",icon:"UserPlus",value:allReservations.data.length,paragragph:(<p className="text-xs text-muted-foreground">On The App</p>)},
+      {title:"Total Orders",icon:"UserPlus",value:allOrders.data.length,paragragph:(<p className="text-xs text-muted-foreground">On The App</p>)},
   
   
   
@@ -53,6 +43,7 @@ async function PendingMedicinesData({ page }: { page: number }) {
     totalPages={medicines.paginationResult.numberOfPages}
     Products={medicines.data}
     type='Medicine'
+    state='false'
     />
   )
 }
@@ -71,6 +62,8 @@ async function AcceptedMedicinesData({ page }: { page: number }) {
    totalPages={medicines.paginationResult.numberOfPages}
    Products={medicines.data}
    type='Medicine'
+   state='true'
+
    />
   )
 }
@@ -105,7 +98,6 @@ export default function Page({ searchParams }: { searchParams: { Apage?: string,
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full sm:max-w-sm"
             /> */}
-            <SearchBar />
           </div>
           <TabsContent value="approved">
            <AcceptedMedicinesData page={Apage}/>

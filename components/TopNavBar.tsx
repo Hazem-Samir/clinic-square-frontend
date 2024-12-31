@@ -1,25 +1,9 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { ModeToggle } from "./ui/ModeToggle"
 import { WelcomeUser } from "./WelcomUser"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
 import { cookies } from 'next/headers'; // Import cookies function from Next.js
-import { shortName } from "@/lib/utils"
 import LanguageSwitcherIcon from "./LanguageSwitcherIcon"
-import { logout } from "@/actions/logout"
-import MobileNav from "@/components/MobileNav"
+import MobileNav from "./MobileNav"
+import TopNavBarMenu from "./TopNavBarMenu"
 interface NavItem {
   href: string;
   icon: string;
@@ -49,30 +33,7 @@ let user;
         <div className="flex items-center">
           <LanguageSwitcherIcon />
           <ModeToggle />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <Avatar className="h-6 w-6 sm:h-8 sm:w-8">
-                  <AvatarImage src={user? user.profilePic : "https://github.com/shadcn.png"} alt={user? user.name : "@shadcn"} />
-                  <AvatarFallback>{shortName(user.name)}</AvatarFallback>
-                </Avatar>
-                <span className="sr-only">Toggle user menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <Link href={`/${user.role}/profile`} >  <DropdownMenuItem className="cursor-pointer"> Profile
-            </DropdownMenuItem></Link>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>  <form action={logout}>
-              <Button variant="ghost" className="h-5" type="submit">
-                Logout
-              </Button>
-            </form></DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+         <TopNavBarMenu user={user} />
         </div>
       </div>
     </header>

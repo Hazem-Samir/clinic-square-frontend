@@ -72,7 +72,7 @@ function ScheduleForm({ onSubmit, availableDays, isLoading, initialData }: { onS
               name="days.0.limit"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm sm:text-base">Patient Limit</FormLabel>
+                  <FormLabel className="text-sm sm:text-base">{t(`PatientLimit`)}</FormLabel>
                   <FormControl>
                     <Input disabled={isLoading} {...field} type="number" min={1} className="text-sm sm:text-base" />
                   </FormControl>
@@ -119,7 +119,7 @@ function ScheduleForm({ onSubmit, availableDays, isLoading, initialData }: { onS
 }
 
 export default function Schedule({ days, cost }: IProps) {
-  const t = useTranslations('schedule')
+  const t = useTranslations('doctor.schedule')
   const router = useRouter()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -257,11 +257,11 @@ export default function Schedule({ days, cost }: IProps) {
                         <div className="flex space-x-2">
                           <Button disabled={isLoading} variant="outline" size="sm" onClick={() => handleUpdateDay(item)}>
                             <Edit2 className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                            <span className="text-xs sm:text-sm">Edit</span>
+                            <span className="text-xs sm:text-sm">{t(`update`)}</span>
                           </Button>
                           <Button disabled={isLoading} variant="outline" size="sm" onClick={() => handleDeleteDay(item)}>
                             <Trash2 className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                            <span className="text-xs sm:text-sm">Delete</span>
+                            <span className="text-xs sm:text-sm">{t(`delete`)}</span>
                           </Button>
                         </div>
                       </div>
@@ -291,7 +291,7 @@ export default function Schedule({ days, cost }: IProps) {
         <Dialog open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle className="text-lg sm:text-xl">{t('updateSchedule', { day: currentEditingItem ? t(`days.${currentEditingItem.day}`) : '' })}</DialogTitle>
+              <DialogTitle className="text-lg sm:text-xl">{t('updateSchedule')}</DialogTitle>
             </DialogHeader>
             
             {currentEditingItem && (

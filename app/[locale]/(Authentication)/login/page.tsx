@@ -1,21 +1,7 @@
 import Medical from "@/public/Medical.jpeg"
-import { useState } from "react"
 import Image from "next/image"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@/components/ui/button"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { useForm } from "react-hook-form"
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
 import Login from "@/components/Login"
-import {   userTypeSchema, userTypeValue } from "@/schema/Essentials"
 export default function LoginPage() {
 
  

@@ -2,14 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Users, UserCheck, UserPlus, DollarSign ,DoorOpen} from 'lucide-react'
 import {ReactNode} from "react";
 import NumberTicker from "../ui/number-ticker";
-const stats = [
-  { title: "Total Doctors", value: "1,234", icon: Users },
-  { title: "Approved Doctors", value: "1,100", icon: UserCheck },
-  { title: "Pending Doctors", value: "134", icon: UserPlus },
-  { title: "New Doctors", value: "$54,321", icon: DollarSign,paragragph:(<p className="text-xs text-muted-foreground">
-    This Month
-   </p>) },
-]
+
 interface IStat{
    title: string
     value: number

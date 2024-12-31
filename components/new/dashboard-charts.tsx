@@ -1,5 +1,4 @@
 "use client"
-import { TrendingUp } from "lucide-react"
 
 import {
   Card,
@@ -15,15 +14,15 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-import { Bar, BarChart, Line, LineChart, ResponsiveContainer,   RadialBar,
-  RadialBarChart,PolarGrid,PolarRadiusAxis,Label,XAxis, YAxis, CartesianGrid, LabelList} from "recharts"
+import { Bar, BarChart, Line, LineChart, RadialBar,
+  RadialBarChart,PolarGrid,PolarRadiusAxis,Label,XAxis, CartesianGrid, LabelList} from "recharts"
 
 
 
 
 
 interface IProps{
-  chartsData: {}[][]
+  chartsData: object[][]
   titles:string[]
   descriptions:string[]
   role:"Doctor" | "Lab" | "Pharmacie" | "Patient" 

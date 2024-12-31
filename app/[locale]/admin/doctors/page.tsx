@@ -1,48 +1,12 @@
-import { Suspense } from 'react'
 import ProtectedRoute from "@/components/ProtectedRoute"
-import { Skeleton } from "@/components/ui/skeleton"
-import { getQuestions } from '@/lib/doctor/api'
 import BlurFade from '@/components/ui/blur-fade'
-import QuestionsList from '@/components/doctor/QuestionsList'
 import { ActorsHeader } from '@/components/new/actors-header'
-import { getAllActorData, getAllDoctors, getAlldoctors, getAllReservations } from '@/lib/api'
+import { getAllActorData,  getAllReservations } from '@/lib/api'
 import { StatisticsCards } from '@/components/new/statistics-cards'
 import { ActorsTable } from '@/components/new/actors-table'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import SearchBar from '@/components/ui/SearchBar'
-async function doctorsData({ page }: { page: number }) {
-  
-  const [{data:doctors}, {data:alldoctors},{data:allReservations}] = await Promise.all([
-    getAllActorData(5,page,"lab"),
-    getAllActorData(500000,1,"lab"),
-    getAllReservations(50000,1,"lab")
-  ])
-  console.log(doctors.data)
-  return (
-    <>
-    <StatisticsCards stats={[
-      {title:"Total doctors",icon:"Users",value:alldoctors.data.length,paragragph:(<p className="text-xs text-muted-foreground">On The App</p>)},
-      {title:"Approved doctors",icon:"UserCheck",value:alldoctors.data.filter((d) => d.state === true).length,paragragph:(<p className="text-xs text-muted-foreground">On The App</p>)},
-      {title:"Pending doctors",icon:"UserPlus",value:alldoctors.data.filter((d) => d.state === false).length,paragragph:(<p className="text-xs text-muted-foreground">On The App</p>)},
-      {title:"Total Reservations",icon:"UserPlus",value:allReservations.data.length,paragragph:(<p className="text-xs text-muted-foreground">On The App</p>)},
-  
-  
-  
-  
-  ]} />
 
-   <ActorsTable
-   currentPage={page}
-   totalPages={doctors.paginationResult.numberOfPages}
-   Actors={doctors.data.filter((d) => d.state === true)}
-   PendingActors={doctors.data.filter((d) => d.state === false)}
-   role='Lab'
-   />
-   </>
-  )
-}
 async function DoctorsStats() {
   
   const [ {data:AcceptedDoctors},{data:PendingDoctors},{data:allReservations}] = await Promise.all([
@@ -71,7 +35,6 @@ async function PendingDoctorsData({ page }: { page: number }) {
   
   const {data:doctors}=await getAllActorData(5,page,"doctor","false")
 
-  console.log("asds",doctors.data)
   return (
     
 
@@ -80,6 +43,7 @@ async function PendingDoctorsData({ page }: { page: number }) {
    totalPages={doctors.paginationResult.numberOfPages}
    Actors={doctors.data}
    role='Doctor'
+   state='false'
    />
   )
 }
@@ -88,7 +52,6 @@ async function AcceptedDoctorsData({ page }: { page: number }) {
   
   const {data:doctors}=await getAllActorData(5,page,"doctor","true")
 
-  console.log("asds",doctors.data)
   return (
     
 
@@ -97,6 +60,7 @@ async function AcceptedDoctorsData({ page }: { page: number }) {
    totalPages={doctors.paginationResult.numberOfPages}
    Actors={doctors.data}
    role='Doctor'
+   state='true'
    />
   )
 }
@@ -131,7 +95,6 @@ export default function Page({ searchParams }: { searchParams: { Apage?: string,
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full sm:max-w-sm"
             /> */}
-            <SearchBar />
           </div>
           <TabsContent value="approved">
            <AcceptedDoctorsData page={Apage}/>

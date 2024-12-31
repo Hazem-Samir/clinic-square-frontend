@@ -1,30 +1,18 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState} from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import Image from "next/image"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { FormDataHandler, ImageHandler } from "@/utils/AuthHandlers"
-import { AddMedicine, AddTest } from "@/lib/admin/clientApi"
+import {  AddTest } from "@/lib/admin/clientApi"
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast';
+import Spinner from "../Spinner"
 
-const categories= [
-      "Cosmetics",
-      "Hair Care",
-      "Every Day Essentials",
-      "Medical Equipment & Supplies",
-      "Mom & Baby",
-      "Sexual Health",
-      "Medicine",
-      "Skin Care",
-    ]
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -90,7 +78,7 @@ export function AddTestModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
               )}
             />
            
-            <Button type="submit">Submit</Button>
+           <Button type="submit">{isLoading?<Spinner />:"Submit"}</Button>
           </form>
         </Form>
       </DialogContent>

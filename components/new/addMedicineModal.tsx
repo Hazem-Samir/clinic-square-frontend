@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -14,6 +14,7 @@ import { FormDataHandler, ImageHandler } from "@/utils/AuthHandlers"
 import { AddMedicine } from "@/lib/admin/clientApi"
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast';
+import Spinner from "../Spinner"
 
 const categories= [
       "Cosmetics",
@@ -120,7 +121,7 @@ export function AddMedicineModal({ isOpen, onClose }: { isOpen: boolean; onClose
             <FormField
               control={form.control}
               name="photo"
-              render={({ field: { value, onChange, ...field } }) => (
+              render={({ field: {  onChange, ...field } }) => (
                 <FormItem>
                   <FormLabel>Photo</FormLabel>
                   <FormControl>
@@ -181,7 +182,7 @@ export function AddMedicineModal({ isOpen, onClose }: { isOpen: boolean; onClose
                     <SelectContent>
                         {categories.map((category,index)=>(
 
-                      <SelectItem value={category}>{category}</SelectItem>
+                      <SelectItem key={index} value={category}>{category}</SelectItem>
                         ))}
                 
                     </SelectContent>
@@ -190,7 +191,7 @@ export function AddMedicineModal({ isOpen, onClose }: { isOpen: boolean; onClose
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit">{isLoading?<Spinner />:"Submit"}</Button>
           </form>
         </Form>
       </DialogContent>

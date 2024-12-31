@@ -1,25 +1,16 @@
-import { Suspense } from 'react'
 import ProtectedRoute from "@/components/ProtectedRoute"
-import { Skeleton } from "@/components/ui/skeleton"
-import { getQuestions } from '@/lib/doctor/api'
 import BlurFade from '@/components/ui/blur-fade'
-import QuestionsList from '@/components/doctor/QuestionsList'
-import { ActorsHeader } from '@/components/new/actors-header'
-import { getAllActorData, getAllDoctors, getAlltests, getAllProductData, getAllReservations } from '@/lib/api'
+import {  getAllProductData, getAllReservations } from '@/lib/api'
 import { StatisticsCards } from '@/components/new/statistics-cards'
-import { testsTable } from '@/components/new/tests-table'
-import { ActorsTable } from '@/components/new/actors-table'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import SearchBar from '@/components/ui/SearchBar'
 import { ProductsTable } from '@/components/new/products-table'
 import { ProductsHeader } from '@/components/new/products-header'
 
 async function TestsStats() {
   
-  const [ {data:AcceptedTests},{data:tests},{data:allReservations}] = await Promise.all([
-    getAllProductData(500000,1,"tests","true"),
+  const [ {data:AcceptedTests},{data:tests}] = await Promise.all([
+    // getAllProductData(500000,1,"tests","true"),
     getAllProductData(500000,1,"tests","false"),
     getAllReservations(50000,1,"lab")
   ])
@@ -52,6 +43,7 @@ async function PendingTestTData({ page }: { page: number }) {
     totalPages={tests.paginationResult.numberOfPages}
     Products={tests.data}
     type='Test'
+    state='false'
     />
   )
 }
@@ -70,6 +62,7 @@ async function AcceptedTestTData({ page }: { page: number }) {
    totalPages={tests.paginationResult.numberOfPages}
    Products={tests.data}
    type='Test'
+   state='true'
    />
   )
 }
@@ -104,7 +97,6 @@ export default function Page({ searchParams }: { searchParams: { Apage?: string,
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full sm:max-w-sm"
             /> */}
-            <SearchBar />
           </div>
           <TabsContent value="approved">
            <AcceptedTestTData page={Apage}/>

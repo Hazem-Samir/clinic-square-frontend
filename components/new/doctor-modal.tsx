@@ -6,7 +6,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { shortName } from "@/lib/utils"
 import { ScrollArea, ScrollBar } from "../ui/scroll-area"
 import { Button } from "@/components/ui/button"
-import { Accept } from "@/lib/admin/clientApi"
 import { getAge } from "@/utils/utils"
 type role= "Patient" | "Pharmacy" | "Lab" | "Doctor" 
 

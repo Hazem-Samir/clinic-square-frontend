@@ -13,8 +13,8 @@ import {
 import { useSelectedLayoutSegment } from 'next/navigation'
 import Link from "next/link"
 import { useEffect, useState } from 'react'
-import { getUser } from "@/lib/auth"
 
+import { useLocale, useTranslations } from 'next-intl'
 
 interface NavItem {
   href: string;
@@ -40,8 +40,12 @@ const iconMap = {
 };
 
 
+
+
 const MobileNav = ({navItems,role}:IProps) => {
   const segment = useSelectedLayoutSegment()
+  const t = useTranslations('nav')
+  const locale = useLocale()
   const [dir, setDir] = useState('ltr')
 
   useEffect(() => {
@@ -63,7 +67,7 @@ const MobileNav = ({navItems,role}:IProps) => {
           <span className="sr-only">Toggle navigation menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side={dir === 'rtl' ? 'right' : 'left'} className="w-[80vw] sm:w-[300px] flex flex-col">
+      <SheetContent side={dir === 'rtl' ? 'right' : 'left'} className="w-[80vw] sm:w-[300px] flex flex-col p-8">
         <nav className="grid gap-1 sm:gap-2 text-sm sm:text-base font-medium space-y-2">
           <Link
             href="#"
@@ -74,12 +78,12 @@ const MobileNav = ({navItems,role}:IProps) => {
           </Link>
 
           {navItems.map((item) => {
-            const isActive = segment === item.href.split('/')[2] || (segment === null && item.href===`${role}` )
+            const isActive = segment === item.href.split('/')[2] || (segment === null && item.href===`/${role}` )
             const Icon = iconMap[item.icon as keyof typeof iconMap];
             return (
               <Link
                 key={item.href}
-                href={item.href}
+                href={`/${locale}/${item.href}`}
                 className={`flex items-center gap-3 rounded-lg px-2 sm:px-3 py-1 sm:py-2 transition-all
                   ${isActive 
                     ? 'bg-primary text-primary-foreground shadow-[0_0_10px_rgba(var(--primary),0.5)]' 
@@ -87,7 +91,7 @@ const MobileNav = ({navItems,role}:IProps) => {
                   }`}
               >
                 <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
-                {item.label}
+                {t(`${item.label}`)}
               </Link>
             )
           })}

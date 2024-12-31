@@ -24,6 +24,8 @@ export const getAllDoctors = async (limit:number,page: number) => {
   return res;
 }
 
+
+
 export const getAllReservations = async (limit:number,page: number,actor:actor) => {
   const cookieStore = cookies()
   const token = JSON.parse (cookieStore.get('token').value)
@@ -47,6 +49,30 @@ export const getAllReservations = async (limit:number,page: number,actor:actor) 
   const res = await response.json();
   return res;
 }
+
+export const getAllOrders = async (limit:number,page: number) => {
+  const cookieStore = cookies()
+  const token = JSON.parse (cookieStore.get('token').value)
+  const queryParams = new URLSearchParams({
+    limit: limit.toString(),
+    page: page.toString(),
+  }).toString();
+  const response = await fetch(`http://localhost:3000/api/admin/orders?${queryParams}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    cache:"reload",
+  });
+
+  if (!response.ok) {
+        throw new Error ('Failed to fetch Doctors');
+  }
+
+  const res = await response.json();
+  return res;
+}
+
 
 
 export const getAllActorData = async (limit:number,page: number,actor:actor,state:string) => {
@@ -101,6 +127,49 @@ export const getAllActorStats = async (limit:number,page: number,actor:actor) =>
 } 
 
 
+export const Logout = async () => {
+  const cookieStore = cookies()
+  const token = JSON.parse (cookieStore.get('token').value)
+  
+  const response = await fetch(`http://localhost:3000/api/logout`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    cache:"no-cache",
+  });
+
+  if (!response.ok) {
+        throw new Error ('Failed to fetch Doctors');
+  }
+
+  const res = await response.json();
+  console.log(res)
+  return res;
+}
+export const getPatientStats = async (limit:number,page: number) => {
+  const cookieStore = cookies()
+  const token = JSON.parse (cookieStore.get('token').value)
+  const queryParams = new URLSearchParams({
+    limit: limit.toString(),
+    page: page.toString(),
+  }).toString();
+  const response = await fetch(`http://localhost:3000/api/admin/patient/stats?${queryParams}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    cache:"reload",
+  });
+
+  if (!response.ok) {
+        throw new Error ('Failed to fetch Doctors');
+  }
+
+  const res = await response.json();
+  return res;
+} 
+
 export const getAllReservationsStats = async (limit:number,page: number,actor:actor) => {
   const cookieStore = cookies()
   const token = JSON.parse (cookieStore.get('token').value)
@@ -124,6 +193,31 @@ export const getAllReservationsStats = async (limit:number,page: number,actor:ac
   const res = await response.json();
   return res;
 }
+
+export const getAllOrdersStats = async (limit:number,page: number) => {
+  const cookieStore = cookies()
+  const token = JSON.parse (cookieStore.get('token').value)
+  const queryParams = new URLSearchParams({
+    limit: limit.toString(),
+    page: page.toString(),
+  }).toString();
+  const response = await fetch(`http://localhost:3000/api/admin/orders/stats?${queryParams}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    cache:"reload",
+  });
+
+  if (!response.ok) {
+        throw new Error ('Failed to fetch Doctors');
+  }
+
+  const res = await response.json();
+  return res;
+}
+
+
 export const getAllPatientsData = async (limit:number,page: number) => {
   const cookieStore = cookies()
   const token = JSON.parse (cookieStore.get('token').value)

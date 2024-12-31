@@ -3,12 +3,12 @@ import type { NextRequest } from 'next/server'
 import createIntlMiddleware from 'next-intl/middleware'
 
 const locales = ['en', 'ar']
-const publicPages = ['/login']
+const publicPages = ['/login','/unauthorized']
 const loggedInRestrictedPages = ['/login']
 
 const intlMiddleware = createIntlMiddleware({
   locales,
-  defaultLocale: 'en'
+defaultLocale: 'en'
 })
 
 export function middleware(request: NextRequest) {
@@ -35,7 +35,6 @@ export function middleware(request: NextRequest) {
     switch (JSON.parse(userCookie.value).role) {
       case 'admin':
         return NextResponse.redirect(new URL(`/${locale}/admin`, request.url))
-        break;
       default:
         break;
     }
@@ -53,7 +52,6 @@ export function middleware(request: NextRequest) {
     const userData = JSON.parse(userCookie.value)
     const roleAccess: { [key: string]: string[] } = {
       admin: ['/admin'],
-      // Add other roles as needed
     }
 
     const allowedPaths = roleAccess[userData.role] || []

@@ -1,7 +1,39 @@
 {
-    "common": {
-      "switchLanguage": "تغيير اللغة"
+  
+  "common": {
+    "switchLanguage": "تغيير اللغة",
+  "EGP":"جنيه مصري"
+
+  },
+  "nav":{
+    "Home":"الصفحة الرئيسية",
+    "Patients":"المرضي",
+    "Doctors":"الدكاترة",
+    "Labs":"المعامل",
+    "Pharmacies":"الصيدليات",
+    "Medicines":"الادوية",
+    "Tests":"التحاليل"
     },
+  "search":{
+    "For_Patient":"ابحث عن مريض",
+    "For_Doctor":"ابحص عن دكتور",
+    "For_Question":"ابحث عن سؤال",
+    "For_Lab":"ابحث عن معمل",
+    "For_Pharmacy":"ابحث عن صيدلية",
+  "For_Test":"ابحث عن تحليل"
+   
+  },
+  "ModeToogle":{
+  "title":"اختيار الثيم",
+    "ٍSystem":"الافتراضي",
+    "Dark":"داكن",
+    "Light":"فاتح"     
+  },
+  "TopBarDropMenu":{
+    "MyAccount":"حسابي",
+    "Profile":"الملف الشخصي",
+    "Logout":"تسجيل الخروج"
+  },
       "doctor": {
         "title": "لوحة تحكم الطبيب"
       },

@@ -1,25 +1,18 @@
-import { Suspense } from 'react'
 import ProtectedRoute from "@/components/ProtectedRoute"
-import { Skeleton } from "@/components/ui/skeleton"
-import { getQuestions } from '@/lib/doctor/api'
 import BlurFade from '@/components/ui/blur-fade'
-import QuestionsList from '@/components/doctor/QuestionsList'
 import { ActorsHeader } from '@/components/new/actors-header'
-import { getAllActorData, getAllDoctors, getAllpharmacies, getAllReservations } from '@/lib/api'
+import { getAllActorData,  getAllOrders } from '@/lib/api'
 import { StatisticsCards } from '@/components/new/statistics-cards'
-import { pharmaciesTable } from '@/components/new/pharmacies-table'
 import { ActorsTable } from '@/components/new/actors-table'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import SearchBar from '@/components/ui/SearchBar'
 
 async function PharmaciesStats() {
   
   const [ {data:AcceptedPharmacies},{data:PendingPharmacies},{data:allReservations}] = await Promise.all([
     getAllActorData(500000,1,"pharmacy","true"),
     getAllActorData(500000,1,"pharmacy","false"),
-    getAllReservations(50000,1,"pharmacy")
+    getAllOrders(50000,1)
   ])
   return (
     
@@ -27,7 +20,7 @@ async function PharmaciesStats() {
       {title:"Total Pharmacies",icon:"Users",value:(AcceptedPharmacies.data.length+PendingPharmacies.data.length),paragragph:(<p className="text-xs text-muted-foreground">On The App</p>)},
       {title:"Approved Pharmacies",icon:"UserCheck",value:AcceptedPharmacies.data.length,paragragph:(<p className="text-xs text-muted-foreground">On The App</p>)},
       {title:"Pending Pharmacies",icon:"UserPlus",value:PendingPharmacies.data.length,paragragph:(<p className="text-xs text-muted-foreground">On The App</p>)},
-      {title:"Total Reservations",icon:"UserPlus",value:allReservations.data.length,paragragph:(<p className="text-xs text-muted-foreground">On The App</p>)},
+      {title:"Total Orders",icon:"UserPlus",value:allReservations.data.length,paragragph:(<p className="text-xs text-muted-foreground">On The App</p>)},
   
   
   
@@ -51,6 +44,7 @@ async function PendingPharmaciesData({ page }: { page: number }) {
    totalPages={pharmacies.paginationResult.numberOfPages}
    Actors={pharmacies.data}
    role='Pharmacy'
+   state='false'
    />
   )
 }
@@ -68,6 +62,8 @@ async function AcceptedPharmaciesData({ page }: { page: number }) {
    totalPages={pharmacies.paginationResult.numberOfPages}
    Actors={pharmacies.data}
    role='Pharmacy'
+   state='true'
+
    />
   )
 }
@@ -102,7 +98,6 @@ export default function Page({ searchParams }: { searchParams: { Apage?: string,
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full sm:max-w-sm"
             /> */}
-            <SearchBar />
           </div>
           <TabsContent value="approved">
            <AcceptedPharmaciesData page={Apage}/>

@@ -31,7 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
-import { DoctorSchema, DoctorValue } from "@/schema/Doctor"
+import { DoctorValue } from "@/schema/Doctor"
 import DoctorScheduleschema from "./DoctorScheduleschema"
 import { Textarea } from "@/components/ui/textarea"
 

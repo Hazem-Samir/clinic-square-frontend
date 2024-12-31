@@ -1,19 +1,7 @@
-import { Suspense } from 'react'
-import { format } from "date-fns"
 import ProtectedRoute from "@/components/ProtectedRoute"
-import { Skeleton } from "@/components/ui/skeleton"
 import BlurFade from '@/components/ui/blur-fade'
-import ReservationsTable from '@/components/doctor/ReservationsTable'
-import Dashboard from '@/components/doctor/Dashboard'
-import { getReservations } from '@/lib/doctor/api'
-import Component from '@/components/Charts/component'
-import { BarComponent } from '@/components/Charts/BarComponent'
-import { RadChart } from '@/components/Charts/RadChart'
-import { DashboardHeader } from '@/components/new/components_dashboard-header'
-import { StatisticsCards } from '@/components/new/statistics-cards'
 import { DashboardCharts } from '@/components/new/dashboard-charts'
-import { getAllActorData, getAllActorStats, getAllPatientsData, getAllReservations, getAllReservationsStats } from '@/lib/api'
-import { ActorsHeader } from '@/components/new/actors-header'
+import { getAllActorData, getAllActorStats, getAllOrdersStats, getAllPatientsData, getAllReservationsStats, getPatientStats } from '@/lib/api'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const monthNames = [
@@ -24,12 +12,12 @@ async function PatientsStatData() {
   const [ {data:pendingActors},{data:allReservations},{data:stat}] = await Promise.all([
     getAllPatientsData(500000,1),
     getAllReservationsStats(50000,1,"doctor"),
-     getAllActorStats(500000,1,"patient")
+     getPatientStats(500000,1)
   ])
   
 
 const Actors = monthNames.map((key, index) => {
-  const found = stat.data.find(st => st._id.month === `${index + 1}` && st._id.state === true);
+  const found = stat.data.find(st => st._id.month === `${index + 1}` );
   return {
       key,
       actors: found ? found.count : 0
@@ -44,7 +32,7 @@ const Reservations = monthNames.map((key, index) => {
 });
   return (
 
-  <DashboardCharts chartsData={[Actors,Reservations,[{pendingActors:pendingActors.data.length}]]} titles={['Labs',"All Reservations"]} descriptions={['January - December 2024','January - December 2024',["The Pending Labs","Labs"]]} role='Lab'/>
+  <DashboardCharts chartsData={[Actors,Reservations,[{pendingActors:pendingActors.data.length}]]} titles={['Patients',"All Reservations"]} descriptions={['January - December 2024','January - December 2024',["All Patients","Patients"]]} role='Patient'/>
 
   )
 }
@@ -112,7 +100,7 @@ const Reservations = monthNames.map((key, index) => {
 async function PharmaciesStatData() {
   const [ {data:pendingActors},{data:allReservations},{data:stat}] = await Promise.all([
     getAllActorData(500000,1,"pharmacy","false"),
-    getAllReservationsStats(50000,1,"pharmacy"),
+    getAllOrdersStats(50000,1),
      getAllActorStats(500000,1,"pharmacy")
   ])
   
@@ -133,48 +121,29 @@ const Reservations = monthNames.map((key, index) => {
 });
   return (
 
-  <DashboardCharts chartsData={[Actors,Reservations,[{pendingActors:pendingActors.data.length,}]]} titles={['Pharmacies',"All Reservations"]} descriptions={['January - December 2024','January - December 2024',["The Pending Pharmacies","Pharmacies"]]} role='Pharmacie'/>
+  <DashboardCharts chartsData={[Actors,Reservations,[{pendingActors:pendingActors.data.length,}]]} titles={['Pharmacies',"All Orders"]} descriptions={['January - December 2024','January - December 2024',["The Pending Pharmacies","Pharmacies"]]} role='Pharmacie'/>
 
   )
 }
 
-async function ReservationsData({ page, date }: { page: number, date: string }) {
-  const startOfDay = new Date(date)
-  const endOfDay = new Date(startOfDay)
-  endOfDay.setHours(23, 59, 59, 999)
 
-  const { data: reservations } = await getReservations(5, page, startOfDay.toISOString(), endOfDay.toISOString(),"pending")
 
-  return (
-    <ReservationsTable 
-      reservations={reservations.data}
-      currentPage={page}
-      totalPages={reservations.paginationResult.numberOfPages}
-      currentDate={date}
-    />
-  )
-}
-
-export default function HomePage({ searchParams }: { searchParams: { page?: string, date?: string } }) {
-  const page = Number(searchParams.page) || 1
-  const date = searchParams.date 
-    ? format(new Date(searchParams.date), 'yyyy-MM-dd') 
-    : format(new Date(), 'yyyy-MM-dd')
-
+export default function HomePage() {
+ 
   return (
     <ProtectedRoute allowedRoles={['admin']}>  
      
      <main className="flex flex-1 flex-col gap-2 p-5 sm:gap-4 sm:p-4 md:gap-8 md:p-8 ">
       <BlurFade delay={0} className='space-y-6' inView>
  
-        <Tabs defaultValue="Doctors" className="w-full">
+        <Tabs defaultValue="Patients" className="w-full">
         <div className="flex flex-col sm:flex-row justify-center items-center  mb-6 sm:mb-4 p-4 sm:p-0">
 
-            <TabsList className="grid  grid-cols-1 md:grid-cols-2 md:mb-5 mb-24 md:space-y-0 space-y-2 md:bg-muted bg-transparent mr-0">
+            <TabsList className="grid  grid-cols-1 md:grid-cols-4 md:mb-5 mb-24 md:space-y-0 space-y-2 md:bg-muted bg-transparent mr-0">
+              <TabsTrigger value="Patients">Patients</TabsTrigger>
               <TabsTrigger value="Doctors">Doctors</TabsTrigger>
-              {/* <TabsTrigger value="Patients">Patients</TabsTrigger> */}
               <TabsTrigger value="Labs">Labs</TabsTrigger>
-              {/* <TabsTrigger value="Pharmacies">Pharmacies</TabsTrigger> */}
+              <TabsTrigger value="Pharmacies">Pharmacies</TabsTrigger>
             </TabsList>
             </div>
             {/* <Input
@@ -187,13 +156,13 @@ export default function HomePage({ searchParams }: { searchParams: { page?: stri
            <DoctorsStatData />
           </TabsContent>
           <TabsContent value="Patients">
-           {/* <StatData /> */}
+          <PatientsStatData />
           </TabsContent>
           <TabsContent value="Labs">
            <LabsStatData />
           </TabsContent>
           <TabsContent value="Pharmacies">
-          {/* <PharmaciesStatData /> */}
+          <PharmaciesStatData />
           </TabsContent>
         </Tabs>
  

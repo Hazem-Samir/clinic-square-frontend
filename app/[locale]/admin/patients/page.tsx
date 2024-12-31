@@ -1,13 +1,8 @@
-import { Suspense } from 'react'
 import ProtectedRoute from "@/components/ProtectedRoute"
-import { Skeleton } from "@/components/ui/skeleton"
-import { getQuestions } from '@/lib/doctor/api'
 import BlurFade from '@/components/ui/blur-fade'
-import QuestionsList from '@/components/doctor/QuestionsList'
 import { ActorsHeader } from '@/components/new/actors-header'
-import { getAllActorData, getAllDoctors, getAllLabs, getAllPatientsData, getAllReservations } from '@/lib/api'
+import {  getAllPatientsData } from '@/lib/api'
 import { StatisticsCards } from '@/components/new/statistics-cards'
-import { LabsTable } from '@/components/new/labs-table'
 import { ActorsTable } from '@/components/new/actors-table'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import SearchBar from '@/components/ui/SearchBar'
@@ -42,6 +37,7 @@ async function PatientsData({ page }: { page: number }) {
    totalPages={patients.paginationResult.numberOfPages}
    Actors={patients.data}
    role='Patient'
+   state=''
    />
   )
 }
