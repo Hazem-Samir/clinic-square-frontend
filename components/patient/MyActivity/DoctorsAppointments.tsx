@@ -19,7 +19,7 @@ import Pagination from '@/components/Pagination'
 interface IDoctorReservation {
   doctor:{name:string,id:string,porfilePic:string,gender:string,specialization:string,phoneNumbers:string[], schedule: {
     days:    {day: string,startTime: string,endTime: string,limit: string}[]
-    cost: number;
+    cost: number
   }}
   id:string
   state:string
@@ -38,7 +38,6 @@ interface IProps {
 export default function DoctorAppointments({appointments,currentPage,totalPages}:IProps) {
 
   const router = useRouter();
-console.log(appointments)
   const [cancelModalOpen, setCancelModalOpen] = useState(false)
   const [detailModalOpen, setDetailModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)

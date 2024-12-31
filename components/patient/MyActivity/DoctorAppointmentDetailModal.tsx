@@ -13,6 +13,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import Spinner from '@/components/Spinner'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { addDays, format } from "date-fns"
+import { HandleTimeFormat } from '@/schema/Essentials'
 
 interface IDoctorReservation {
   doctor:{name:string,id:string,porfilePic:string,gender:string,specialization:string,phoneNumbers:string[],  schedule: {
@@ -35,12 +36,12 @@ interface AppointmentDetailModalProps {
 }
 
 const formSchema = z.object({
-  scheduleDay: z.string().min(1, "Please select a schedule day"),
-  appointmentDate: z.string().min(1, "Please select an appointment date"),
-  files: z.array(z.custom<File>()).optional(),
+  scheduleDay: z.string(),
+  appointmentDate: z.string(),
+  files: z.array(z.custom<File>()),
 }).refine(data => data.appointmentDate || (data.files && data.files.length > 0), {
   message: "Either date or files must be provided",
-  path: ['appointmentDate'],
+  path: ['root'],
 });
 
 export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointment, onUpdate, isLoading}: AppointmentDetailModalProps) {
@@ -85,20 +86,17 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
   const availableDates = selectedDay ? getAvailableDates(selectedDay) : []
 
   const handleUpdate = (values: z.infer<typeof formSchema>) => {
-    if (appointment) {
-      if (values.appointmentDate || (values.files && values.files.length > 0)) {
-        onUpdate({
-          date: values.appointmentDate || appointment.date,
-          files: values.files || [],
-        });
-      } else {
-        form.setError('appointmentDate', { 
-          type: 'manual', 
-          message: 'Either date or files must be provided' 
-        });
-      }
-    }
+  if (appointment) {
+    const date = values.appointmentDate 
+      ? new Date(values.appointmentDate).setUTCHours(0,0,0,0)
+      : undefined;
+      
+    onUpdate({
+      date: date ? new Date(date).toISOString() : appointment.date,
+      files: values.files || [],
+    });
   }
+}
 
   if (!appointment) return null
 
@@ -165,7 +163,7 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                             <SelectContent>
                               {appointment.doctor.schedule.days.map((schedule) => (
                                 <SelectItem key={schedule.day} value={schedule.day}>
-                                  {schedule.day} ({schedule.startTime} - {schedule.endTime})
+                                  {schedule.day} ({HandleTimeFormat(schedule.startTime)} - {HandleTimeFormat(schedule.endTime)})
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -184,10 +182,15 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                           <FormItem className="grid grid-cols-4 items-center gap-4">
                             <FormLabel className="text-right">Available Dates</FormLabel>
                             <div className="col-span-3 space-y-4">
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <Select 
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
                                 <FormControl>
                                   <SelectTrigger>
-                                    <SelectValue placeholder="Select from available dates" />
+                                    <SelectValue>
+                                      {field.value ? format(new Date(field.value), 'EEEE, MMMM d, yyyy') : "Select from available dates"}
+                                    </SelectValue>
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
@@ -201,9 +204,6 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                                   ))}
                                 </SelectContent>
                               </Select>
-                              <p className="text-sm text-muted-foreground">
-                                Showing next 5 available {selectedDay} appointments
-                              </p>
                             </div>
                             <FormMessage className="col-start-2 col-span-3" />
                           </FormItem>
@@ -258,7 +258,7 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                   <Button disabled={isLoading} type="button" variant="outline" onClick={onClose}>
                     Cancel
                   </Button>
-                  <Button type="submit" disabled={!form.formState.isValid || isLoading}>
+                  <Button type="submit" disabled={isLoading || (!form.watch("appointmentDate") && (!form.watch("files") || form.watch("files").length === 0))}>
                     {isLoading ? <Spinner /> : "Update"}
                   </Button>
                 </DialogFooter>

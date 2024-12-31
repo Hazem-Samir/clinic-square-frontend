@@ -23,7 +23,9 @@ interface testDtails {
   
 }
 interface ILabReservation {
-  lab:{name:string,id:string,porfilePic:string,phoneNumbers:string[]}
+  lab:{name:string,id:string,porfilePic:string,phoneNumbers:string[],chedule: {
+    days:    {day: string,startTime: string,endTime: string,limit: string}[]
+    cost: number}}
   id:string
   paymentMethod:string
   state:string
@@ -43,9 +45,10 @@ interface IProps {
 export default function LabAppointments({appointments,currentPage,totalPages}:IProps) {
  const [detailModalOpen, setDetailModalOpen] = useState(false)
   const [cancelModalOpen, setCancelModalOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
   const [selectedAppointment, setSelectedAppointment] = useState<ILabReservation | null>(null)
   const router = useRouter();
-console.log(appointments)
   const handleCancel = (appointment: ILabReservation) => {
     setSelectedAppointment(appointment)
     setCancelModalOpen(true)
@@ -79,13 +82,14 @@ console.log(appointments)
     }
 
     const handleUpdate = async(date:string) => {
+      setIsLoading(true)
       if(date!==''){
         const formData=FormDataHandler({date});
-     
-  
-      const res = await UpdateMyLabReservation(formData,selectedAppointment.id);
-      if (res.success === true) {
-        toast.success(res.message, {
+        
+        
+        const res = await UpdateMyLabReservation(formData,selectedAppointment.id);
+        if (res.success === true) {
+          toast.success(res.message, {
           duration: 3000,
           position: 'top-center',
         });
@@ -97,6 +101,8 @@ console.log(appointments)
         }));
       }
     }
+    setIsLoading(false)
+    handleCloseDetailModal()
     }
 
   
@@ -162,6 +168,7 @@ console.log(appointments)
       />
           <LabAppointmentDetailModal  
             isOpen={detailModalOpen}
+            isLoading={isLoading}
             onClose={handleCloseDetailModal}
             appointment={selectedAppointment}
             onUpdate={handleUpdate}

@@ -1,17 +1,22 @@
 'use client'
 
+import { useState } from 'react'
+import { format, addDays } from 'date-fns'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { FileText } from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { HandleTimeFormat } from '@/schema/Essentials'
+import Spinner from '@/components/Spinner'
 
 interface TestDetails {
   test: { id: string; name: string }
@@ -21,125 +26,225 @@ interface TestDetails {
 }
 
 interface ILabReservation {
-  lab: { name: string; id: string; porfilePic: string }
+  lab:{
+    name: string
+    id: string
+    porfilePic: string
+    phoneNumbers: string[]
+    schedule: {
+      days: {
+        day: string
+        startTime: string
+        endTime: string
+        limit: string
+      }[]
+      cost: number
+    }
+  }
   id: string
+  paymentMethod: string
   state: string
-  requestedTests: { testDetails: TestDetails; testResult: string[]; id: string }[]
+  totalCost: string
+  requestedTests: {
+    testDetails: TestDetails
+    testResult: string[]
+    id: string
+  }[]
   date: string
 }
 
 interface AppointmentDetailModalProps {
   isOpen: boolean
+  isLoading: boolean
   onClose: () => void
   appointment: ILabReservation | null
   onUpdate: (date: string) => void
 }
 
 const formSchema = z.object({
+  day: z.string().min(1, { message: "Day is required" }),
   date: z.string().min(1, { message: "Date is required" }),
 })
 
-export default function LabAppointmentDetailModal({ isOpen, onClose, appointment, onUpdate }: AppointmentDetailModalProps) {
+export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, appointment, onUpdate }: AppointmentDetailModalProps) {
+  const [selectedDay, setSelectedDay] = useState<string | null>(null)
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      day: '',
       date: appointment?.date || '',
     },
   })
 
   const handleUpdate = (values: z.infer<typeof formSchema>) => {
     if (appointment) {
-      onUpdate(values.date)
+      const date=new Date(values.date).setUTCHours(0,0,0,0)
+      onUpdate(new Date(date).toISOString())
     }
-    onClose()
+  }
+
+  // Generate 5 dates from the selected day
+  const getAvailableDates = (dayName: string) => {
+    const today = new Date()
+    const dates: Date[] = []
+    let currentDate = new Date(today)
+
+    // Find the next occurrence of the selected day
+    while (format(currentDate, 'EEEE').toLowerCase() !== dayName.toLowerCase()) {
+      currentDate = addDays(currentDate, 1)
+    }
+
+    // Generate 5 dates
+    for (let i = 0; i < 5; i++) {
+      dates.push(addDays(currentDate, i * 7))
+    }
+
+    return dates
   }
 
   if (!appointment) return null
 
   return (
-    <Dialog  open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[550px]">
-      <ScrollArea className="h-[calc(70vh-2rem)] pr-4" style={{ overflow: 'auto' }}>
-
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">Appointment Details</DialogTitle>
-        </DialogHeader>
-        <div className="mt-4">
-          <div className="flex items-center space-x-4 mb-6">
-            <Avatar className="h-16 w-16">
-              <AvatarImage src={appointment.lab.porfilePic} alt={appointment.lab.name} />
-              <AvatarFallback>{appointment.lab.name.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div>
-              <h2 className="text-xl font-semibold">{appointment.lab.name}</h2>
-              {/* <p className="text-sm text-gray-500">{ appointment.date}</p> */}
-            </div>
-          </div>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-6">
-              {appointment.state==="completed"?null:<FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Appointment Date</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} className="w-full" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />}
+        <ScrollArea className="h-[calc(70vh-2rem)] pr-4" style={{ overflow: 'auto' }}>
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold">Appointment Details</DialogTitle>
+          </DialogHeader>
+          <div className="mt-4">
+            <div className="flex items-center space-x-4 mb-6">
+              <Avatar className="h-16 w-16">
+                <AvatarImage src={appointment.lab.porfilePic} alt={appointment.lab.name} />
+                <AvatarFallback>{appointment.lab.name.charAt(0)}</AvatarFallback>
+              </Avatar>
               <div>
-                <Label className="text-lg font-semibold mb-2 block">Test Results</Label>
-                <ScrollArea className="h-[300px] w-full rounded-md border">
-                  <div className="p-4 space-y-4">
-                    {appointment.requestedTests.map((test) => (
-                      <Card key={test.id}>
-                        <CardHeader>
-                          <CardTitle>{test.testDetails.test.name}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="flex flex-wrap gap-2">
-                            {test.testResult.map((result, index) => (
-                              <Button
-                                key={index}
-                                variant="outline"
-                                size="sm"
-                                className="flex items-center space-x-2"
-                                asChild
-                              >
-                                <a
-                                  href={result}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  title={`View Result File ${index + 1}`}
-                                >
-                                  <FileText className="h-4 w-4" />
-                                  <span>Result {index + 1}</span>
-                                </a>
-                              </Button>
-                            ))}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </ScrollArea>
+                <h2 className="text-xl font-semibold">{appointment.lab.name}</h2>
               </div>
-              {appointment.state==="completed"?null:
-              <DialogFooter>
-                <Button type="button" variant="outline" onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button type="submit">Update Appointment</Button>
-              </DialogFooter>
-}
-            </form>
-          </Form>
-        </div>
-        </ScrollArea>
+            </div>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-6">
+                {appointment.state !== "completed" && (
+                  <div className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="day"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Select Day</FormLabel>
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value)
+                              setSelectedDay(value)
+                              form.setValue('date', '') 
+                            }}
+                            value={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select available day" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {appointment.lab.schedule.days.map((schedule) => (
+                                <SelectItem key={schedule.day} value={schedule.day}>
+                                  {schedule.day} ({HandleTimeFormat(schedule.startTime)} - {HandleTimeFormat(schedule.endTime)})
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
+                    {selectedDay && (
+                      <FormField
+                        control={form.control}
+                        name="date"
+                        render={({ field }) => (
+                          <FormItem className="space-y-3">
+                            <FormLabel>Select Appointment Date</FormLabel>
+                            <FormControl>
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue>
+                                    {field.value ? format(new Date(field.value), 'EEEE, MMMM d, yyyy') : "Select available date"}
+                                  </SelectValue>
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {getAvailableDates(selectedDay).map((date) => (
+                                    <SelectItem 
+                                      key={date.toISOString()} 
+                                      value={date.toISOString()}
+                                    >
+                                      {format(date, 'EEEE, MMMM d, yyyy')}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
+                  </div>
+                )}
+
+                <div>
+                  <Label className="text-lg font-semibold mb-2 block">Test Results</Label>
+                  <ScrollArea className="h-[300px] w-full rounded-md border">
+                    <div className="p-4 space-y-4">
+                      {appointment.requestedTests.map((test) => (
+                        <Card key={test.id}>
+                          <CardHeader>
+                            <CardTitle>{test.testDetails.test.name}</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="flex flex-wrap gap-2">
+                              {test.testResult.map((result, index) => (
+                                <Button
+                                  key={index}
+                                  variant="outline"
+                                  size="sm"
+                                  className="flex items-center space-x-2"
+                                  asChild
+                                >
+                                  <a
+                                    href={result}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    title={`View Result File ${index + 1}`}
+                                  >
+                                    <FileText className="h-4 w-4" />
+                                    <span>Result {index + 1}</span>
+                                  </a>
+                                </Button>
+                              ))}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </div>
+
+                {appointment.state !== "completed" && (
+                  <DialogFooter>
+                    <Button type="button" disabled={isLoading} variant="outline" onClick={onClose}>
+                      Cancel
+                    </Button>
+                    <Button type="submit" disabled={isLoading}>{isLoading?<Spinner />:"Update Appointment"}</Button>
+                  </DialogFooter>
+                )}
+              </form>
+            </Form>
+          </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   )
