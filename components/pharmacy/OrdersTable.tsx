@@ -21,6 +21,7 @@ import Pagination from "../Pagination"
 import toast, { Toaster } from 'react-hot-toast'
 import { searchOrders } from "@/lib/pharmacy/clientApi"
 import Spinner from "../Spinner"
+import { useTranslations } from 'next-intl'
 
 
 
@@ -38,10 +39,12 @@ interface IOrder extends IProps {
 }
 
 const OrdersData=({orders,currentPage,totalPages,handlePageChange,isLoading}:IOrder)=>{
+  const t = useTranslations('Orders')
+  
   return(
     <>
           <CardContent className="flex flex-col gap-4 sm:gap-8">
-          {orders.length<=0?<div className="flex justify-center items-center">No Orders</div>
+          {orders.length<=0?<div className="flex justify-center items-center">{t(`No-Orders`)}</div>
         :orders.map((order) => (
             <div key={order.id} className="flex items-center gap-2 sm:gap-4">
               <Avatar className="max-[350px]:hidden sm:h-9 sm:w-9">
@@ -70,6 +73,7 @@ const OrdersData=({orders,currentPage,totalPages,handlePageChange,isLoading}:IOr
 export default function OrdersTable({orders, currentPage, totalPages}: IProps) {
  const [searchTerm, setSearchTerm] = useState('')
  const [isSearching, setIsSearching] = useState(false)
+ const t = useTranslations('Orders')
 
     const [SearchResult, setSearchResult] = useState<{currentPage:number,totalPages:number,orders:EndReservationValues[]}|null>(null)
   const router = useRouter()
@@ -138,9 +142,9 @@ export default function OrdersTable({orders, currentPage, totalPages}: IProps) {
     <Card>
       <CardHeader>
         <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-2 sm:gap-4">
-          <CardTitle className="text-base sm:text-lg">New Orders</CardTitle>
+          <CardTitle className="text-base sm:text-lg">{t(`title`)}</CardTitle>
           <div className="flex items-center gap-2">
-            <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='Search for patient'/>
+            <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='For_Patient'/>
     
           </div>
         </div>

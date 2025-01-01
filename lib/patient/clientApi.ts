@@ -568,7 +568,7 @@ export const MarkCompleted = async (data:{state:string},RID:string)=>{
     console.error('No Token');
   }
 }
-export const UpdateMyLabReservation = async (formData:FormData,id:string)=>{
+export const UpdateMyLabReservation = async (data:{date:string},id:string)=>{
   const token = getToken();
   if (token){
     const queryParams = new URLSearchParams({
@@ -580,7 +580,7 @@ export const UpdateMyLabReservation = async (formData:FormData,id:string)=>{
         headers: {
           'Authorization': `Bearer ${token}`,
       },
-      body: formData,
+      body: JSON.stringify(data),
       })
 
       if (response.ok) {

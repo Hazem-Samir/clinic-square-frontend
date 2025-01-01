@@ -85,16 +85,21 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
 
   const availableDates = selectedDay ? getAvailableDates(selectedDay) : []
 
-  const handleUpdate = (values: z.infer<typeof formSchema>) => {
+  const handleUpdate = async(values: z.infer<typeof formSchema>) => {
   if (appointment) {
     const date = values.appointmentDate 
       ? new Date(values.appointmentDate).setUTCHours(0,0,0,0)
       : undefined;
       
-    onUpdate({
+    await onUpdate({
       date: date ? new Date(date).toISOString() : appointment.date,
       files: values.files || [],
     });
+    form.reset({
+      scheduleDay: '',
+      appointmentDate: '',
+      files: [],
+    })
   }
 }
 
@@ -111,24 +116,50 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
             <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-8 p-1 pb-8">
               <div className="grid gap-4 py-4">
                 {/* Existing doctor info fields */}
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">Doctor</Label>
+                <div className="flex gap-2 items-center">
+                  <h3 className=" text-md sm:text-md font-semibold">Doctor:</h3>
                   <span id="name">{appointment.doctor.name}</span>
+                        
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="specialization" className="text-right">Specialization:</Label>
-                  <span id="specialization">{appointment.doctor.specialization}</span>
+                <div className="flex gap-2 items-center">
+                  <h3 className=" text-md sm:text-md font-semibold">Specialization:</h3>
+                  <span id="name">{appointment.doctor.specialization}</span>
+                        
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="diagnosis" className="text-right">Diagnosis:</Label>
-                  <span id="diagnosis">{appointment.report.diagnose}</span>
+                <div className="flex gap-2 items-center">
+                  <h3 className=" text-md sm:text-md font-semibold">Diagnosis:</h3>
+                  <span id="name">{appointment.report.diagnose}</span>
+                        
                 </div>
-
+               
+                
+              
+                <div>
+                  <h3 className="mb-4 text-md sm:text-md font-semibold">Prescriptions:</h3>
+                  <ul className="space-y-2">
+                    {appointment.report.medicine.length >0 ? (appointment.report.medicine.map((medicine, index) => (
+                      <li key={index} className="flex justify-between items-center text-sm">
+                        <span>{medicine.name}</span>
+                        <span className="text-gray-500">{medicine.dose}</span>
+                      </li>
+                    ))): <p className="ml-1 text-sm">No Medicines</p>}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="mb-4 text-md sm:text-md font-semibold">Requested Tests:</h3>
+                  <ul className="space-y-2">
+                    {appointment.report.requestedTests.length >0 ? (appointment.report.requestedTests.map((test, index) => (
+                      <li key={index} className="flex justify-between items-center text-md">
+                        <span>{test}</span>
+                      </li>
+                    ))): <p className="ml-1 text-sm">No Tests</p>}
+                  </ul>
+                </div>
                 {/* Files section */}
-                <div className="flex items-center gap-4">
-                  <Label className="text-right">Files</Label>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-md sm:text-md font-semibold">Files:</h3>
                   <div className="flex gap-2 p-4 flex-wrap items-center justify-start">
-                    {appointment.report.results.map((result, index) => (
+                    {appointment.report.results.length>0? appointment.report.results.map((result, index) => (
                       <Button
                         key={index}
                         variant="outline"
@@ -141,7 +172,7 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                           <span>File {index + 1}</span>
                         </a>
                       </Button>
-                    ))}
+                    )) :<p className="ml-1 text-sm">No Files</p>}
                   </div>
                 </div>
 
@@ -152,8 +183,8 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                       control={form.control}
                       name="scheduleDay"
                       render={({ field }) => (
-                        <FormItem className="grid grid-cols-4 items-center gap-4">
-                          <FormLabel className="text-right">Schedule Day</FormLabel>
+                        <FormItem className="grid  items-center ">
+                          <FormLabel className="text-md" >Schedule Day</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl className="col-span-3">
                               <SelectTrigger>
@@ -179,8 +210,8 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                         control={form.control}
                         name="appointmentDate"
                         render={({ field }) => (
-                          <FormItem className="grid grid-cols-4 items-center gap-4">
-                            <FormLabel className="text-right">Available Dates</FormLabel>
+                          <FormItem className="grid  items-center ">
+                            <FormLabel className="text-md">Available Dates</FormLabel>
                             <div className="col-span-3 space-y-4">
                               <Select 
                                 onValueChange={field.onChange}
@@ -216,8 +247,8 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                       control={form.control}
                       name="files"
                       render={() => (
-                        <FormItem className="grid grid-cols-4 items-center gap-4">
-                          <FormLabel className="text-right">Upload Files</FormLabel>
+                        <FormItem className="grid  items-center ">
+                          <FormLabel className="text-md">Upload Files</FormLabel>
                           <FormControl className="col-span-3">
                             <Input
                               type="file"

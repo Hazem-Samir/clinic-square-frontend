@@ -40,6 +40,7 @@ import { IMedicine, IMedicineDetails } from '@/interfaces/Phamacy'
 import { MedicineSchema, MedicineValue, NewMedicineSchema, NewMedicineValue } from '@/schema/Pharmacy'
 import SearchBar from '../ui/SearchBar'
 import Pagination from '../Pagination'
+import { useTranslations } from 'next-intl'
 
 
 
@@ -62,11 +63,13 @@ interface IMedicinesData extends IProps{
 
 
 const MedicinesData=({medicines,medicineForm,isLoading,setMedicineName,setIsEditOpen,setIsDeleteOpen,currentPage,handlePageChange,totalPages}:IMedicinesData)=>{
+  const t = useTranslations('Medicines')
+  const tcommon = useTranslations('common')
 
 return(
   <>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-          {medicines.length<=0?<div className="flex justify-center items-center">No Medicines</div>
+          {medicines.length<=0?<div className="flex justify-center items-center">{t(`none`)}</div>
           :medicines.map((medicine) => (
             <div key={medicine.id} className="bg-card text-card-foreground rounded-lg  shadow-md transition-all hover:shadow-lg border border-border rounded-md">
               <div className="mb-4 relative w-full h-52">
@@ -118,8 +121,8 @@ return(
                 </div>
               </div>
            
-              <p className="text-xl font-bold text-primary mb-2">{medicine.medicine.cost} EGP</p>
-              <p className="text-sm text-muted-foreground">Stock: {medicine.stock}</p>
+              <p className="text-xl font-bold text-primary mb-2">{`${medicine.medicine.cost} ${tcommon(`EGP`)}`}</p>
+              <p className="text-sm text-muted-foreground"> {`${t(`Add_Med.stock`)}: ${medicine.stock}`}</p>
             </div>
             </div>
           ))}
@@ -139,8 +142,8 @@ export default function MedicineManagement({medicines, currentPage, totalPages, 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
   const [isRequestOpen, setIsRequestOpen] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
-
   const [searchTerm, setSearchTerm] = useState('')
+  const t = useTranslations('Medicines')
 
     const [SearchResult, setSearchResult] = useState<{currentPage:number,totalPages:number,medicines:IMedicine[]}|null>(null)
 
@@ -331,19 +334,19 @@ const resetMedicineForm=()=>{
     <>
       <div className="p-4 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row items-start justify-between mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">My Medicines</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">{t(`title`)}</h1>
           <Dialog open={isRequestOpen} onOpenChange={setIsRequestOpen}>
             <DialogTrigger asChild>
               <Button disabled={isLoading} variant="outline" size="sm" className="w-full sm:w-auto mb-4 sm:mb-0">
-                <Send className="mr-2 h-4 w-4" />
-                Request New Test
+                <Send className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
+                {t(`Request_Med.title`)}
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
-                <DialogTitle>Request New Test</DialogTitle>
+                <DialogTitle>{t(`Request_Med.title`)}</DialogTitle>
                 <DialogDescription>
-                  Can&apos;t find the Medicne you&apos;re looking for? Request it here.
+                {t(`Request_Med.description`)}
                 </DialogDescription>
               </DialogHeader>
               <Form {...NewMedicineForm}>
@@ -353,7 +356,7 @@ const resetMedicineForm=()=>{
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Medicine Name</FormLabel>
+                      <FormLabel>{t(`Request_Med.Med_Name`)}</FormLabel>
                       <FormControl>
                         <Input disabled={isLoading} type="text" {...field} />
                       </FormControl>
@@ -367,7 +370,7 @@ const resetMedicineForm=()=>{
                   name="cost"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Cost</FormLabel>
+                      <FormLabel>{t(`Request_Med.cost`)}</FormLabel>
                       <FormControl>
                         <Input disabled={isLoading} type="number" {...field} />
                       </FormControl>
@@ -382,7 +385,7 @@ const resetMedicineForm=()=>{
                   render={({ field}) => (
                     <FormItem>
               <FormLabel  className="cursor-pointer text-sm text-primary hover:underline">
-            Upload Profile Photo
+              {t(`Request_Med.upload_photo`)}
           </FormLabel>
               <FormControl>
                 <Input
@@ -400,13 +403,13 @@ const resetMedicineForm=()=>{
                   )}
                 />
             
-                <DialogFooter>
+                <DialogFooter className="gap-1">
                   <Button disabled={isLoading} type="button" variant="outline" onClick={() => {
                     setIsRequestOpen(false)
                   }}>
-                    Cancel
+                    {t(`Request_Med.Cancel`)}
                   </Button>
-                  <Button disabled={isLoading} type="submit">{isLoading?<Spinner/>:"Send Request"}</Button>
+                  <Button disabled={isLoading} type="submit">{isLoading?<Spinner/>:t(`Request_Med.submit`)}</Button>
                 </DialogFooter>
               </form>
             </Form>
@@ -420,13 +423,13 @@ const resetMedicineForm=()=>{
 <Dialog open={isAddOpen} onOpenChange={handleAddModalOpen}>
           <DialogTrigger asChild>
             <Button disabled={isLoading} className="w-full sm:w-auto">
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Add New Medicine
+              <PlusCircle className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
+              {t(`Add_Med.title`)}
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Add New Test</DialogTitle>
+              <DialogTitle>{t(`Add_Med.title`)}</DialogTitle>
               <DialogDescription></DialogDescription>
             </DialogHeader>
             <Form {...medicineForm}>
@@ -436,11 +439,11 @@ const resetMedicineForm=()=>{
                   name="id"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Medicne Name</FormLabel>
+                      <FormLabel>{t(`Add_Med.Med_Name`)}</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger disabled={isLoading}>
-                            <SelectValue placeholder="Select a Medicine" />
+                            <SelectValue placeholder={t(`Add_Med.Select_Med`)} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -460,7 +463,7 @@ const resetMedicineForm=()=>{
                   name="stock"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Stock</FormLabel>
+                      <FormLabel>{t(`Add_Med.stock`)}</FormLabel>
                       <FormControl>
                         <Input disabled={isLoading} type="number" {...field} />
                       </FormControl>
@@ -470,20 +473,20 @@ const resetMedicineForm=()=>{
                 />
              
             
-                <DialogFooter>
+                <DialogFooter className="gap-1">
                   <Button disabled={isLoading} type="button" variant="outline" onClick={() => {
                     handleAddModalOpen()
                   }}>
-                    Cancel
+                    {t(`Add_Med.Cancel`)}
                   </Button>
-                  <Button disabled={isLoading} type="submit">{isLoading?<Spinner/>:"Add Medicine"}</Button>
+                  <Button disabled={isLoading} type="submit">{isLoading?<Spinner/>:t(`Add_Med.submit`)}</Button>
                 </DialogFooter>
               </form>
             </Form>
           </DialogContent>
           <Toaster />
         </Dialog>
-        <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='Search for Medicine'/>
+        <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='For_Medicine'/>
 </div>
 </div>
 
@@ -524,7 +527,7 @@ const resetMedicineForm=()=>{
         <Dialog open={isEditOpen} onOpenChange={handleEditModalOpen}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Edit Test</DialogTitle>
+              <DialogTitle>{t(`Add_Med.Edit_Med`)}</DialogTitle>
               <DialogDescription></DialogDescription>
             </DialogHeader>
             <Form {...medicineForm}>
@@ -534,9 +537,9 @@ const resetMedicineForm=()=>{
                   name="id"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Test Name</FormLabel>
+                      <FormLabel>{t(`Add_Med.Med_Name`)}</FormLabel>
                       <FormControl>
-                        <Input {...field} value={medicineName} disabled={isLoading}  />
+                        <Input disabled {...field} value={medicineName} disabled={isLoading}  />
                       </FormControl>
                     </FormItem>
                   )}
@@ -546,7 +549,7 @@ const resetMedicineForm=()=>{
                   name="stock"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>stock</FormLabel>
+                      <FormLabel>{t(`Add_Med.stock`)}</FormLabel>
                       <FormControl>
                         <Input disabled={isLoading} type="number" {...field} />
                       </FormControl>
@@ -556,13 +559,13 @@ const resetMedicineForm=()=>{
                 />
               
              
-                <DialogFooter>
+                <DialogFooter className="gap-1">
                   <Button disabled={isLoading} type="button" variant="outline" onClick={() => {
                     handleEditModalOpen()
                   }}>
-                    Cancel
+                    {t(`Add_Med.Cancel`)}
                   </Button>
-                  <Button disabled={isLoading} type="submit">{isLoading?<Spinner/>:"Save Changes"}</Button>
+                  <Button disabled={isLoading} type="submit">{isLoading?<Spinner/>:t(`Add_Med.submit`)}</Button>
                 </DialogFooter>
               </form>
             </Form>
@@ -571,16 +574,16 @@ const resetMedicineForm=()=>{
         <Dialog open={isDeleteOpen} onOpenChange={handleDeleteModal}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Confirm Deletion</DialogTitle>
+              <DialogTitle>{t(`Delete_Med.title`)}</DialogTitle>
               <DialogDescription>
-                Are you sure you want to delete the test &quot;{medicineName}&quot;? This action cannot be undone.
+                {t(`Delete_Med.description`,{medicineName})}
               </DialogDescription>
             </DialogHeader>
-            <DialogFooter>
+            <DialogFooter className="gap-1">
               <Button disabled={isLoading} type="button" variant="outline" onClick={() => {handleDeleteModal()}}>
-                Cancel
+                {t(`Delete_Med.Cancel`)}
               </Button>
-              <Button disabled={isLoading} variant="destructive" onClick={handleDeleteTest}>{isLoading?<Spinner />:"Delete"}</Button>
+              <Button disabled={isLoading} variant="destructive" onClick={handleDeleteTest}>{isLoading?<Spinner />:t(`Delete_Med.submit`)}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

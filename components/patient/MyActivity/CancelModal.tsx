@@ -1,3 +1,4 @@
+import Spinner from "@/components/Spinner"
 import {
       AlertDialog,
       AlertDialogAction,
@@ -11,15 +12,15 @@ import {
     
     type CancelModalProps = {
       isOpen: boolean
+      isLoading: boolean
       onClose: () => void
-      onConfirm: (itemId:string) => void
+      onConfirm: () => void
       itemName: string
-      itemId:string
     }
     
-    export default function CancelModal({ isOpen, onClose, onConfirm, itemName,itemId }: CancelModalProps) {
+    export default function CancelModal({ isOpen, onClose, onConfirm,isLoading, itemName }: CancelModalProps) {
       return (
-        <AlertDialog open={isOpen} onOpenChange={onClose}>
+        <AlertDialog open={isOpen} >
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Are you sure?</AlertDialogTitle>
@@ -29,7 +30,7 @@ import {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel onClick={onClose}>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={()=>{onConfirm(itemId)}}>Confirm</AlertDialogAction>
+              <AlertDialogAction onClick={()=>{onConfirm()}}>{isLoading?<Spinner />:"Confirm"}</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

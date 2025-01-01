@@ -55,9 +55,10 @@ export default function LabAppointments({appointments,currentPage,totalPages}:IP
   }
   const confirmCancel = async() => {
     if (selectedAppointment) {
+      setIsLoading(true)
       const res = await CancelLabReservation(selectedAppointment.id);
-    if (res.success === true) {
-      toast.success(res.message, {
+      if (res.success === true) {
+        toast.success(res.message, {
         duration: 3000,
         position: 'top-center',
       });
@@ -68,9 +69,10 @@ export default function LabAppointments({appointments,currentPage,totalPages}:IP
         position: 'bottom-center',
       }));
     }
-    }
+    setIsLoading(false)
     setCancelModalOpen(false)
     setSelectedAppointment(null)
+  }
   }
   const handlePageChange=(newPage:number)=>{
     router.push(`my-activity?labsPage=${newPage}&activeTab=labs`);
@@ -84,10 +86,9 @@ export default function LabAppointments({appointments,currentPage,totalPages}:IP
     const handleUpdate = async(date:string) => {
       setIsLoading(true)
       if(date!==''){
-        const formData=FormDataHandler({date});
+        console.log(selectedAppointment.id)
         
-        
-        const res = await UpdateMyLabReservation(formData,selectedAppointment.id);
+        const res = await UpdateMyLabReservation({date},selectedAppointment.id);
         if (res.success === true) {
           toast.success(res.message, {
           duration: 3000,
@@ -165,6 +166,7 @@ export default function LabAppointments({appointments,currentPage,totalPages}:IP
         onClose={() => setCancelModalOpen(false)}
         onConfirm={confirmCancel}
         itemName="lab appointment"
+        isLoading={isLoading}
       />
           <LabAppointmentDetailModal  
             isOpen={detailModalOpen}

@@ -11,6 +11,7 @@ import OrderDetails from './OrderDetails'
 import toast, { Toaster } from 'react-hot-toast'
 import Spinner from "../Spinner"
 import { searchOrders } from "@/lib/pharmacy/clientApi"
+import { useTranslations } from 'next-intl'
 
 
 interface IProps {
@@ -24,10 +25,12 @@ interface IOrder extends IProps {
 }
 
 const OrdersHistoryData=({orders,currentPage,totalPages,handlePageChange,isLoading}:IOrder)=>{
+  const t = useTranslations('Orders')
+  
   return(
     <>
      <CardContent className="grid gap-4 sm:gap-8">
-     {orders.length<=0?<div className="flex justify-center items-center">No Orders</div>
+     {orders.length<=0?<div className="flex justify-center items-center">{t(`No_Orders`)}</div>
           :orders.map((order) => (
             <div key={order.id} className="flex items-center gap-2 sm:gap-4">
               <Avatar className="max-[350px]:hidden sm:h-9 sm:w-9">
@@ -106,14 +109,16 @@ export default function OrdersHistoryTable({
       router.push(`orders-history?page=${newPage}`)
     }
   }
+  const t = useTranslations('Orders')
+
 
   return (
       <Card>
         <CardHeader>
           <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-2 sm:gap-0">
-            <CardTitle className="text-base sm:text-lg">Orders History</CardTitle>
+            <CardTitle className="text-base sm:text-lg">{t(`History_title`)}</CardTitle>
           
-            <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='Search for patient'/>
+            <SearchBar onSearch={handleSearch} setResult={setSearchResult} searchTerm={searchTerm} setSearchTerm={setSearchTerm} title='For_Patient'/>
           </div>
         </CardHeader>
        

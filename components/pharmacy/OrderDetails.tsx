@@ -17,6 +17,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { shortName } from "@/lib/utils"
+import { useTranslations } from 'next-intl'
 
 
 
@@ -26,6 +27,7 @@ interface IProps {
 
 export default function OrderDetails({order}: IProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const t = useTranslations('Orders')
   
 
 
@@ -49,11 +51,11 @@ export default function OrderDetails({order}: IProps) {
       `}</style>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button  variant="outline" onClick={() => setIsOpen(true)}>View Order</Button>
+          <Button  variant="outline" onClick={() => setIsOpen(true)}>{t(`View_Details`)}</Button>
         </DialogTrigger>
         <DialogContent className="w-full sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-lg sm:text-xl">Order Details</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl">{t(`Details.title`)}</DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
               <div className="grid gap-4">
@@ -68,27 +70,27 @@ export default function OrderDetails({order}: IProps) {
              
                     
                   </div>
-                <p className="text-sm text-gray-500 mb-2">Payment Method: {order.paymentMethod}</p>
+                <p className="text-sm text-gray-500 mb-2">{`${t(`Details.pay_method`)}: ${t(`Details.${order.paymentMethod}`)}`}</p>
                 </div>
                 <div>
                
                   <ul className="space-y-2 flex flex-col justify-between  ">
                   <li  className="flex justify-between items-center text-md">
-                    <span>Product</span>
-                    <span>Price</span>
-                    <span>Quantity</span>
+                    <span>{t(`Details.product`)}</span>
+                    <span>{t(`Details.price`)}</span>
+                    <span>{t(`Details.quantity`)}</span>
                     </li>
                     {order.medicines.length >0 ? (order.medicines.map((medicine, index) => (
                       <li key={index} className="flex justify-between items-center text-sm ">
-                        <span >{medicine.medicineId.name}</span>
+                        <span>{medicine.medicineId.medicine.name}</span>
                         <span>{medicine.price}</span>
                         <span className="text-gray-500">{medicine.quantity}</span>
                       </li>
-                    ))): <p className="ml-1 text-sm">No Products</p>}
+                    ))): <p className="ml-1 text-sm">{t(`Details.no_products`)}</p>}
                   </ul>
                 </div>
                 <div className="flex justify-between items-center mt-2">
-                  <span>Total Cost</span>
+                  <span>{t(`Details.total`)}</span>
                   <span>{order.totalCost}</span>
                 </div>
                 {/* <div>

@@ -197,7 +197,7 @@ export default function Doctor({ role ,onBack}: IProps) {
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Hazem Samir" />
+                    <Input {...field} placeholder="Enter Your Name" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

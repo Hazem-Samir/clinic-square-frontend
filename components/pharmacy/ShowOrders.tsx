@@ -21,6 +21,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation'
 import { shortName } from "@/lib/utils"
 import { MarkDelivered } from "@/lib/pharmacy/clientApi"
+import { useTranslations } from 'next-intl'
 
 
 
@@ -34,7 +35,8 @@ export default function ShowOrders({ order}: IProps) {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const [showEndReservationDialog, setShowEndReservationDialog] = useState(false)
-
+console.log(order)
+  const t = useTranslations('Orders')
 
   const handleMarkDelivered = async () => {
     setIsLoading(true);
@@ -88,7 +90,7 @@ export default function ShowOrders({ order}: IProps) {
         </DialogTrigger>
         <DialogContent className="w-full sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-lg sm:text-xl">Order Details</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl">{t(`Details.title`)}</DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
               <div className="grid gap-4">
@@ -103,27 +105,27 @@ export default function ShowOrders({ order}: IProps) {
              
                     
                   </div>
-                <p className="text-sm text-gray-500 mb-2">Payment Method: {order.paymentMethod}</p>
+                <p className="text-sm text-gray-500 mb-2">{`${t(`Details.pay_method`)}: ${t(`${`Details.${order.paymentMethod}`}`)}`}</p>
                 </div>
                 <div>
                
                   <ul className="space-y-2 flex flex-col justify-between  ">
                   <li  className="flex justify-between items-center text-md">
-                    <span>Product</span>
-                    <span>Price</span>
-                    <span>Quantity</span>
+                    <span>{t(`Details.product`)}</span>
+                    <span>{t(`Details.price`)}</span>
+                    <span>{t(`Details.quantity`)}</span>
                     </li>
                     {order.medicines.length >0 ? (order.medicines.map((medicine, index) => (
                       <li key={index} className="flex justify-between items-center text-sm ">
-                        <span >{medicine.medicineId.name}</span>
+                        <span >{medicine.medicineId.medicine.name}</span>
                         <span>{medicine.price}</span>
                         <span className="text-gray-500">{medicine.quantity}</span>
                       </li>
-                    ))): <p className="ml-1 text-sm">No Products</p>}
+                    ))): <p className="ml-1 text-sm">{t(`Details.no_products`)}</p>}
                   </ul>
                 </div>
                 <div className="flex justify-between items-center mt-2">
-                  <span>Total Cost</span>
+                  <span>{t(`Details.total`)}</span>
                   <span>{order.totalCost}</span>
                 </div>
                 {/* <div>
@@ -137,10 +139,10 @@ export default function ShowOrders({ order}: IProps) {
               </div>
           <DialogFooter className="flex-col sm:flex-row gap-2">
             <Button disabled={isLoading} type="button" onClick={() => setIsOpen(false)} variant="outline" className="w-full sm:w-auto text-xs sm:text-sm">
-              Cancel
+              {t(`Details.cancel`)}
             </Button>
             <Button disabled={isLoading} onClick={() => setShowEndReservationDialog(true)} variant="destructive" className="w-full sm:w-auto text-xs sm:text-sm">
-              {isLoading ? <Spinner /> : "Mark Delivered"}
+              {isLoading ? <Spinner /> : t(`Details.submit`)}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -18,7 +18,8 @@
     "For_Question":"Search For Question",
     "For_Lab":"Search For Lab",
     "For_Pharmacy":"Search For Pharmacy",
-    "For_Test":"Search For Test"
+    "For_Test":"Search For Test",
+    "For_Medicine":"Search For Medicine"
     
   },
   "ModeToogle":{
@@ -203,5 +204,56 @@
       "errors":{
         "password_8chars":"Password must be at least 8 characters",
         "password_not_match":"Passwords do not match"
+      },
+      "Orders":{
+        "title":"New Orders",
+        "History_title":"Orders History",
+        "No_Orders":"No Orders",
+        "View_Details":"View Details",
+        "Details":{
+          "title":"Order Details",
+          "pay_method":"Payment Method",
+          "cash":"Cash",
+          "visa":"Visa",
+          "quantity":"Quantity",
+          "price":"Price",
+          "product":"Product",
+          "no_products":"No Products",
+          "total":"Total",
+          "submit":"Mark Delivered",
+          "cancel":"Cancel"
+        }
+      },
+      "Medicines":{
+        "title":"My Medicines",
+        "preps":"Stock",
+        "none":"None",
+    
+        "Add_Med":{
+          "title":"Add New Medicine",
+          "Edit_Med":"Edit Medicine",
+          "Save":"Save",
+          "Select_Med":"Select Medicine",
+          "Med_Name":"Medicine Name",
+          "stock":"Stock",
+          "submit":"Add Medicine",
+          "Cancel":"Cancel"
+        },
+        "Request_Med":{
+          "title":"Request New Medicine",
+          "cost":"cost",
+          "description":"Can't find the medicine you're looking for? Request it here.",
+          "Med_Name":"Medicine Name",
+          "upload_photo":"Upload Photo",
+          "submit":"submit",
+          "Cancel":"Cancel"
+        },
+        "Delete_Med":{
+          "title":"Confirm Deletion",
+          "description":"Are you sure you want to delete the test {medicineName}? This action cannot be undone.",
+
+          "submit":"Delete",
+          "Cancel":"Cancel"
+        }
       }
     }

@@ -33,7 +33,6 @@ export const getReservationsHistory = async (limit:number,page: number) => {
         page: page.toString(),
         startOfDay,
         endOfDay,
-        state,
       }).toString();
       const response = await fetch(`${FRONT_URL}/api/doctor/reservations?${queryParams}`, {
         method: 'GET',

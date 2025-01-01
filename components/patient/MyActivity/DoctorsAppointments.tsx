@@ -59,6 +59,7 @@ export default function DoctorAppointments({appointments,currentPage,totalPages}
   
   const confirmCancel = async() => {
     if (selectedAppointment) {
+      setIsLoading(true)
       const res = await CancelDoctorReservation(selectedAppointment.id);
     if (res.success === true) {
       toast.success(res.message, {
@@ -73,6 +74,7 @@ export default function DoctorAppointments({appointments,currentPage,totalPages}
         position: 'bottom-center',
       }));
     }
+    setIsLoading(false)
     }
  handleCloseDetailModal()
   }
@@ -142,6 +144,8 @@ export default function DoctorAppointments({appointments,currentPage,totalPages}
       ))}
       <CancelModal
         isOpen={cancelModalOpen} 
+        isLoading={isLoading}
+
         onClose={() => {
           setCancelModalOpen(false)
           setSelectedAppointment(null)

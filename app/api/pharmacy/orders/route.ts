@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
       const state=searchParams.get('state')||'pending';
 
       try {
-        const apiResponse = await fetch(`${SERVER_URL}/pharmacy/my-orders?page=${page}&limit=${limit}&populate=medicines.medicineId=name,patient&state=${state}`, {
+        const apiResponse = await fetch(`${SERVER_URL}/pharmacy/my-orders?page=${page}&limit=${limit}&populate=medicines.medicineId.medicine=name,patient&state=${state}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }

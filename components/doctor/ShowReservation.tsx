@@ -105,7 +105,8 @@ export default function ShowReservation({  reservation, RID, currentPage, curren
   const onSubmitConsultationDate: SubmitHandler<EndReservationValues> = async (data: EndReservationValues) => {
     setIsLoading(true);
     const { consultationDate, ...rest } = data;
-    const consultaion = { report: { ...rest }, date: new Date(consultationDate).toISOString(), state: 'consultaion' };
+    const consultaion = { report: { ...rest }, date: new Date(new Date(consultationDate).setUTCHours(0,0,0,0)).toISOString(), state: 'consultation' };
+    console.log("aaaaa")
     const body = FormDataHandler(consultaion);
     const token = getToken();
     try {
@@ -127,7 +128,7 @@ export default function ShowReservation({  reservation, RID, currentPage, curren
           requestedTests: [],
           consultationDate: null,
         })
-        router.push(`doctor?page=${currentPage}&date=${currentDate}`)
+        router.refresh()
       } else {
         res.message.forEach((err: string) => toast.error(err || 'An unexpected error occurred.', {
           duration: 2000,
@@ -165,7 +166,7 @@ export default function ShowReservation({  reservation, RID, currentPage, curren
           requestedTests: [],
           consultationDate: null,
         })
-        router.push(`doctor?page=${currentPage}&date=${currentDate}`)
+        router.refresh()
       } else {
         res.message.forEach((err: string) => toast.error(err || 'An unexpected error occurred.', {
           duration: 2000,

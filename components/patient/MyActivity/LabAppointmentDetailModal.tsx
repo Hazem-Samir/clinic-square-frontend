@@ -77,10 +77,15 @@ export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, a
     },
   })
 
-  const handleUpdate = (values: z.infer<typeof formSchema>) => {
+  const handleUpdate = async(values: z.infer<typeof formSchema>) => {
     if (appointment) {
       const date=new Date(values.date).setUTCHours(0,0,0,0)
-      onUpdate(new Date(date).toISOString())
+     await onUpdate(new Date(date).toISOString())
+     setSelectedDay(null)
+     form.reset({
+      day: '',
+      date: appointment?.date || '',
+     })
     }
   }
 
@@ -125,7 +130,7 @@ export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, a
             <Form {...form}>
               <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-6">
                 {appointment.state !== "completed" && (
-                  <div className="space-y-4">
+                  <div className="space-y-4 p-1">
                     <FormField
                       control={form.control}
                       name="day"
@@ -202,7 +207,7 @@ export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, a
                       {appointment.requestedTests.map((test) => (
                         <Card key={test.id}>
                           <CardHeader>
-                            <CardTitle>{test.testDetails.test.name}</CardTitle>
+                            <CardTitle className="text-lg">{test.testDetails.test.name}</CardTitle>
                           </CardHeader>
                           <CardContent>
                             <div className="flex flex-wrap gap-2">

@@ -60,15 +60,16 @@ export async function GET(request: NextRequest) {
         const searchParams = request.nextUrl.searchParams
         const id=searchParams.get('id');
         
-        const body = await request.formData();
+        const body = await request.json();
       
           try {
           const apiResponse = await fetch(`${SERVER_URL}/lab-Reservation/${id}`, {
             method: 'PATCH',
             headers: {
+            'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`,
             },
-            body: body,
+            body: JSON.stringify(body),
           });
       
           if (!apiResponse.ok) {

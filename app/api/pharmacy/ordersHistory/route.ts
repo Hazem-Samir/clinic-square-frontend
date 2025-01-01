@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
       const limit=parseInt(searchParams.get('limit')||'5',10);
      
       try {
-     const apiResponse = await fetch(`${SERVER_URL}/pharmacy/my-orders?page=${page}&limit=${limit}&populate=medicines.medicineId=name,patient&state=delivered`, {
+     const apiResponse = await fetch(`${SERVER_URL}/pharmacy/my-orders?page=${page}&limit=${limit}&populate=medicines.medicineId.medicine=name,patient&state=delivered`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }

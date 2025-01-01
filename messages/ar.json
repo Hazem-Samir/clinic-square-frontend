@@ -20,7 +20,8 @@
       "For_Question":"ابحث عن سؤال",
       "For_Lab":"ابحث عن معمل",
       "For_Pharmacy":"ابحث عن صيدلية",
-    "For_Test":"ابحث عن تحليل"
+    "For_Test":"ابحث عن تحليل",
+    "For_Medicine":"ابحث عن ادوية"
      
     },
     "ModeToogle":{
@@ -210,6 +211,56 @@
       "errors":{
         "password_8chars":"كلمة السر يجب انت تكون 8 احرف علي الاقل",
         "password_not_match":"كلمة السر غير متطابقة"
+      },
+      "Orders":{
+        "title":"الطلبات الجديدة",
+        "History_title":"الطلبات السابقة",
+        "No_Orders":"لا يوجد طلبات",
+        "View_Details":"التفاصيل",
+        "Details":{
+          "title":"تفاصيل الطلب",
+          "pay_method":"طريقة الدفع",
+          "cash":"كاش",
+          "visa":"فيزا",
+          "quantity":"الكمية",
+          "price":"السعر",
+          "no_products":"لا يوجد منتجات",
+          "product":"المنتج",
+          "total":"الاجمالي",
+          "submit":"استلام",
+          "cancel":"الغاء"
+        }
+      },
+      "Medicines":{
+        "title":"ادويتي",
+        "preps":"الكمية",
+        "none":"لا يوجد",
+    
+        "Add_Med":{
+          "title":"اضف دواء جديد",
+          "Edit_Med":"تعديل الدواء",
+          "Save":"حفظ التغييرات",
+          "Select_Med":"اختار دواء",
+          "Med_Name":"اسم الدواء",
+          "stock":"الكمية",
+          "submit":"اضف دواء",
+          "Cancel":"الغاء"
+        },
+        "Request_Med":{
+          "title":"اطلب دواء جديد",
+          "cost":"التكلفة",
+          "description":"لا تجد الدواء الذي تبحث عنه؟ اطلب دواء جديد",
+          "Med_Name":"اسم الدواء",
+          "upload_photo":"رفع صورة",
+          "submit":"ارسال طلب",
+          "Cancel":"الغاء"
+        },
+        "Delete_Med":{
+          "title":"تاكيد المسح",
+          "description":"هل انت متاكد من مسح {medicineName} هذه العملية لا يكمن الرجع منها",
+          "submit":"مسح",
+          "Cancel":"الغاء"
+        }
       }
      
     }

@@ -65,7 +65,7 @@ const ReservationsData=({reservations,currentPage,totalPages,handlePageChange,is
             </div>
           ))}
       </CardContent>
-      <Pagination currentPage={currentPage} totalPages={totalPages}  handlePageChange={handlePageChange} isLoading={isLoading}/>
+      <Pagination  currentPage={currentPage} totalPages={totalPages}  handlePageChange={handlePageChange} isLoading={isLoading}/>
 
          </>
   )
@@ -194,6 +194,7 @@ export default function ReservationsTable({reservations, currentPage, totalPages
           isLoading={isSearching} 
           reservations={reservations} 
           totalPages={totalPages} 
+          currentDate={currentDate}
         />
       ) : (
         <ReservationsData 
@@ -202,6 +203,8 @@ export default function ReservationsTable({reservations, currentPage, totalPages
           isLoading={isSearching} 
           reservations={SearchResult.reservations} 
           totalPages={SearchResult.totalPages} 
+          currentDate={currentDate}
+
         />
       )
     )}

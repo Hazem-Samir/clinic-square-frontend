@@ -213,7 +213,7 @@ export default function Patient({ role ,onBack}: IProps) {
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>
                   <FormControl>
-                    <Input disabled={isLoading} {...field} placeholder="Hazem Samir" />
+                    <Input disabled={isLoading} {...field} placeholder="Enter Your Name" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
       const endOfDay= searchParams.get('endOfDay')||new Date(LastHourOfToday).toISOString();
 
       try {
-        const apiResponse = await fetch(`${SERVER_URL}/doctor/My-Reservations?page=${page}&limit=${limit}&date[gte]=${startOfDay}&date[lte]=${endOfDay}&or[0][state]=pending&or[1][state]=consultaion&populate=patient`, {
+        const apiResponse = await fetch(`${SERVER_URL}/doctor/My-Reservations?page=${page}&limit=${limit}&date[gte]=${startOfDay}&date[lte]=${endOfDay}&or[0][state]=pending&or[1][state]=consultation&populate=patient`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
