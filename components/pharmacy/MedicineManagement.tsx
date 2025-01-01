@@ -29,7 +29,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { PlusCircle, Edit, Trash2, Send, ChevronLeft, ChevronRight } from 'lucide-react'
+import { PlusCircle, Edit, Trash2, Send } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import Spinner from '../Spinner'
@@ -207,7 +207,7 @@ const resetMedicineForm=()=>{
   const handleDeleteModal = () => {
     setIsDeleteOpen(!isDeleteOpen);
     setMedicineName('')
-    if(!isAddOpen){
+    if(!isDeleteOpen){
       resetMedicineForm();
     }
   }
@@ -283,7 +283,7 @@ const resetMedicineForm=()=>{
     }
     else{
 
-      router.push(`lab/my-medicines?page=${newPage}`);
+      router.push(`/lab/my-medicines?page=${newPage}`);
     }
   };
 
@@ -539,7 +539,7 @@ const resetMedicineForm=()=>{
                     <FormItem>
                       <FormLabel>{t(`Add_Med.Med_Name`)}</FormLabel>
                       <FormControl>
-                        <Input disabled {...field} value={medicineName} disabled={isLoading}  />
+                        <Input {...field} value={medicineName} disabled={true} />
                       </FormControl>
                     </FormItem>
                   )}
