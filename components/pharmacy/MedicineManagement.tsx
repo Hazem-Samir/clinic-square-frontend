@@ -127,7 +127,7 @@ return(
             </div>
           ))}
         </div>
-        <Pagination currentPage={currentPage} totalPages={totalPages}  handlePageChange={handlePageChange} />
+        <Pagination currentPage={currentPage} totalPages={totalPages}  handlePageChange={handlePageChange} isLoading={isLoading}/>
   
   </>
 )
@@ -588,29 +588,7 @@ const resetMedicineForm=()=>{
           </DialogContent>
         </Dialog>
    
-        {totalPages > 0 ?
-          <div className="flex justify-center items-center p-4 gap-4">
-            <Button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1 || isLoading}
-              size="icon"
-              variant="outline"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <span className="text-sm font-medium">
-              {currentPage} / {totalPages}
-            </span>
-            <Button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages || totalPages === 0 || isLoading}
-              size="icon"
-              variant="outline"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div> : null
-        }
+        
         <Toaster />
       </div>
     </>

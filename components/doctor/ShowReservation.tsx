@@ -48,7 +48,7 @@ interface IProps {
   consultaion?: consultaitonData | null;
 }
 
-export default function ShowReservation({  reservation, RID, currentPage, currentDate, consultaion }: IProps) {
+export default function ShowReservation({  reservation, RID, consultaion }: IProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -124,7 +124,7 @@ export default function ShowReservation({  reservation, RID, currentPage, curren
         setIsOpen(false)
         reset({
           diagnose: "",
-          medicine: [],
+          medicine: [], 
           requestedTests: [],
           consultationDate: null,
         })

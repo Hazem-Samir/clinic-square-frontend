@@ -10,7 +10,6 @@ import toast, { Toaster } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { CancelLabReservation, UpdateMyLabReservation } from '@/lib/patient/clientApi'
 import { shortName } from '@/lib/utils'
-import { FormDataHandler } from '@/utils/AuthHandlers'
 import { format } from "date-fns"
 import Pagination from '@/components/Pagination'
 

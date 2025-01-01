@@ -25,7 +25,7 @@ export const getReservationsHistory = async (limit:number,page: number) => {
     }
 
     
-  export const getReservations = async (limit:number,page: number, startOfDay: string,endOfDay:string,state:string) => {
+  export const getReservations = async (limit:number,page: number, startOfDay: string,endOfDay:string) => {
       const cookieStore = cookies()
       const token = JSON.parse (cookieStore.get('token').value)
       const queryParams = new URLSearchParams({

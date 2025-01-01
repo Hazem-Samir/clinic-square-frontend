@@ -6,7 +6,6 @@ import * as z from 'zod'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { File, FileText } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
