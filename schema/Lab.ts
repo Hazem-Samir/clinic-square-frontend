@@ -8,7 +8,10 @@ import { DaySchema } from "./Essentials";
       profilePic: z.custom<File>(ImageHandler, {
         message: 'Invalid image file. Must be JPEG, PNG, or GIF and less than 5MB.',
       }).optional(),
-      name: z.string().min(3, "Name is required"),
+      name: z.string().min(3, "Name is required").regex(
+        /^[a-zA-Z\s]*$/,
+        "Name can only contain letters and spaces"
+      ),
       email: z.string().email("Invalid email address"),
       phoneNumbers:z.array(z.string().regex(/^\d{11}$/, "Phone number must be 11 digits")).nonempty({
         message: "At least one phone is required",

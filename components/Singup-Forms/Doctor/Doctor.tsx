@@ -34,6 +34,7 @@ import { cn } from "@/lib/utils"
 import {  DoctorSchema, DoctorValue } from "@/schema/Doctor"
 import { Textarea } from "@/components/ui/textarea"
 import DoctorSchedule from "./DoctorSchedule"
+import { Doctors_Specializations } from "@/schema/Essentials"
 
 
 
@@ -431,8 +432,10 @@ export default function Doctor({ role ,onBack}: IProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="Dermatologist">Dermatologist</SelectItem>
-                    <SelectItem value="Psycholigist">Psycholigist</SelectItem>
+                       {Doctors_Specializations.map(spec => (
+                    
+                                        <SelectItem  key={spec} value={`${spec}`}>{spec}</SelectItem>
+                                        ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />

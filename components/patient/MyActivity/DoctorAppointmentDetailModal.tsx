@@ -175,7 +175,45 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                   </div>
                 </div>
 
-                {appointment.state !== "completed" && (
+                    {/* File Upload Fields */}
+                    <FormField
+                      control={form.control}
+                      name="files"
+                      render={() => (
+                        <FormItem className="grid  items-center ">
+                          <FormLabel className="text-md">Upload Files</FormLabel>
+                          <FormControl className="col-span-3">
+                            <Input
+                              type="file"
+                              accept=".pdf"
+                              multiple
+                              disabled={isLoading}
+                              onChange={(e) => {
+                                const newFiles = Array.from(e.target.files || []);
+                                newFiles.forEach((file) => append(file));
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage className="col-start-2 col-span-3" />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* Uploaded Files List */}
+                    {fields.map((field, index) => (
+                      <div key={field.id} className="grid grid-cols-4 items-center gap-4">
+                        <span className="col-start-2 col-span-2">{`File ${index+1}`}</span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => remove(index)}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    ))}
+                {(appointment.state !== "completed" && appointment.state !== "consultation" )&& (
                   <>
                     {/* Schedule Day Selection */}
                     <FormField
@@ -241,44 +279,6 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                       />
                     )}
 
-                    {/* File Upload Fields */}
-                    <FormField
-                      control={form.control}
-                      name="files"
-                      render={() => (
-                        <FormItem className="grid  items-center ">
-                          <FormLabel className="text-md">Upload Files</FormLabel>
-                          <FormControl className="col-span-3">
-                            <Input
-                              type="file"
-                              accept=".pdf"
-                              multiple
-                              disabled={isLoading}
-                              onChange={(e) => {
-                                const newFiles = Array.from(e.target.files || []);
-                                newFiles.forEach((file) => append(file));
-                              }}
-                            />
-                          </FormControl>
-                          <FormMessage className="col-start-2 col-span-3" />
-                        </FormItem>
-                      )}
-                    />
-
-                    {/* Uploaded Files List */}
-                    {fields.map((field, index) => (
-                      <div key={field.id} className="grid grid-cols-4 items-center gap-4">
-                        <span className="col-start-2 col-span-2">{`File ${index+1}`}</span>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => remove(index)}
-                        >
-                          Remove
-                        </Button>
-                      </div>
-                    ))}
                   </>
                 )}
               </div>

@@ -2,7 +2,10 @@ import { ImageHandler } from "@/utils/AuthHandlers"
 import * as z from "zod"
 
 export const DoctorProfileSchema = z.object({
-      name: z.string().min(2, "Name must be at least 2 characters"),
+      name: z.string().min(2, "Name must be at least 2 characters").regex(
+        /^[a-zA-Z\s]*$/,
+        "Name can only contain letters and spaces"
+      ),
       email: z.string().email("Invalid email address"),
       about: z.string().min(5,"About must be at least 5 characters"),
       gender: z.enum(["male", "female"]),
@@ -19,7 +22,10 @@ export const DoctorProfileSchema = z.object({
     })
     
     export const LabProfileSchema = z.object({
-      name: z.string().min(2, "Name must be at least 2 characters"),
+      name: z.string().min(2, "Name must be at least 2 characters").regex(
+        /^[a-zA-Z\s]*$/,
+        "Name can only contain letters and spaces"
+      ),
       email: z.string().email("Invalid email address"),
       phoneNumbers: z.array(z.string().min(1, "Phone number is required")),
       address: z.array(z.string().min(1, "Address is required")),
@@ -32,7 +38,10 @@ export const DoctorProfileSchema = z.object({
     })
 
     export const PatientProfileSchema = z.object({
-      name: z.string().min(2, "Name must be at least 2 characters"),
+      name: z.string().min(2, "Name must be at least 2 characters").regex(
+        /^[a-zA-Z\s]*$/,
+        "Name can only contain letters and spaces"
+      ),
       email: z.string().email("Invalid email address"),
       gender: z.enum(["male", "female"]),
       dateOfBirth: z.date(),

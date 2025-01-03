@@ -15,6 +15,7 @@ import useCartStore from '@/lib/cart'
 import {TestTubeDiagonal, ShoppingCart,Search } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Spinner from '@/components/Spinner'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 interface Lab {
   id: string
@@ -124,12 +125,28 @@ const LabsData=({Labs,currentPage,totalPages,handlePageChange,isLoading}:ILabDat
 
         :Tests.map((test) => (
           <Card key={test.id}>
-            <CardContent className="p-4 flex flex-col items-center space-y-2">
-              <div className="flex items-center space-x-1">
-                <TestTubeDiagonal size={24} />
-                <h3 className="text-lg font-semibold">{test.test.name}</h3>
+                <CardContent className="p-4 flex-1">
+              <div className="flex items-center justify-center space-x-2 mb-3 h-10">
+                <TestTubeDiagonal className="h-5 w-5 flex-shrink-0 mt-1" />
+                <h3 className="text-lg font-semibold leading-tight line-clamp-2">
+                  {test.test.name}
+                </h3>
               </div>
-              <p className="text-2xl font-bold">{test.cost} EGP</p>
+            
+                <div className="space-y-2">
+                  <h4 className="font-medium">Preparations:</h4>
+                  <ScrollArea className="h-10 w-full pr-4">
+                    <ul className="list-disc list-inside text-sm space-y-1">
+                      {test.preparations.length>0? test.preparations.map((prep, index) => (
+                        <li key={index} className="text-muted-foreground">
+                          {prep}
+                        </li>
+                      )):<li>None</li>}
+                    </ul>
+                  </ScrollArea>
+                </div>
+                <p className="text-2xl text-center font-bold mb-3">{test.cost} EGP</p>
+            
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
               <Button className="w-full" onClick={() => handleAddToCart(test.id)}>

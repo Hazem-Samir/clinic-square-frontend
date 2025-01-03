@@ -14,6 +14,7 @@ interface Medicine {
     id: string;
     name: string;
     cost: string;
+    photo: string;
   }
   preparations: string[];
   cost: string;
@@ -78,7 +79,7 @@ export default function PharmacyDetails({Pharmacy, Medicines}: IProps) {
                 alt={Pharmacy.name}
                 priority
                 fill
-                style={{ objectFit: 'cover' }}
+                style={{ objectFit: 'contain' }}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="rounded-lg"
               />
@@ -156,6 +157,15 @@ export default function PharmacyDetails({Pharmacy, Medicines}: IProps) {
         {Medicines.map((medicine) => (
           <Card key={medicine.id}>
             <CardContent className="p-4 flex flex-col items-center space-y-2">
+            <div className="relative w-full aspect-square">
+                <Image 
+                  src={medicine.medicine.photo} 
+                  alt={medicine.medicine.name} 
+                  fill
+            className="rounded-lg object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"y
+                />
+              </div>
               <div className="flex items-center space-x-1">
                 <medicineTubeDiagonal size={24} />
                 <h3 className="text-lg font-semibold">{medicine.medicine.name}</h3>
@@ -163,30 +173,7 @@ export default function PharmacyDetails({Pharmacy, Medicines}: IProps) {
               <p className="text-2xl font-bold">{medicine.medicine.cost} EGP</p>
             </CardContent>
             <CardFooter>
-              {/* {0> 0 ? (
-                <div className="flex items-center justify-between w-full">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleUpdateQuantity(medicine, false)}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <span className="mx-2 font-semibold">{getItemQuantity(medicine.id)}</span>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => updateMedicineQuantity(medicine.id, medicine)}
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-              ) : (
-                <Button className="w-full" onClick={() =>{ handleAddToCart(medicine.id); getItemQuantity(medicine.id)}}>
-                  <ShoppingCart className="w-4 h-4 mr-2" />
-                  Add to Cart
-                </Button>
-              )} */}
+            
          
                 <Button className="w-full" onClick={() =>{ handleAddToCart(medicine.id);}}>
                   <ShoppingCart className="w-4 h-4 mr-2" />

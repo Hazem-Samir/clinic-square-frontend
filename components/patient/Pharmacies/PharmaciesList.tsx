@@ -16,6 +16,8 @@ import useCartStore from '@/lib/cart'
 import { ShoppingCart } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Spinner from '@/components/Spinner'
+import Image from 'next/image'
+
 interface Pharmacy {
   id: string
   name: string
@@ -28,6 +30,7 @@ interface Medicine {
   medicine:{
     id: string;
     name: string;
+    photo: string;
     cost: string;
   }
   preparations: string[];
@@ -126,7 +129,15 @@ const PharmaciesData=({Pharmacies,currentPage,totalPages,handlePageChange,isLoad
         {Medicines.map((medicine) => (
           <Card key={medicine.id}>
             <CardContent className="p-4 flex flex-col items-center space-y-2">
-
+            <div className="relative w-full aspect-square">
+                <Image 
+                  src={medicine.medicine.photo} 
+                  alt={medicine.medicine.name} 
+                  fill
+            className="rounded-lg object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"y
+                />
+              </div>
               <div className="flex items-center space-x-1">
                 <medicineTubeDiagonal size={24} />
                 <h3 className="text-lg font-semibold">{medicine.medicine.name}</h3>

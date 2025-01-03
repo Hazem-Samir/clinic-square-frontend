@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import { UseModel } from '@/lib/patient/clientApi'
+import { Doctors_Specializations } from '@/schema/Essentials'
 
 interface SearchSectionProps {
   onAnalyzing: (analyzing: boolean) => void
@@ -106,11 +107,10 @@ export default function SearchSection({ onAnalyzing }: SearchSectionProps) {
                     <SelectValue placeholder="Select specialization" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="cardiology">Cardiology</SelectItem>
-                    <SelectItem value="dermatology">Dermatology</SelectItem>
-                    <SelectItem value="neurology">Neurology</SelectItem>
-                    <SelectItem value="orthopedics">Orthopedics</SelectItem>
-                    <SelectItem value="pediatrics">Pediatrics</SelectItem>
+                       {Doctors_Specializations.map(spec => (
+                    
+                                        <SelectItem  key={spec} value={`${spec}`}>{spec}</SelectItem>
+                                        ))}
                   </SelectContent>
                 </Select>
                 <Button type="submit" size="sm" className="w-full">

@@ -186,7 +186,6 @@ export default function ShowReservation({  reservation, RID, consultaion }: IPro
     })
     setShowSetConsultationDialog(false)
   }
-
   return (
     <>
       <style jsx global>{`
@@ -231,12 +230,12 @@ export default function ShowReservation({  reservation, RID, consultaion }: IPro
                   <h3 className="mb-2 text-sm sm:text-lg font-semibold">{t(`Details.FSBP`)}</h3>
                   <div className="flex flex-wrap gap-2">
             
-                    {reservation.report.results.length>0? reservation.report.results.map((index,result)=>{
+                    {reservation.report.results.length>0? reservation.report.results.map((result,index)=>
  <Link href={result} index={index} className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground text-xs sm:text-sm h-9 rounded-md px-3" >
- <File className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+ <File className="h-3 w-3 sm:h-4 sm:w-4 ltr:mr-1 rtl:ml-1 sm:mr-2" />
  {`${t(`Details.View_File`)} ${index}`}
 </Link>
-                    }):t(`Details.No_Files`)}
+                    ):t(`Details.No_Files`)}
                   </div>
                 </div>
                 <div>
