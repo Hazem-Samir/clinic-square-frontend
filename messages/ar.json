@@ -7,9 +7,9 @@
     "Dashboard":{
       "Reservations":"الحجوزات",
       "REM":"الارباح كل شهر",
-      "in":"في {thisYear}",
+      "in":"في",
       "Total_Revenue":"مجموع الارباح",
-      "Jan-Dec":"يناير - ديسمبر {thisYear}",
+      "Jan-Dec":"يناير - ديسمبر",
       "revenue":"الربح",
       "reservation":"عدد الحجوزات",
       "Orders":"الطلبات",

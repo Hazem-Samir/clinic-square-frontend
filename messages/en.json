@@ -26,9 +26,9 @@
   "Dashboard":{
           "Reservations":"Reservations",
           "REM":"Revenue Every Month",
-          "in":"in {thisYear}",
+          "in":"in",
           "Total_Revenue":"Total Revnue",
-          "Jan-Dec":"January - December {thisYear}",
+          "Jan-Dec":"January - December",
           "revenue":"revenue",
           "reservation":"reservations",
           "Orders":"Orders",

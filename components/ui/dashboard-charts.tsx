@@ -27,12 +27,12 @@ interface IProps{
   titles:string[]
   descriptions:string[]
   role:"Doctor" | "Lab" | "Pharmacie" | "Patient" 
+  year:number
 }
 const colors={Doctor:"hsl(var(--chart-1))",Lab:"hsl(var(--chart-2))",Pharmacie:"hsl(var(--chart-3))",Patient:"hsl(var(--chart-4))"}
-export function DashboardCharts({chartsData,titles,descriptions,role}:IProps) {
+export function DashboardCharts({year,chartsData,titles,descriptions,role}:IProps) {
   const t = useTranslations('Dashboard')
   const tcommon = useTranslations('common')
-  const thisYear=new Date().getFullYear()
 
   const chartConfig = {
     revenue: {
@@ -52,7 +52,7 @@ export function DashboardCharts({chartsData,titles,descriptions,role}:IProps) {
     <Card className="col-span-2  row-span-0">
   <CardHeader>
     <CardTitle>{t(`${titles[0]}`)}</CardTitle>
-    <CardDescription>{t(`${descriptions[0]}`,{thisYear})}</CardDescription>
+    <CardDescription>{t(`${descriptions[0]}`,{year})}</CardDescription>
   </CardHeader>
   <CardContent >
     <ChartContainer config={chartConfig}>
@@ -97,7 +97,7 @@ export function DashboardCharts({chartsData,titles,descriptions,role}:IProps) {
     <Card  >
       <CardHeader>
         <CardTitle>{t(`${titles[1]}`)}</CardTitle>
-        <CardDescription>{t(`${descriptions[1]}`,{thisYear})}</CardDescription>
+        <CardDescription>{t(`${descriptions[1]}`,{year})}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -198,7 +198,7 @@ export function DashboardCharts({chartsData,titles,descriptions,role}:IProps) {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          {t(`${descriptions[2][1]}`,{thisYear})}
+                          {tcommon(`EGP`)}
                         </tspan>
                       </text>
                     )
