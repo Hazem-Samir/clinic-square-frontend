@@ -4,7 +4,6 @@ import ProtectedRoute from "@/components/ProtectedRoute"
 import { Skeleton } from "@/components/ui/skeleton"
 import BlurFade from '@/components/ui/blur-fade'
 import ReservationsTable from '@/components/doctor/ReservationsTable'
-import Dashboard from '@/components/doctor/Dashboard'
 import { getReservations } from '@/lib/doctor/api'
 
 
