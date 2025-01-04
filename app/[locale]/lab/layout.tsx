@@ -5,10 +5,11 @@ import { setRequestLocale } from 'next-intl/server'
 
 
 const navItems = [
-  { href: `/lab`, icon: 'Home', label: "Home" },
-  { href: `/lab/reservations-history`, icon: 'History', label: "Reservations History" },
-  { href: `/lab/my-schedule`, icon: 'CalendarCheck', label: "My Schedule" },
-  { href: `/lab/my-tests`, icon: 'FlaskConical', label: "My Tests" },
+  { href: `lab`, icon: 'Home', label: "Home" },
+  { href: `lab/reservations-history`, icon: 'History', label: "Reservations History" },
+  { href: `lab/my-schedule`, icon: 'CalendarCheck', label: "My Schedule" },
+  { href: `lab/my-tests`, icon: 'FlaskConical', label: "My Tests" },
+  { href: 'lab/analytics', icon: 'ChartNoAxesCombined', label: "Analytics" },
 
 ]
 

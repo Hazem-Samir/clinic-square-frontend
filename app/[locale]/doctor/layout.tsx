@@ -10,6 +10,7 @@ const navItems = [
   { href: 'doctor/reservations-history', icon: 'History', label: "Reservations History" },
   { href: 'doctor/my-schedule', icon: 'CalendarCheck', label: "My Schedule" },
   { href: 'doctor/medical-questions', icon: 'MessageCircleQuestion', label: "Medical Questions" },
+  { href: 'doctor/analytics', icon: 'ChartNoAxesCombined', label: "Analytics" },
 ]
 
 export default function DoctorLayout({

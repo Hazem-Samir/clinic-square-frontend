@@ -24,7 +24,30 @@ export const getOrdersHistory = async (limit:number,page: number) => {
       return res;
     }
 
+    export const getOrdersStat = async (limit:number,page:number) => {
+      const cookieStore = cookies()
+      const token = JSON.parse (cookieStore.get('token').value)
+      const queryParams = new URLSearchParams({
+        limit: limit.toString(),
+        page: page.toString(),
+        
+      }).toString();
+      const response = await fetch(`${FRONT_URL}/api/pharmacy/orders/stat?${queryParams}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+          cache:"reload"
+          
+      });
     
+      if (!response.ok) {
+        throw new Error('Failed to fetch reservations');
+      }
+    
+      const res = await response.json();
+      return res;
+    } 
   export const getOrders = async (limit:number,page:number,state:string) => {
       const cookieStore = cookies()
       const token = JSON.parse (cookieStore.get('token').value)

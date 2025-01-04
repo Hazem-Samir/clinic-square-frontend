@@ -4,6 +4,17 @@
     "EGP":"جنيه مصري"
 
     },
+    "Dashboard":{
+      "Reservations":"الحجوزات",
+      "REM":"الارباح كل شهر",
+      "in":"في {thisYear}",
+      "Total_Revenue":"مجموع الارباح",
+      "Jan-Dec":"يناير - ديسمبر {thisYear}",
+      "revenue":"الربح",
+      "reservation":"عدد الحجوزات",
+      "Orders":"الطلبات",
+      "order":"عدد الطلبات"
+    },
     "nav":{
       "Home":"الصفحة الرئيسية",
       "Reservations History":"الحجوزات السابقة",
@@ -11,6 +22,7 @@
       "My Tests":"تحاليلي",
       "Orders History":"الطلبات السابقة",
       "My Medicines":"ادويتي",
+      "Analytics":"التحليلات",
   
       "Medical Questions":"اسئلة طبية"
     },
@@ -40,6 +52,7 @@
         "Questions":{
           "title":"اسئلة المرضي"
         },
+    
       "Question_Details":{
         "PAge":"العمر",
         "PGender":"الجنس",

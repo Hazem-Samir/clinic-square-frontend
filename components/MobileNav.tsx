@@ -7,7 +7,7 @@ import {
   History,
   CalendarCheck,
   Hospital,
-  MessageCircleQuestion,FlaskConical,Menu,BriefcaseMedical
+  MessageCircleQuestion,FlaskConical,Menu,BriefcaseMedical,ChartNoAxesCombined
 } from "lucide-react"
 import { useSelectedLayoutSegment } from 'next/navigation'
 import Link from "next/link"
@@ -34,6 +34,7 @@ const iconMap = {
   MessageCircleQuestion,
   FlaskConical,
   BriefcaseMedical,
+  ChartNoAxesCombined
 };
 
 const MobileNav = ({navItems,role}:IProps) => {

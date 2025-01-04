@@ -4,9 +4,11 @@ import SideNavBar from "@/components/SideNavBar"
 import BlurFade from '@/components/ui/blur-fade'
 
 const navItems = [
-  { href: `/pharmacy`, icon: 'Home', label: "Home" },
-  { href: `/pharmacy/orders-history`, icon: 'History', label: "Orders History" },
-  { href: `/pharmacy/my-medicines`, icon: 'BriefcaseMedical', label: "My Medicines" },
+  { href: `pharmacy`, icon: 'Home', label: "Home" },
+  { href: `pharmacy/orders-history`, icon: 'History', label: "Orders History" },
+  { href: `pharmacy/my-medicines`, icon: 'BriefcaseMedical', label: "My Medicines" },
+  { href: 'pharmacy/analytics', icon: 'ChartNoAxesCombined', label: "Analytics" },
+
 ]
 
 export function generateStaticParams() {

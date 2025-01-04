@@ -10,7 +10,8 @@
     "My Tests":"My Tests",
     "Orders History":"Orders History",
     "My Medicines":"My Medicines",
-    "Medical Questions":"Medical Questions"
+    "Medical Questions":"Medical Questions",
+    "Analytics":"Analytics"
   },
   "search":{
     "For_Patient":"Search For Patient",
@@ -22,6 +23,18 @@
     "For_Medicine":"Search For Medicine"
     
   },
+  "Dashboard":{
+          "Reservations":"Reservations",
+          "REM":"Revenue Every Month",
+          "in":"in {thisYear}",
+          "Total_Revenue":"Total Revnue",
+          "Jan-Dec":"January - December {thisYear}",
+          "revenue":"revenue",
+          "reservation":"reservations",
+          "Orders":"Orders",
+          "order":"orders"
+        },
+        
   "ModeToogle":{
     "title":"Toggle theme",
     "ٍSystem":"System",
@@ -38,6 +51,7 @@
         "Questions":{
           "title":"Patient Questions"
         },
+        
        "Question_Details":{
         "PAge":"Age",
         "PGender":"Gender",
