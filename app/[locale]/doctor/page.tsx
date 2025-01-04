@@ -7,28 +7,7 @@ import ReservationsTable from '@/components/doctor/ReservationsTable'
 import Dashboard from '@/components/doctor/Dashboard'
 import { getReservations } from '@/lib/doctor/api'
 
-async function DashboardData() {
-  const today = new Date()
-  const firstDayOfPreviousMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1)
-  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
-  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999)
-  const lastDayOfPreviousMonth = new Date(firstDayOfMonth.getTime() - 1)
-  const startOfDay = new Date(today.setHours(0, 0, 0, 0))
-  const endOfDay = new Date(today.setHours(23, 59, 59, 999))
 
-  const [monthResults, todayResults, prevMonthResults] = await Promise.all([
-    getReservations(10000000, 1, firstDayOfMonth.toISOString(), lastDayOfMonth.toISOString(),"completed"),
-    getReservations(10000000, 1, startOfDay.toISOString(), endOfDay.toISOString(),"pending"),
-    getReservations(10000000, 1, firstDayOfPreviousMonth.toISOString(), lastDayOfPreviousMonth.toISOString(),"completed")
-  ])
-  return (
-    <Dashboard 
-      monthResults={monthResults.data.results}
-      todayResults={todayResults.data.results}
-      prevMonthResults={prevMonthResults.data.results}
-    />
-  )
-}
 
 async function ReservationsData({ page, date }: { page: number, date: string }) {
   const startOfDay = new Date(date)
@@ -57,9 +36,7 @@ export default function DoctorDashboardPage({ searchParams }: { searchParams: { 
     <ProtectedRoute allowedRoles={['doctor']}>  
       <BlurFade delay={0} inView>
         <div className="flex flex-1 flex-col gap-2 p-2 sm:gap-4 sm:p-4 md:gap-8 md:p-8">
-          <Suspense fallback={<Skeleton className="w-full h-[200px]" />}>
-            <DashboardData />
-          </Suspense>
+        
           <Suspense fallback={<Skeleton className="w-full h-[400px]" />}>
             <ReservationsData page={page} date={date} />
           </Suspense>
