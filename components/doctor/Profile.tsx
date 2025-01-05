@@ -50,6 +50,7 @@ import { Label } from "../ui/label"
 import { getAge } from "@/utils/utils"
 import { removeUser } from "@/lib/auth"
 import { useTranslations } from 'next-intl'
+import { Doctors_Specializations } from "@/schema/Essentials"
 
 interface Iimages {
   profilePic: File | string | null;
@@ -474,8 +475,10 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="Dermatologist">Dermatologist</SelectItem>
-                          <SelectItem value="Psychologist">Psychologist</SelectItem>
+                          {Doctors_Specializations.map(spec => (
+                                              
+                                                                  <SelectItem  key={spec} value={`${spec}`}>{spec}</SelectItem>
+                                                                  ))}
                         </SelectContent>
                       </Select>
                       <FormMessage translate={'errors'} />

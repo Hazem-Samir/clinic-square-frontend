@@ -227,7 +227,7 @@ export default function Doctor({ role ,onBack}: IProps) {
             name="about"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>About ME</FormLabel>
+                <FormLabel>About Me</FormLabel>
                 <FormControl>
                 <Textarea
                 aria-describedby="About field"
