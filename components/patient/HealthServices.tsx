@@ -18,10 +18,10 @@ export default function HealthServices() {
           <Link key={index} href={service.href} className="block group">
             <Card className="transition-shadow hover:shadow-md rounded-2xl h-full bg-card">
               <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full">
-                <div className="text-primary group-hover:text-primary-dark transition-colors">
+                <div className="text-teal-primary group-hover:text-teal-400 transition-colors">
                   {service.icon}
                 </div>
-                <h3 className="mt-4 text-lg font-semibold group-hover:text-primary transition-colors">
+                <h3 className="mt-4 text-lg font-semibold group-hover:text-teal-400 transition-colors">
                   {service.title}
                 </h3>
               </CardContent>
