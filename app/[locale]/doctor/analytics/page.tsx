@@ -31,7 +31,6 @@ const Revenues = monthNames.map((key, index) => {
 
 const TotalRevnue=stats.data.reduce((sum,obj)=>obj._id.year==parseInt(year)? sum+ obj.count:0,0);
 
-
 const Reservations = monthNames.map((key, index) => {
   const found = stats.data.find(st => Number(st._id.month) === index + 1&&st._id.year==parseInt(year));
   return {

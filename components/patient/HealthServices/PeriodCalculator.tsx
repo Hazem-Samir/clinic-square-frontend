@@ -9,6 +9,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { CalendarIcon } from 'lucide-react'
 import { format, addDays } from "date-fns"
 import { Calendar } from "@/components/ui/calendar"
+import PeriodCal from "@/public/PeriodCal.png"
+
 import {
   Popover,
   PopoverContent,
@@ -34,13 +36,16 @@ export default function PeriodCalculator() {
       <Card className="max-w-2xl mx-auto">
         <CardContent className="p-6 md:p-8">
           <div className="mb-8">
+            <div className="flex items-center justify-center">
+
             <Image
-              src="/placeholder.svg?height=200&width=400"
+              src={PeriodCal}
               alt="Period Calculator"
-              width={400}
+              width={800}
               height={200}
-              className="w-full h-auto rounded-lg mb-4"
-            />
+              className="w-2/3 h-auto rounded-lg mb-4"
+              />
+              </div>
             <h1 className="text-3xl font-bold mb-2 text-center">Period Calculator</h1>
             <p className="text-center text-gray-600">
               Track your menstrual cycle and predict your next period and ovulation dates

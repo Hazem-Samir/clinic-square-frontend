@@ -59,7 +59,7 @@ const DoctorsData=({Doctors,currentPage,totalPages,handlePageChange,isLoading}:I
                 />
               </div>
               <div className="p-4">
-                <h2 className="text-xl font-semibold">{doctor.name}</h2>
+                <h2 className="text-xl font-semibold">Dr. {doctor.name}</h2>
                 <p className="text-sm text-gray-500">{doctor.specialization}</p>
                 <div className="flex items-center mt-2">
                   <Star className="w-4 h-4 text-yellow-400 fill-current" />

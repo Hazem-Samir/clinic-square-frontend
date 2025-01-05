@@ -17,6 +17,7 @@ import { getUser } from '@/lib/auth'
 import LanguageSwitcherIcon from '../LanguageSwitcherIcon'
 import { logout } from '@/actions/logout'
 import { CartIcon } from '../CartIcon'
+import Logo from "@/public/Logo.png"
 
 export default function NavBar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -37,7 +38,17 @@ export default function NavBar() {
 
   return (
     <nav className="flex items-center justify-between p-4 bg-background shadow-sm">
-      <div className="text-2xl font-bold text-primary">Clinic Square</div>
+      <div>
+      <Link href="/patient" className="flex items-center">
+        <Image
+          src={Logo}
+          alt="Clinic Square Logo"
+          width={150}
+          height={40}
+          className="h-12 w-auto"
+        />
+      </Link>
+    </div>
       <div className="flex items-center">
         {/* Desktop menu */}
         <div className="hidden md:flex items-center space-x-4">
@@ -45,7 +56,7 @@ export default function NavBar() {
             <Link
               key={item.href}
               href={item.href}
-              className="text-foreground hover:text-primary transition-colors"
+              className="text-foreground hover:text-teal-300 transition-colors"
             >
               {item.label}
             </Link>

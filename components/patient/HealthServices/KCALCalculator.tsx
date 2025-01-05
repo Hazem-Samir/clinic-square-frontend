@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Card, CardContent } from "@/components/ui/card"
 import { Plus, Minus } from 'lucide-react'
+import CalorieCal from "@/public/CalorieCal.png"
 
 export default function KCALCalculator() {
   const [weight, setWeight] = useState(70)
@@ -38,13 +39,16 @@ export default function KCALCalculator() {
       <Card className="max-w-2xl mx-auto">
         <CardContent className="p-6 md:p-8">
           <div className="mb-8">
+          <div className="flex items-center justify-center">
+
             <Image
-              src="/placeholder.svg?height=200&width=400"
+              src={CalorieCal}
               alt="Calorie Calculator"
-              width={400}
-              height={200}
-              className="w-full h-auto rounded-lg mb-4"
+              width={800}
+              height={100}
+              className="w-2/3 h-auto rounded-lg mb-4"
             />
+            </div>
             <h1 className="text-3xl font-bold mb-2 text-center">Calorie Calculator</h1>
             <div className="absolute top-4 right-4">
               <div className="w-3 h-3 rounded-full bg-teal-500" />

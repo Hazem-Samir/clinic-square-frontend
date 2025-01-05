@@ -3,13 +3,14 @@ import * as z from "zod"
 
 
 
-export const EnReservationschema = z.object({
+export const EndReservationschema = z.object({
       diagnose: z.string().min(3, "Diagnosis is required"),
       medicine: z.array(z.object({
             name: z.string().min(3, "Medication name is required"),
             dose: z.string().min(2, "Dose is required"),
           })),
           requestedTests: z.array(z.string().min(1, "Test name is required")),
+          results: z.array(z.string()).optional(),
           consultationDate: z.string().min(1, "Consultation date is required").refine((value:string) => {
             const inputDate = new Date(value);
             const today = new Date();
@@ -25,6 +26,7 @@ export const EnReservationschema = z.object({
     })
     
 
+    
 
     
     // Export the schema for use in your form

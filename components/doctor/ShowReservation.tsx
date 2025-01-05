@@ -22,7 +22,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
-import { EnReservationschema, EndReservationValues } from "@/schema/DoctorReservation"
+import { EndReservationschema, EndReservationValues } from "@/schema/DoctorReservation"
 import Spinner from "../Spinner"
 import toast, { Toaster } from 'react-hot-toast';
 import { getToken } from "@/lib/auth"
@@ -37,6 +37,7 @@ interface consultaitonData {
   diagnose: string;
   medicine: { name: string, dose: string, id: string }[];
   requestedTests: string[];
+  results: string[];
 }
 
 interface IProps {
@@ -57,11 +58,12 @@ export default function ShowReservation({  reservation, RID, consultaion }: IPro
   const t = useTranslations('Reservations')
 
   const { register, control, handleSubmit, formState: { errors }, reset, getValues } = useForm<EndReservationValues>({
-    resolver: zodResolver(EnReservationschema),
+    resolver: zodResolver(EndReservationschema),
     defaultValues: {
       diagnose: consultaion ? consultaion.diagnose : "",
       medicine: consultaion ? consultaion.medicine : [],
       requestedTests: consultaion ? consultaion.requestedTests : [],
+      results:consultaion?consultaion.results:[],
     },
   })
 
@@ -89,6 +91,7 @@ export default function ShowReservation({  reservation, RID, consultaion }: IPro
       diagnose: consultaion ? consultaion.diagnose : "",
       medicine: consultaion ? consultaion.medicine : [],
       requestedTests: consultaion ? consultaion.requestedTests : [],
+      results:consultaion?consultaion.results:[],
       consultationDate: null,
     })
     setIsOpen(!isOpen)
@@ -105,8 +108,8 @@ export default function ShowReservation({  reservation, RID, consultaion }: IPro
   const onSubmitConsultationDate: SubmitHandler<EndReservationValues> = async (data: EndReservationValues) => {
     setIsLoading(true);
     const { consultationDate, ...rest } = data;
+    console.log({...rest})
     const consultaion = { report: { ...rest }, date: new Date(new Date(consultationDate).setUTCHours(0,0,0,0)).toISOString(), state: 'consultation' };
-    console.log("aaaaa")
     const body = FormDataHandler(consultaion);
     const token = getToken();
     try {
@@ -126,6 +129,7 @@ export default function ShowReservation({  reservation, RID, consultaion }: IPro
           diagnose: "",
           medicine: [], 
           requestedTests: [],
+          results: [],
           consultationDate: null,
         })
         router.refresh()
@@ -163,6 +167,7 @@ export default function ShowReservation({  reservation, RID, consultaion }: IPro
         reset({
           diagnose: "",
           medicine: [],
+          results: [],
           requestedTests: [],
           consultationDate: null,
         })

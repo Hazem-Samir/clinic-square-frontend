@@ -1,12 +1,13 @@
 "use client"
 
 import { MapPin, Phone, ShoppingCart } from 'lucide-react'
-
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import Image from 'next/image'
 import { toast, Toaster } from 'react-hot-toast'
 import useCartStore from '@/lib/cart'
+import Spinner from '@/components/Spinner'
 
 interface Medicine {
   id: string;
@@ -49,9 +50,13 @@ interface IProps {
 
 export default function PharmacyDetails({Pharmacy, Medicines}: IProps) {
   const {  addToCart } = useCartStore();
+  const [medicineID,setMedicineID] = useState<string|null>(null)
 
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleAddToCart = async (medicineId: string) => {
+    setIsLoading(true)
+    
     const res = await addToCart({ medicineId });
     if (!res.success) {
       toast.error("Something went wrong! Try Again Later", {
@@ -64,6 +69,7 @@ export default function PharmacyDetails({Pharmacy, Medicines}: IProps) {
         position: 'bottom-center',
       });
     }
+    setIsLoading(false)
   }
 
 
@@ -175,9 +181,14 @@ export default function PharmacyDetails({Pharmacy, Medicines}: IProps) {
             <CardFooter>
             
          
-                <Button className="w-full" onClick={() =>{ handleAddToCart(medicine.id);}}>
+                <Button className="w-full" disabled={isLoading} onClick={() =>{
+                  setMedicineID(medicine.id); handleAddToCart(medicine.id);}}>
+                 {isLoading&&medicine.id===medicineID?<Spinner />:
+                 (<>
                   <ShoppingCart className="w-4 h-4 mr-2" />
                   Add to Cart
+                  </>
+                  )}
                 </Button>
               
             </CardFooter>

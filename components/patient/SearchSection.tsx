@@ -87,10 +87,10 @@ export default function SearchSection({ onAnalyzing }: SearchSectionProps) {
         <CardContent className="p-4 sm:p-6 md:p-8">
           <Tabs defaultValue="name" className="w-full">
             <TabsList className="grid w-full grid-cols-1 md:grid-cols-2 mb-8 md:mb-4 bg-transparent md:space-y-0 space-y-1 md:bg-muted p-0">
-              <TabsTrigger value="name" className="text-xs sm:text-sm md:text-base lg:text-lg h-full">
+              <TabsTrigger value="name" className="text-xs sm:text-sm md:text-base lg:text-lg h-full   data-[state=active]:bg-teal-400 data-[state=active]:text-primary-foreground">
                 Search for Doctor
               </TabsTrigger>
-              <TabsTrigger value="symptoms" className="text-xs sm:text-sm md:text-base lg:text-lg h-full">
+              <TabsTrigger value="symptoms" className="text-xs sm:text-sm md:text-base lg:text-lg h-full data-[state=active]:bg-teal-400 data-[state=active]:text-primary-foreground">
                 Search by Symptoms
               </TabsTrigger>
             </TabsList>
@@ -155,7 +155,7 @@ export default function SearchSection({ onAnalyzing }: SearchSectionProps) {
                     variant="outline"
                     className={`justify-center px-2 sm:px-4 py-1 sm:py-2 h-auto text-xs sm:text-sm md:text-base font-medium rounded-full ${
                       selectedSymptoms.includes(symptom) 
-                        ? 'bg-primary text-primary-foreground' 
+                        ? 'bg-teal-400 text-primary-foreground' 
                         : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                     }`}
                     onClick={() => toggleSymptom(symptom)}
