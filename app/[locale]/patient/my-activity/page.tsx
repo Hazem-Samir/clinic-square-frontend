@@ -9,7 +9,7 @@ import PharmacyOrders from '@/components/patient/MyActivity/PharmacyOrders'
 type activeTabOptions= "doctors"|"labs"|"pharmacies";
 
 async function MyDoctorsResrvations({ page }: { page: number }) {
-  const {data:doctors} = await getMyDoctorsResrvations(10,page);
+  const {data:doctors} = await getMyDoctorsResrvations(5,page);
   console.log("docotrs",doctors.data)
   return (
    <DoctorAppointments
@@ -21,7 +21,7 @@ async function MyDoctorsResrvations({ page }: { page: number }) {
 
 
 async function MyLabsResrvations({ page }: { page: number }) {
-  const {data:labs} = await getMyLabsResrvations(10,page);
+  const {data:labs} = await getMyLabsResrvations(5,page);
   return (
    <LabAppointments
    currentPage={page}
@@ -32,7 +32,7 @@ async function MyLabsResrvations({ page }: { page: number }) {
 
 
 async function MyPharmaciesResrvations({ page }: { page: number }) {
-  const {data:pharmacies} = await getMyPharmaciesResrvations(10,page);
+  const {data:pharmacies} = await getMyPharmaciesResrvations(5,page);
   return (
    <PharmacyOrders
    currentPage={page}
@@ -59,9 +59,9 @@ export default function MyActivityPage({ searchParams }: {searchParams:{doctorsP
       <h1 className="text-2xl font-bold mb-4">My Medical Dashboard</h1>
       <Tabs defaultValue={activeTab}>
         <TabsList className="grid w-full grid-cols-1 md:grid-cols-3 md:mb-5 mb-24 md:space-y-0 space-y-2 md:bg-muted bg-transparent ">
-          <TabsTrigger value="doctors">Doctor Appointments</TabsTrigger>
-          <TabsTrigger value="labs">Lab Appointments</TabsTrigger>
-          <TabsTrigger value="pharmacies">Pharmacy Orders</TabsTrigger>
+          <TabsTrigger className=" data-[state=active]:bg-teal-400 data-[state=active]:text-primary-foreground" value="doctors">Doctor Appointments</TabsTrigger>
+          <TabsTrigger className=" data-[state=active]:bg-teal-400 data-[state=active]:text-primary-foreground" value="labs">Lab Appointments</TabsTrigger>
+          <TabsTrigger  className=" data-[state=active]:bg-teal-400 data-[state=active]:text-primary-foreground" value="pharmacies">Pharmacy Orders</TabsTrigger>
         </TabsList>
         <TabsContent value="doctors">
       <MyDoctorsResrvations page={doctorsPage} />

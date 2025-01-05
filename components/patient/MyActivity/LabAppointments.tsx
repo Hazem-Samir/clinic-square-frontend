@@ -154,12 +154,15 @@ export default function LabAppointments({appointments,currentPage,totalPages}:IP
           <CardFooter className="flex flex-col sm:flex-row justify-start gap-2">
         
             <Button onClick={() => handleShowDetails(appointment)} className="w-full sm:w-auto">Details</Button>
-            <Button variant="outline" onClick={() => handleCancel(appointment)} className="w-full sm:w-auto">Cancel</Button>
+            {appointment.state!=="completed"?
+            <Button variant="outline" onClick={() => handleCancel(appointment)} className="w-full sm:w-auto">Cancel</Button>:null
+            }
             {/* <Button variant="outline" onClick={() => handleCancel(appointment)} className="w-full sm:w-auto">Cancel</Button> */}
           </CardFooter>
           
         </Card>
       ))}
+      
       <CancelModal 
         isOpen={cancelModalOpen} 
         onClose={() => setCancelModalOpen(false)}
