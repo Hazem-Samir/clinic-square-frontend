@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import Link from "next/link"
 import { Upload } from "lucide-react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm ,useFieldArray} from "react-hook-form"
