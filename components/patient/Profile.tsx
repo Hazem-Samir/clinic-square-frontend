@@ -67,7 +67,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
   const [month, setMonth] = useState(new Date().getMonth())
   const [images, setImages] = useState<Iimages>({ profilePic: null, license: [] })
   const router = useRouter();
-
+console.log(profile)
 
   const form = useForm<ProfileValue>({
     resolver: zodResolver(PatientProfileSchema),

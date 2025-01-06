@@ -31,7 +31,7 @@ export const userTypeSchema = z.object({
 export const FRONT_URL= "https://clinic-square-frontend.vercel.app" 
 // export const FRONT_URL= "http://localhost:3000" 
 export const MODEL_URL="https://clinic-square-model.onrender.com"
-export const Doctors_Specializations=['Allergist','Cardiologist','Dermatologist','Endocrinologist','Gastroenterologist','Gynecologist','Hepatologist','hepatologist','Internal Medcine','Neurologist','Osteopathic','Otolaryngologist','Pediatrician','Phlebologist','Pulmonologist','Rheumatologists','Tuberculosis']
+export const Doctors_Specializations=['Allergist','Cardiologist','Dermatologist','Endocrinologist','Gastroenterologist','Gynecologist','Hepatologist','Internal Medcine','Neurologist','Osteopathic','Otolaryngologist','Pediatrician','Phlebologist','Pulmonologist','Rheumatologists','Tuberculosis']
     export const DaySchema = z.object({
       day: z.enum(DaysOfWeek  ,{  errorMap: () => ({ message: "You have to choose day" }),}),
       startTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,  "Please Enter Start Time"),
