@@ -280,7 +280,7 @@ else{
       </form>
       {isLoading ? (
       <div className="flex justify-center items-center p-8">
-        <Spinner />
+        <Spinner invert />
       </div>
     ) : (SearchResult===null?<LabsData Labs={Labs} currentPage={currentPage} handlePageChange={handlePageChange} isLoading={isLoading} totalPages={totalPages} />
       :(SearchResult.type==='Lab'?<LabsData Labs={SearchResult.data} currentPage={SearchResult.currentPage} handlePageChange={handlePageChange} isLoading={isLoading} totalPages={SearchResult.totalPages} />

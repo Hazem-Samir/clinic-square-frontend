@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Pagination from '@/components/Pagination'
 import { Doctors_Specializations } from '@/schema/Essentials'
+import Spinner from '@/components/Spinner'
 interface Doctor {
   id: string;
   profilePic: string;
@@ -45,7 +46,8 @@ const DoctorsData=({Doctors,currentPage,totalPages,handlePageChange,isLoading}:I
   return (
     <>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Doctors.map((doctor) => (
+        {Doctors.length<=0?<div className="my-4 flex col-span-4 justify-center items-center">No Doctors</div>
+        :Doctors.map((doctor) => (
           <Card key={doctor.id} className="flex flex-col h-[500px]">
             <CardContent className="p-0 flex-grow">
               <div className="relative w-full h-48">
@@ -175,10 +177,13 @@ export default function DoctorsList({ Doctors, currentPage, totalPages,searchPar
         </div>
       </form>
       
-{(searchResult&& searchResult.Doctors.length<=0&&(name.trim().length>0||specialization.length>0))?(
+{isLoading? <div className="flex justify-center items-center p-8">
+        <Spinner invert />
+      </div>
+      : ( (searchResult&& searchResult.Doctors.length<=0&&(name.trim().length>0||specialization.length>0))?(
 <div className="flex justify-center mt-6"><h2>No Doctors Found</h2>
 </div>):(searchResult===null?<DoctorsData Doctors={Doctors} totalPages={totalPages} currentPage={currentPage} isLoading={isLoading} handlePageChange={handlePageChange} />
-     :<DoctorsData Doctors={searchResult.Doctors} totalPages={searchResult.totalPages} currentPage={searchResult.currentPage} isLoading={isLoading} handlePageChange={handlePageChange} />)}
+     :<DoctorsData Doctors={searchResult.Doctors} totalPages={searchResult.totalPages} currentPage={searchResult.currentPage} isLoading={isLoading} handlePageChange={handlePageChange} />))}
     </div>
   )
 }

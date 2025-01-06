@@ -68,7 +68,8 @@ const PharmaciesData=({Pharmacies,currentPage,totalPages,handlePageChange,isLoad
   <>
    
    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Pharmacies.map((pharmacy) => (
+        {Pharmacies.length<=0?<div className="my-4 flex col-span-4 justify-center items-center">No Pharmacies</div>
+        :Pharmacies.map((pharmacy) => (
           <Card key={pharmacy.id} className="flex flex-col">
             <CardContent className="p-4">
               <div className="flex items-center space-x-4">
@@ -126,7 +127,8 @@ const PharmaciesData=({Pharmacies,currentPage,totalPages,handlePageChange,isLoad
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
-        {Medicines.map((medicine) => (
+        {Medicines.length<=0?<div className="my-4 flex col-span-4 justify-center items-center">No Medicines</div>
+        :Medicines.map((medicine) => (
           <Card key={medicine.id}>
             <CardContent className="p-4 flex flex-col items-center space-y-2">
             <div className="relative w-full aspect-square">
@@ -305,7 +307,7 @@ const [searchTerm, setSearchTerm] = useState('')
       </form>
       {isLoading ? (
       <div className="flex justify-center items-center p-8">
-        <Spinner />
+        <Spinner invert />
       </div>
     ) : (SearchResult===null?<PharmaciesData Pharmacies={Pharmacies} currentPage={currentPage} handlePageChange={handlePageChange} isLoading={isLoading} totalPages={totalPages} />
 :(SearchResult.type==="Pharmacy"?<PharmaciesData Pharmacies={SearchResult.data} currentPage={SearchResult.currentPage} handlePageChange={handlePageChange} isLoading={isLoading} totalPages={SearchResult.totalPages} />
