@@ -229,6 +229,12 @@ const [searchTerm, setSearchTerm] = useState('')
       }));
     }
   }
+  else{
+    toast.error("You have to enter text and choose what you search for", {
+      duration: 2000,
+      position: 'top-center',
+    })
+  }
   
   setIsLoading(false);
   
