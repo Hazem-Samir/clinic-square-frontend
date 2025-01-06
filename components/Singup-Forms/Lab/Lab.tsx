@@ -9,7 +9,6 @@ import { PlusCircle,  File } from "lucide-react"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ArrowLeft } from "lucide-react"
 import {
   Form,
   FormControl,
@@ -20,6 +19,7 @@ import {
 } from "@/components/ui/form"
 import { LabSchema, LabValue } from "@/schema/Lab"
 import LabSchedule from "./LabSchedule"
+import { Eye, EyeOff,ArrowLeft } from 'lucide-react';
 
 
 
@@ -36,6 +36,8 @@ export default function Lab({ role ,onBack}: IProps) {
   const [step, setStep] = useState(1);
   const [LabData, setLabData] = useState<LabValue | null>(null);
   const [images, setImages] = useState<Iimages>({profilePic:null,license:[]});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   const handleBack = () => {
     setStep(1);
@@ -191,7 +193,26 @@ export default function Lab({ role ,onBack}: IProps) {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" />
+                <div className="relative">
+
+                  <Input {...field} type={showPassword ? "text" : "password"} />
+                  <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? (
+              <EyeOff className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <Eye className="h-4 w-4 text-muted-foreground" />
+            )}
+            <span className="sr-only">
+              {showPassword ? "Hide password" : "Show password"}
+            </span>
+          </Button>
+            </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -204,7 +225,26 @@ export default function Lab({ role ,onBack}: IProps) {
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" />
+                <div className="relative">
+
+                  <Input {...field}type={showPassword ? "text" : "password"} />
+                  <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+            onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
+          >
+            {showPasswordConfirm ? (
+              <EyeOff className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <Eye className="h-4 w-4 text-muted-foreground" />
+            )}
+            <span className="sr-only">
+              {showPasswordConfirm ? "Hide password" : "Show password"}
+            </span>
+          </Button>
+                </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

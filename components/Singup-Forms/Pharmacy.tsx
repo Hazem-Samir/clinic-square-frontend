@@ -9,7 +9,6 @@ import { PlusCircle, File } from "lucide-react"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ArrowLeft } from "lucide-react"
 import {
   Form,
   FormControl,
@@ -23,6 +22,7 @@ import { FormDataHandler, onSignupSubmit } from "@/utils/AuthHandlers"
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast';
 import Spinner from "@/components/Spinner"
+import { Eye, EyeOff,ArrowLeft } from 'lucide-react';
 
 
 
@@ -41,7 +41,8 @@ export default function Pharmacy({ role ,onBack}: IProps) {
   const [isLoading,SetIsLoading]=useState(false);
 
   const [images, setImages] = useState<Iimages>({profilePic:null,license:[]});
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
 
 
@@ -239,7 +240,26 @@ export default function Pharmacy({ role ,onBack}: IProps) {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input   disabled={isLoading} {...field} type="password" />
+                <div className="relative">
+                  
+                  <Input   disabled={isLoading} {...field}type={showPassword ? "text" : "password"} />
+                  <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? (
+              <EyeOff className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <Eye className="h-4 w-4 text-muted-foreground" />
+            )}
+            <span className="sr-only">
+              {showPassword ? "Hide password" : "Show password"}
+            </span>
+          </Button>
+            </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -252,7 +272,27 @@ export default function Pharmacy({ role ,onBack}: IProps) {
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
-                  <Input   disabled={isLoading} {...field} type="password" />
+                <div className="relative">
+
+                  <Input   disabled={isLoading} {...field}type={showPasswordConfirm ? "text" : "password"} />
+                  <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+            onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
+            disabled={isLoading}
+          >
+            {showPasswordConfirm ? (
+              <EyeOff className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <Eye className="h-4 w-4 text-muted-foreground" />
+            )}
+            <span className="sr-only">
+              {showPasswordConfirm ? "Hide password" : "Show password"}
+            </span>
+          </Button>
+                </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

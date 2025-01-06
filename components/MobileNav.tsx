@@ -13,7 +13,8 @@ import { useSelectedLayoutSegment } from 'next/navigation'
 import Link from "next/link"
 import { useEffect, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-
+import Image from 'next/image'
+import Logo from "@/public/Logo.png"
 
 interface NavItem {
   href: string;
@@ -36,8 +37,7 @@ const iconMap = {
   BriefcaseMedical,
   ChartNoAxesCombined
 };
-import Image from 'next/image'
-import Logo from "@/public/Logo.png"
+
 
 
 const MobileNav = ({navItems,role}:IProps) => {

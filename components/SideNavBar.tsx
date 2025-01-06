@@ -4,7 +4,8 @@ import Link from "next/link"
 import { useSelectedLayoutSegment } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { Home, History, CalendarCheck, Hospital, MessageCircleQuestion,ChartNoAxesCombined, FlaskConical, BriefcaseMedical } from 'lucide-react'
-
+import Image from 'next/image'
+import Logo from "@/public/Logo.png"
 interface NavItem {
   href: string;
   icon: string;
@@ -26,8 +27,7 @@ const iconMap = {
   BriefcaseMedical,
   ChartNoAxesCombined
 };
-import Image from 'next/image'
-import Logo from "@/public/Logo.png"
+
 
 
 export default function SideNavBar({navItems,role}: IProps) {

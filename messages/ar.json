@@ -189,7 +189,7 @@
         "female":"انثي",
         "address":"العنوان",
         "phoneNumbers":"ارقام التليفون",
-        "license":"الشهادات",
+        "license":"الترخيص",
         "age":"العمر",
         "update_profile":{
           "button":"تحديث البيانات",
@@ -206,8 +206,8 @@
           "Add_Another_Address_Button":"اضف عنوان اخر",
 
         "address":"العنوان {index}",
-        "License_Photo":"صور الشهادة",
-        "Upload_License":"رفم صورة الشهادة",
+        "License_Photo":"صور الترخيص",
+        "Upload_License":"رفم صورة الترخيص",
           "submit":"تحديث البيانات"
           
         },

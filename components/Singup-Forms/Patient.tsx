@@ -36,6 +36,7 @@ import {  FormDataHandler, onSignupSubmit } from "@/utils/AuthHandlers"
 import toast, { Toaster } from 'react-hot-toast';
 import Spinner from "../Spinner"
 import { useRouter } from "next/navigation"
+import { Eye, EyeOff } from 'lucide-react';
 
 
 
@@ -50,13 +51,14 @@ interface Iimages{
 }
 export default function Patient({ role ,onBack}: IProps) {
 
-  
+  const [showPassword, setShowPassword] = useState(false);
   const [images, setImages] = useState<Iimages>({profilePic:null});
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
  const router=useRouter();
   const [isLoading,SetIsLoading]=useState(false);
 
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   const handleProfilePicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -256,7 +258,27 @@ export default function Patient({ role ,onBack}: IProps) {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input disabled={isLoading} {...field} type="password" />
+                  <div className="relative">
+
+                  <Input disabled={isLoading} {...field}type={showPassword ? "text" : "password"} />
+                  <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+            onClick={() => setShowPassword(!showPassword)}
+            disabled={isLoading}
+          >
+            {showPassword ? (
+              <EyeOff className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <Eye className="h-4 w-4 text-muted-foreground" />
+            )}
+            <span className="sr-only">
+              {showPassword ? "Hide password" : "Show password"}
+            </span>
+          </Button>
+          </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -269,7 +291,27 @@ export default function Patient({ role ,onBack}: IProps) {
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
-                  <Input disabled={isLoading} {...field} type="password" />
+                <div className="relative">
+
+                  <Input disabled={isLoading} {...field}type={showPasswordConfirm ? "text" : "password"} />
+                  <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+            onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
+            disabled={isLoading}
+          >
+            {showPasswordConfirm ? (
+              <EyeOff className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <Eye className="h-4 w-4 text-muted-foreground" />
+            )}
+            <span className="sr-only">
+              {showPasswordConfirm ? "Hide password" : "Show password"}
+            </span>
+          </Button>
+                </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

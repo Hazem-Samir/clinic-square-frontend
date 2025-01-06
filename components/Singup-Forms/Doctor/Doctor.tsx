@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { Upload, CalendarIcon, ChevronLeft, ChevronRight,PlusCircle, File,ArrowLeft } from "lucide-react"
+import { Upload, CalendarIcon, ChevronLeft, ChevronRight,PlusCircle, File,Eye, EyeOff,ArrowLeft } from "lucide-react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm ,useFieldArray} from "react-hook-form"
 import { format } from "date-fns"
@@ -53,6 +53,9 @@ export default function Doctor({ role ,onBack}: IProps) {
   const [images, setImages] = useState<Iimages>({profilePic:null,license:[]});
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+
   const handleBack = () => {
     setStep(1);
   }
@@ -259,7 +262,25 @@ export default function Doctor({ role ,onBack}: IProps) {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" />
+                  <div className="relative">
+                  <Input {...field}type={showPassword ? "text" : "password"} />
+                  <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? (
+              <EyeOff className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <Eye className="h-4 w-4 text-muted-foreground" />
+            )}
+            <span className="sr-only">
+              {showPassword ? "Hide password" : "Show password"}
+            </span>
+          </Button>
+          </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -272,7 +293,26 @@ export default function Doctor({ role ,onBack}: IProps) {
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" />
+                <div className="relative">
+
+                  <Input {...field}type={showPasswordConfirm ? "text" : "password"} />
+                  <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+            onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
+          >
+            {showPasswordConfirm ? (
+              <EyeOff className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <Eye className="h-4 w-4 text-muted-foreground" />
+            )}
+            <span className="sr-only">
+              {showPasswordConfirm ? "Hide password" : "Show password"}
+            </span>
+          </Button>
+                </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

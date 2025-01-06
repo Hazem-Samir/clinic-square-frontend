@@ -36,6 +36,7 @@ import { Label } from "../ui/label"
 import { removeUser } from "@/lib/auth"
 import Spinner from "../Spinner"
 import { useTranslations } from 'next-intl'
+import { Eye, EyeOff } from 'lucide-react';
 
 interface Iimages {
   profilePic: File | string | null;
@@ -53,7 +54,9 @@ export default function PharmacyProfileUpdate({ profile }: IProps) {
   const [images, setImages] = useState<Iimages>({ profilePic: null, license: [] })
   const router = useRouter();
   const t = useTranslations('profile')
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+  const [showPasswordConfirm2, setShowPasswordConfirm2] = useState(false);
 
   const form = useForm<ProfileValue>({
     resolver: zodResolver(LabProfileSchema),
@@ -447,7 +450,26 @@ export default function PharmacyProfileUpdate({ profile }: IProps) {
                     <FormItem>
                       <FormLabel>{t(`change_password.current_Password`)}</FormLabel>
                       <FormControl>
-                        <Input  disabled={isLoading}{...field} type="password"/>
+                  <div className="relative">
+                        <Input  disabled={isLoading}{...field}type={showPassword ? "text" : "password"}/>
+                        <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+            onClick={() => setShowPassword(!showPassword)}
+            disabled={isLoading}
+          >
+            {showPassword ? (
+              <EyeOff className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <Eye className="h-4 w-4 text-muted-foreground" />
+            )}
+            <span className="sr-only">
+              {showPassword ? "Hide password" : "Show password"}
+            </span>
+          </Button>
+          </div>
                       </FormControl>
                       <FormMessage   translate={`errors`}/>
                     </FormItem>
@@ -461,7 +483,26 @@ export default function PharmacyProfileUpdate({ profile }: IProps) {
                     <FormItem>
                       <FormLabel>{t(`change_password.new_Password`)}</FormLabel>
                       <FormControl>
-                        <Input  disabled={isLoading}{...field} type="password" />
+                <div className="relative">
+                        <Input  disabled={isLoading}{...field}type={showPasswordConfirm ? "text" : "password"} />
+                        <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+            onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
+            disabled={isLoading}
+          >
+            {showPasswordConfirm ? (
+              <EyeOff className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <Eye className="h-4 w-4 text-muted-foreground" />
+            )}
+            <span className="sr-only">
+              {showPasswordConfirm ? "Hide password" : "Show password"}
+            </span>
+          </Button>
+                </div>
                       </FormControl>
                       <FormMessage translate={`errors`}/>
                     </FormItem>
@@ -474,7 +515,26 @@ export default function PharmacyProfileUpdate({ profile }: IProps) {
                     <FormItem>
                       <FormLabel>{t(`change_password.confirm_new_Password`)}</FormLabel>
                       <FormControl>
-                        <Input  disabled={isLoading} {...field} type="password" />
+                <div className="relative">
+                        <Input  disabled={isLoading} {...field}type={showPasswordConfirm2 ? "text" : "password"} />
+                        <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+            onClick={() => setShowPasswordConfirm(!showPasswordConfirm2)}
+            disabled={isLoading}
+          >
+            {showPasswordConfirm2 ? (
+              <EyeOff className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <Eye className="h-4 w-4 text-muted-foreground" />
+            )}
+            <span className="sr-only">
+              {showPasswordConfirm2 ? "Hide password" : "Show password"}
+            </span>
+          </Button>
+                </div> 
                       </FormControl>
                       <FormMessage   translate={`errors`}/>
                     </FormItem>

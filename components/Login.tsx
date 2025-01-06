@@ -23,7 +23,7 @@ import { setUser } from "@/lib/auth"
 import Spinner from "./Spinner"
 import { useForm } from "react-hook-form"
 import { useLocale } from 'next-intl'
-
+import { Eye, EyeOff } from 'lucide-react';
 
 interface IProps {
   role: string;
@@ -41,7 +41,7 @@ export default function Login({ role ,onBack}: IProps) {
   const [isLoading,SetIsLoading]=useState(false);
   const router = useRouter()
   const locale = useLocale()
-
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -122,8 +122,28 @@ export default function Login({ role ,onBack}: IProps) {
                         Forgot your password?
                       </Link>
                     </div>
-                    <FormControl>
-                      <Input disabled={isLoading}  type="password" {...field} />
+                    <FormControl >
+                      <div className="relative">
+
+                      <Input  type={showPassword ? "text" : "password"} disabled={isLoading}   {...field} />
+                      <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+            onClick={() => setShowPassword(!showPassword)}
+            disabled={isLoading}
+          >
+            {showPassword ? (
+              <EyeOff className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <Eye className="h-4 w-4 text-muted-foreground" />
+            )}
+            <span className="sr-only">
+              {showPassword ? "Hide password" : "Show password"}
+            </span>
+          </Button>
+            </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
