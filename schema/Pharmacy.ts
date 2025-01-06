@@ -44,7 +44,10 @@ import { ImageHandler } from "@/utils/AuthHandlers";
     export const NewMedicineSchema = z.object({
       name: z.string().min(2, {
         message: "Medicine name must be at least 2 characters.",
-      }),
+      })    .regex(
+        /^[a-zA-Z0-9()\s]*$/,
+        "Name can only contain letters, numbers, spaces, and parentheses"
+      ),
       cost: z.string().refine((val:string) => !isNaN(Number(val)) && Number(val) > 0, {
         message: "Stock must be a positive number.",
       }),

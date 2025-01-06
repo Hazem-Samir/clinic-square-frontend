@@ -296,7 +296,15 @@ const handleDeleteTest = async() => {
 
   const handleRequestTest = async() => {
     setIsLoading(true);
+    const regex = /^[A-Za-z0-9\s\(\)]+$/;
     if (testName) {
+      if(!regex.test(testName)){
+        toast.error("Name can only contain letters, numbers, spaces, and parentheses.", {
+          duration: 2000,
+          position: 'top-center',
+        })
+        return;
+      }
           const res = await RequestTest({name:testName});
           if (res.success ===true) {
             toast.success(res.message, {

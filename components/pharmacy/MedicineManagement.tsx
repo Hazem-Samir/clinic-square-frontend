@@ -308,7 +308,6 @@ const resetMedicineForm=()=>{
   }
 
   const handleRequestTest = async(data:NewMedicineValue) => {
-    console.log(data)
     setIsLoading(true);
     const formData=FormDataHandler(data);
           const res = await RequestMedicine(formData);
