@@ -8,8 +8,8 @@ import { ImageHandler } from "@/utils/AuthHandlers";
         message: 'Invalid image file. Must be JPEG, PNG, or GIF and less than 5MB.',
       }).optional(),
       name: z.string().min(3, "Name is required").regex(
-        /^[a-zA-Z\s]*$/,
-        "Name can only contain letters and spaces"
+        /^[a-zA-Z0-9\s]*$/,
+        "Name can only contain letters, numbers, and spaces"
       ),
       email: z.string().email("Invalid email address"),
       phoneNumbers:z.array(z.string().regex(/^\d{11}$/, "Phone number must be 11 digits")).nonempty({
