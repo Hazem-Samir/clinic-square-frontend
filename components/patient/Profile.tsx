@@ -179,7 +179,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
 
    
       <div className="container mx-auto flex-grow">
-        {isLoading?<Spinner />:
+      
           <Card className="w-full border-none">
             <CardHeader>
               <CardTitle className="text-2xl font-bold text-center">User Profile</CardTitle>
@@ -510,7 +510,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
             
               </div>
             </ScrollArea>
-            <Button type="submit" className="w-full">Update Profile</Button>
+            <Button type="submit" className="w-full" disabled={isLoading}>{isLoading?<Spinner />:"Update Profile"}</Button>
           </form>
         </Form>
         
@@ -635,7 +635,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
               
               </div>
             </ScrollArea>
-            <Button type="submit" className="w-full">Update Password</Button>
+            <Button type="submit" className="w-full"  disabled={isLoading}>{isLoading?<Spinner/>:"Update Password"}</Button>
           </form>
         </Form>
             <Toaster />
@@ -645,7 +645,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
               </div>
             </CardContent>
           </Card>
-}
+
           <Toaster />
         </div>
 
