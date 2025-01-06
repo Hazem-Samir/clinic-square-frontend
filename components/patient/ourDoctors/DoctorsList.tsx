@@ -63,11 +63,11 @@ const DoctorsData=({Doctors,currentPage,totalPages,handlePageChange,isLoading}:I
               <div className="p-4">
                 <h2 className="text-xl font-semibold">Dr. {doctor.name}</h2>
                 <p className="text-sm text-gray-500">{doctor.specialization}</p>
-                <div className="flex items-center mt-2">
+                {/* <div className="flex items-center mt-2">
                   <Star className="w-4 h-4 text-yellow-400 fill-current" />
                   <span className="ml-1 text-sm">{doctor.rating || 'N/A'}</span>
-                  {/* <span className="ml-1 text-sm text-gray-500">({doctor.reviews || 0} reviews)</span> */}
-                </div>
+                  <span className="ml-1 text-sm text-gray-500">({doctor.reviews || 0} reviews)</span>
+                </div> */}
                 <Accordion type="single" collapsible className="w-full mt-4">
                   <AccordionItem value="address">
                     <AccordionTrigger className="text-sm py-2">
