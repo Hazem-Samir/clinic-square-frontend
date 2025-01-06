@@ -25,10 +25,12 @@ interface IReservations extends IProps {
 }
 
 const ReservationsData=({reservations,currentPage,totalPages,handlePageChange,isLoading}:IReservations)=>{
+  const t = useTranslations('Reservations')
+
   return(
     <>
             <CardContent className="grid gap-4 sm:gap-8">
-          {reservations.length<=0?<div className="flex justify-center items-center">No Reservations</div>
+          {reservations.length<=0?<div className="flex justify-center items-center">{t(`No_Reservations`)}</div>
           :reservations.map((reservation) => (
             <div key={reservation.id} className="flex items-center gap-2 sm:gap-4">
               <Avatar className="max-[350px]:hidden sm:h-9 sm:w-9">
@@ -123,7 +125,7 @@ export default function ReservationsHistoryTable({
 
         {isSearching ? (
       <div className="flex justify-center items-center p-8">
-        <Spinner />
+        <Spinner invert />
       </div>
     ) : (
       SearchResult === null ? (

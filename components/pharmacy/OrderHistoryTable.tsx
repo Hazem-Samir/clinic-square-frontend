@@ -124,7 +124,7 @@ export default function OrdersHistoryTable({
        
         {isSearching ? (
       <div className="flex justify-center items-center p-8">
-        <Spinner />
+        <Spinner invert />
       </div>
     ) : (
       SearchResult === null ? (

@@ -153,7 +153,7 @@ export default function OrdersTable({orders, currentPage, totalPages}: IProps) {
       
       {isSearching ? (
       <div className="flex justify-center items-center p-8">
-        <Spinner />
+        <Spinner invert/>
       </div>
     ) : (
       SearchResult === null ? (

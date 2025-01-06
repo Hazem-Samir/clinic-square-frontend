@@ -126,7 +126,7 @@ export default function ReservationsHistoryTable({
     </CardHeader>
     {isSearching ? (
       <div className="flex justify-center items-center p-8">
-        <Spinner />
+        <Spinner invert />
       </div>
     ) : (
       SearchResult === null ? (
