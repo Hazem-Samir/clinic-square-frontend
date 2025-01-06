@@ -25,7 +25,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 import {  LabValue, LabScheduleSchema, LabScheduleValue } from "@/schema/Lab"
 import { FormDataHandler, onSignupSubmit } from "@/utils/AuthHandlers"
-import { DaysOfWeek } from "@/schema/Essentials"
+import { ConvertTimeToDate, DaysOfWeek } from "@/schema/Essentials"
 import Spinner from "@/components/Spinner"
 import { useRouter } from 'next/navigation'
 
@@ -65,10 +65,10 @@ export default function LabSchedule({ role ,prevData,onBack}: IProps) {
 
   const onSubmitHandler=async (data:LabScheduleValue)=>{
     SetIsLoading(true);
+     const newdata={days:data.days.map(d=>{return ({day:d.day,startTime:ConvertTimeToDate(d.startTime),endTime:ConvertTimeToDate(d.endTime)})})}
     const AllData={...prevData,role,schedule:{...data}}
     const formData=FormDataHandler(AllData);
     const res= await onSignupSubmit(formData);
-    SetIsLoading(false);
     if(res.success){  
       toast.success(res.message,{
         duration: 2000,
@@ -86,6 +86,8 @@ export default function LabSchedule({ role ,prevData,onBack}: IProps) {
       //   position: 'bottom-center',
       // }))
     }
+    SetIsLoading(false);
+
   }
   return (
     <>  <Button disabled={isLoading} type="button" variant="ghost" onClick={onBack}>

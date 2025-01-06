@@ -26,7 +26,7 @@ import { useRouter } from 'next/navigation'
 
 import {  DoctorValue, DoctorScheduleschema, DoctorScheduleschemaValue } from "@/schema/Doctor"
 import { FormDataHandler, onSignupSubmit } from "@/utils/AuthHandlers"
-import { DaysOfWeek } from "@/schema/Essentials"
+import { ConvertTimeToDate, DaysOfWeek } from "@/schema/Essentials"
 import Spinner from "@/components/Spinner"
 
 
@@ -66,10 +66,10 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
 
   const onSubmitHandler=async (data:DoctorScheduleschemaValue)=>{
     SetIsLoading(true);
-    const AllData={...prevData,role,schedule:{...data}}
+    const newdata={cost:data.cost,days:data.days.map(d=>{return ({day:d.day,startTime:ConvertTimeToDate(d.startTime),endTime:ConvertTimeToDate(d.endTime)})})}
+    const AllData={...prevData,role,schedule:{...newdata}}
     const formData=FormDataHandler(AllData);
     const res= await onSignupSubmit(formData);
-    SetIsLoading(false);
     if(res.success){  
       toast.success(res.message,{
         duration: 2000,
@@ -87,6 +87,7 @@ export default function DoctorSchedule({ role ,prevData,onBack}: IProps) {
       //   position: 'bottom-center',
       // }))
     }
+  SetIsLoading(false)
   }
 
   return (
