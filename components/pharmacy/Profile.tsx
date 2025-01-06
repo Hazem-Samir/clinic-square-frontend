@@ -516,13 +516,13 @@ export default function PharmacyProfileUpdate({ profile }: IProps) {
                       <FormLabel>{t(`change_password.confirm_new_Password`)}</FormLabel>
                       <FormControl>
                 <div className="relative">
-                        <Input  disabled={isLoading} {...field}type={showPasswordConfirm2 ? "text" : "password"} />
+                        <Input  disabled={isLoading} {...field}type={showPasswordC ? "text" : "password"} />
                         <Button
             type="button"
             variant="ghost"
             size="icon"
             className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-            onClick={() => setShowPasswordConfirm(!showPasswordConfirm2)}
+            onClick={() => setShowPasswordConfirm2(!showPasswordConfirm2)}
             disabled={isLoading}
           >
             {showPasswordConfirm2 ? (

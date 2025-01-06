@@ -524,7 +524,7 @@ export default function LabProfileUpdate({ profile }: IProps) {
             variant="ghost"
             size="icon"
             className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-            onClick={() => setShowPasswordConfirm(!showPasswordConfirm2)}
+            onClick={() => setShowPasswordConfirm2(!showPasswordConfirm2)}
             disabled={isLoading}
           >
             {showPasswordConfirm2 ? (
