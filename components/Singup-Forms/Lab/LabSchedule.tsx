@@ -66,7 +66,7 @@ export default function LabSchedule({ role ,prevData,onBack}: IProps) {
   const onSubmitHandler=async (data:LabScheduleValue)=>{
     SetIsLoading(true);
      const newdata={days:data.days.map(d=>{return ({day:d.day,startTime:ConvertTimeToDate(d.startTime),endTime:ConvertTimeToDate(d.endTime)})})}
-    const AllData={...prevData,role,schedule:{...data}}
+    const AllData={...prevData,role,schedule:{...newdata}}
     const formData=FormDataHandler(AllData);
     const res= await onSignupSubmit(formData);
     if(res.success){  
