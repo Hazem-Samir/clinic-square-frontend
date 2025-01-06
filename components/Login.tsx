@@ -22,6 +22,7 @@ import { useRouter } from 'next/navigation'
 import { setUser } from "@/lib/auth"
 import Spinner from "./Spinner"
 import { useForm } from "react-hook-form"
+import { useLocale } from 'next-intl'
 
 
 interface IProps {
@@ -39,6 +40,7 @@ const loginSchema = z.object({
 export default function Login({ role ,onBack}: IProps) {
   const [isLoading,SetIsLoading]=useState(false);
   const router = useRouter()
+  const locale = useLocale()
 
 
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -135,7 +137,7 @@ export default function Login({ role ,onBack}: IProps) {
          
           <div className="text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="underline">
+            <Link href={`/${locale}/signup`} className="underline">
               Sign up
             </Link>
           </div>

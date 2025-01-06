@@ -19,9 +19,12 @@ import Doctor from "@/components/Singup-Forms/Doctor/Doctor"
 import Patient from "@/components/Singup-Forms/Patient"
 import Lab from "@/components/Singup-Forms/Lab/Lab"
 import Pharmacy from "@/components/Singup-Forms/Pharmacy"
+import { useLocale } from 'next-intl'
+import Link from "next/link"
 
 export default function SignupPage() {
   const [step, setStep] = useState(1);
+  const locale = useLocale()
 
   const userTypeForm = useForm<userTypeValue>({
     resolver: zodResolver(userTypeSchema),
@@ -39,6 +42,7 @@ export default function SignupPage() {
       <div className="flex flex-1 items-center justify-center p-6 lg:p-10">
         <div className="w-full max-w-[350px] space-y-6">
           {step === 1 ? (
+            <>
             <Form {...userTypeForm}>
               <form onSubmit={userTypeForm.handleSubmit(onUserTypeSubmit)} className="space-y-6">
                 <div className="text-center space-y-2">
@@ -86,6 +90,13 @@ export default function SignupPage() {
                 </Button>
               </form>
             </Form>
+             <div className="text-center text-sm">
+             Already have an account?{" "}
+             <Link href={`/${locale}/login`} className="underline">
+               Log in
+             </Link>
+           </div>
+           </>
           ) : (
             <>
               {userTypeForm.getValues().userType === 'doctor' ? (

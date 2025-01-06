@@ -399,12 +399,7 @@ export default function Pharmacy({ role ,onBack}: IProps) {
 
           </Button>
         </div>
-        <div className="text-center text-sm">
-          Already have an account?{" "}
-          <Link href="/login" className="underline">
-            Log in
-          </Link>
-        </div>
+  
       </form>
     </Form>
     <Toaster />

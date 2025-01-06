@@ -348,12 +348,7 @@ export default function Lab({ role ,onBack}: IProps) {
             Sign Up
           </Button>
         </div>
-        <div className="text-center text-sm">
-          Already have an account?{" "}
-          <Link href="/login" className="underline">
-            Log in
-          </Link>
-        </div>
+ 
       </form>
     </Form></>)
   :

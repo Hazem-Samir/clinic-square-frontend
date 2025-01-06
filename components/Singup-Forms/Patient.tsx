@@ -488,12 +488,7 @@ export default function Patient({ role ,onBack}: IProps) {
           {isLoading? <Spinner />: 'Sign Up'}
           </Button>
         </div>
-        <div className="text-center text-sm">
-          Already have an account?{" "}
-          <Link href="/login" className="underline">
-            Log in
-          </Link>
-        </div>
+     
       </form>
     </Form>
     <Toaster />
