@@ -1,6 +1,6 @@
   import * as z from "zod"
 import { ImageHandler } from "@/utils/AuthHandlers";
-import { DaySchema } from "./Essentials";
+import { DaySchema, Doctors_Specializations } from "./Essentials";
 
 
 
@@ -24,7 +24,7 @@ import { DaySchema } from "./Essentials";
       gender: z.enum(["male", "female"], {
         required_error: "Please select a gender",
       }),
-      specialization: z.enum(["Dermatologist", "Psycholigist"], {
+      specialization: z.enum(Doctors_Specializations, {
         required_error: "Please select a Specialiaztion",
       }),
       dateOfBirth: z.date({
