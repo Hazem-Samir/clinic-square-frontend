@@ -226,7 +226,7 @@ export default function LabsList({currentPage,totalPages,Labs}:IProps) {
         
       }
       if (res.success === true) {
- 
+        console.log(res.data)
         setSearchResult({data:res.data.data,totalPages:res.data.paginationResult.numberOfPages,currentPage:res.data.paginationResult.currentPage,type:searchType})
         console.log(SearchResult)
       } else {
