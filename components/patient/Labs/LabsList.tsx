@@ -193,7 +193,6 @@ export default function LabsList({currentPage,totalPages,Labs}:IProps) {
     }
     if (res.success === true) {
   
-      console.log(res.data)
       setSearchResult({data:res.data.data,totalPages:res.data.paginationResult.numberOfPages,currentPage:res.data.paginationResult.currentPage,type:searchType})
       console.log(SearchResult)
     } else {
@@ -216,21 +215,18 @@ export default function LabsList({currentPage,totalPages,Labs}:IProps) {
   const handlePageChange = async(newPage: number) => {
     setIsLoading(true);
     if(SearchResult!==null&& SearchResult.totalPages>1&&searchType!==''){
+      console.log("aaa")
       let res;
       if(searchType==='Lab'){
 
-         res = await SearchForTest(searchTerm,newPage);
-        }
-        else if(searchType==='Test'){
         res = await SearchForLab(searchTerm,newPage);
+      }
+      else if(searchType==='Test'){
+          res = await SearchForTest(searchTerm,newPage);
         
       }
       if (res.success === true) {
-        // toast.success(res.message, {
-        //   duration: 2000,
-        //   position: 'top-center',
-        // });
-        console.log(res.data)
+ 
         setSearchResult({data:res.data.data,totalPages:res.data.paginationResult.numberOfPages,currentPage:res.data.paginationResult.currentPage,type:searchType})
         console.log(SearchResult)
       } else {
@@ -241,7 +237,7 @@ export default function LabsList({currentPage,totalPages,Labs}:IProps) {
       }
     }
 else{
-
+console.log("hna")
   router.push(`labs?page=${newPage}`);
 }
     setIsLoading(false);
@@ -260,7 +256,7 @@ else{
     <h1 className="text-3xl font-bold text-center mb-8">Our Labs</h1>
       
       <form onSubmit={handleSearch} className="mb-8">
-        <div className="flex gap-2">
+        <div className="flex gap-2 sm:flex-row flex-col">
           <Input
             type="text"
             placeholder="Search for lab or tests..."
@@ -269,7 +265,7 @@ else{
             className="flex-grow"
           />
                <Select  value={searchType} onValueChange={setSearchType}>
-                  <SelectTrigger className="w-1/4 text-sm py-2 ">
+                  <SelectTrigger className="sm:w-1/4 text-sm py-2 ">
                     <SelectValue placeholder="Search in" />
 
                   </SelectTrigger>

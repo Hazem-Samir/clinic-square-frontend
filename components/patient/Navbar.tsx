@@ -18,6 +18,8 @@ import LanguageSwitcherIcon from '../LanguageSwitcherIcon'
 import { logout } from '@/actions/logout'
 import { CartIcon } from '../CartIcon'
 import Logo from "@/public/Logo.png"
+import { shortName } from '@/lib/utils'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 
 export default function NavBar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -71,15 +73,14 @@ export default function NavBar() {
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="w-10 h-10 rounded-full p-0">
-                <Image
-                  src={user.profilePic || "/placeholder.svg?height=40&width=40"}
-                  alt="Profile picture"
-                  width={40}
-                  height={40}
-                  className="rounded-full object-cover"
-                />
+            <Button variant="ghost" size="icon" className="w-12 h-12 rounded-full p-0">
+                <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
+                  <AvatarImage src={user.profilePic?user.profilePic:"" } alt={shortName(user.name?user.name:"patient")} />
+                  <AvatarFallback>{shortName(user.name?user.name:"patient")}</AvatarFallback>
+                </Avatar>
+                <span className="sr-only">Toggle user menu</span>
               </Button>
+          
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem>

@@ -33,7 +33,7 @@ const TopNavBarMenu = ({user}:IProps) => {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="rounded-full">
                 <Avatar className="h-6 w-6 sm:h-8 sm:w-8">
-                  <AvatarImage src={user? user.profilePic : "https://github.com/shadcn.png"} alt={user? user.name : "@shadcn"} />
+                  <AvatarImage src={user.profilePic } alt={shortName(user.name)} />
                   <AvatarFallback>{shortName(user.name)}</AvatarFallback>
                 </Avatar>
                 <span className="sr-only">Toggle user menu</span>

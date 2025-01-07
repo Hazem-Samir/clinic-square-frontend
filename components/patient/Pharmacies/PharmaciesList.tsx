@@ -252,11 +252,7 @@ const [searchTerm, setSearchTerm] = useState('')
         
       }
       if (res.success === true) {
-        // toast.success(res.message, {
-        //   duration: 2000,
-        //   position: 'top-center',
-        // });
-        console.log(res.data)
+    
         setSearchResult({data:res.data.data,totalPages:res.data.paginationResult.numberOfPages,currentPage:res.data.paginationResult.currentPage,type:searchType})
         console.log(SearchResult)
       } else {
@@ -287,7 +283,7 @@ const [searchTerm, setSearchTerm] = useState('')
       <h1 className="text-3xl font-bold text-center mb-8">Our Pharmacies</h1>
       
       <form onSubmit={handleSearch} className="mb-8">
-        <div className="flex gap-2">
+        <div className="flex gap-2 sm:flex-row flex-col">
           <Input
             type="text"
             placeholder="Search for pharmacies or medicines..."
@@ -296,7 +292,7 @@ const [searchTerm, setSearchTerm] = useState('')
             className="flex-grow"
           />
             <Select  value={searchType} onValueChange={setSearchType}>
-                  <SelectTrigger className="w-1/4 text-sm py-2 ">
+                  <SelectTrigger className="sm:w-1/4 text-sm py-2 ">
                     <SelectValue placeholder="Search in" />
 
                   </SelectTrigger>
