@@ -255,7 +255,6 @@ const handleAddModalOpen=()=>{
   }
 const handleUpdateSubmit=async(data:TestFormValue)=>{
   setIsLoading(true);
-    const user = getUser();
     const object ={preparations:data.preparations,cost:Number(data.cost)}
     const res = await UpdateTest(object,data.id)
     if (res.success ===true) {
