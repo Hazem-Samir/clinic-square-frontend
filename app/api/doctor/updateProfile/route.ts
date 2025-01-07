@@ -56,7 +56,7 @@ export async function PUT(request: NextRequest) {
 
     try {
     const apiResponse = await fetch(`${SERVER_URL}/doctor/changeMyPassword`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
