@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const apiResponse = await fetch(`${SERVER_URL}/tests?state=true`, {
+    const apiResponse = await fetch(`${SERVER_URL}/tests?state=true&limit=100000`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       }
@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      export async function PUT(request: NextRequest) {
+      export async function PATCH(request: NextRequest) {
         const authHeader = request.headers.get('Authorization')
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
           return NextResponse.json({ success: false, message: 'Missing or invalid Authorization header' }, { status: 401 })
@@ -99,10 +99,11 @@ export async function GET(request: NextRequest) {
         }
             
         const body = await request.json();
-      
+      const searchParams = request.nextUrl.searchParams
+        const id = searchParams.get('id')||""
           try {
-          const apiResponse = await fetch(`${SERVER_URL}/questions/answer`, {
-            method: 'PUT',
+          const apiResponse = await fetch(`${SERVER_URL}/lab/tests/${id}`, {
+            method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`,
@@ -117,7 +118,7 @@ export async function GET(request: NextRequest) {
           }
       
           const data = await apiResponse.json()
-          return NextResponse.json({ success: true, message: 'Answer Updated Successfully', data });
+          return NextResponse.json({ success: true, message: 'Updated Successfully', data });
           
         } catch (error) {
           console.error('Error:', error.message)

@@ -52,7 +52,7 @@ export function DashboardCharts({year,chartsData,titles,descriptions,role}:IProp
     <Card className="col-span-2  row-span-0">
   <CardHeader>
     <CardTitle>{t(`${titles[0]}`)}</CardTitle>
-    <CardDescription>{t(`${descriptions[0]}`,{year})}</CardDescription>
+    <CardDescription>{`${t(`${descriptions[0]}`)} ${year}`}</CardDescription>
   </CardHeader>
   <CardContent >
     <ChartContainer config={chartConfig}>
@@ -97,7 +97,7 @@ export function DashboardCharts({year,chartsData,titles,descriptions,role}:IProp
     <Card  >
       <CardHeader>
         <CardTitle>{t(`${titles[1]}`)}</CardTitle>
-        <CardDescription>{t(`${descriptions[1]}`,{year})}</CardDescription>
+        <CardDescription>{`${t(`${descriptions[1]}`)} ${year}`}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

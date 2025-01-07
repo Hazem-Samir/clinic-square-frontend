@@ -322,7 +322,34 @@ export const UploadResults = async (formData:FormData,RID:string)=>{
     console.error('No Token');
   }
 }
+export const UpdateTest = async (data:{cost:number,preparations:string[]},id:string)=>{
+  const token = getToken();
+  if (token){
+    const queryParams = new URLSearchParams({
+      id,
+    }).toString();
+    try {
+      const response = await fetch(`/api/lab/tests/available?${queryParams}`, {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      })
 
+      if (response.ok) {
+      }
+      
+      const res = await response.json();
+  return res;
+    } catch (error) {
+      console.error('Error Upload Test:', error)
+    }
+  }
+  else {
+    console.error('No Token');
+  }
+}
 
 export const MarkCompleted = async (data:{state:string},RID:string)=>{
   const token = getToken();

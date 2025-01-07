@@ -232,7 +232,6 @@ const resetMedicineForm=()=>{
 
 
   async function onSubmit(data: MedicineValue) {
-    console.log(data)
     setIsLoading(true);
 
     const object ={medicine:data.id,stock:data.stock}
@@ -256,7 +255,6 @@ const resetMedicineForm=()=>{
   }
 
   const handleUpdateSubmit = async (data: MedicineValue) => {
-    console.log(data)
     setIsLoading(true);
 
     const res = await UpdateStock({stock:data.stock},data.id)
@@ -287,7 +285,7 @@ const resetMedicineForm=()=>{
     }
   };
 
-  const handleDeleteTest = async() => {
+  const handleDeleteMedicine = async() => {
     setIsLoading(true);
     const {id} = medicineForm.getValues();
     const res = await DeleteMedicine(id);
@@ -307,7 +305,7 @@ const resetMedicineForm=()=>{
     handleDeleteModal();
   }
 
-  const handleRequestTest = async(data:NewMedicineValue) => {
+  const handleRequestMedicine = async(data:NewMedicineValue) => {
     setIsLoading(true);
     const formData=FormDataHandler(data);
           const res = await RequestMedicine(formData);
@@ -349,7 +347,7 @@ const resetMedicineForm=()=>{
                 </DialogDescription>
               </DialogHeader>
               <Form {...NewMedicineForm}>
-              <form onSubmit={NewMedicineForm.handleSubmit(handleRequestTest)} className="space-y-8">
+              <form onSubmit={NewMedicineForm.handleSubmit(handleRequestMedicine)} className="space-y-8">
               <FormField
                   control={NewMedicineForm.control}
                   name="name"
@@ -582,7 +580,7 @@ const resetMedicineForm=()=>{
               <Button disabled={isLoading} type="button" variant="outline" onClick={() => {handleDeleteModal()}}>
                 {t(`Delete_Med.Cancel`)}
               </Button>
-              <Button disabled={isLoading} variant="destructive" onClick={handleDeleteTest}>{isLoading?<Spinner />:t(`Delete_Med.submit`)}</Button>
+              <Button disabled={isLoading} variant="destructive" onClick={handleDeleteMedicine}>{isLoading?<Spinner />:t(`Delete_Med.submit`)}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

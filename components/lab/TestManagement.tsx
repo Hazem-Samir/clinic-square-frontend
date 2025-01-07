@@ -33,7 +33,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { PlusCircle, Edit, Trash2, Send, Plus, X, } from 'lucide-react'
-import { AddTest, DeleteTest, RequestTest, searchTests } from '@/lib/lab/clientApi'
+import { AddTest, DeleteTest, RequestTest, searchTests, UpdateTest } from '@/lib/lab/clientApi'
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import { getUser } from '@/lib/auth'
@@ -147,8 +147,6 @@ export default function TestManagement({tests, currentPage, totalPages,available
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
   const [isRequestOpen, setIsRequestOpen] = useState(false)
-
-
   const t = useTranslations('Tests')
 
   const [searchTerm, setSearchTerm] = useState('')
@@ -168,7 +166,6 @@ export default function TestManagement({tests, currentPage, totalPages,available
     try {
       const res = await searchTests(searchTerm, 7, page)
       if (res.success === true) {
-        console.log(res.data)
         setSearchResult({
           tests: res.data.data,
           totalPages: res.data.paginationResult.numberOfPages,
@@ -239,7 +236,6 @@ const handleAddModalOpen=()=>{
    setIsLoading(true);
     const user = getUser();
     const object ={Lab:user.id,test:data.id,preparations:data.preparations,cost:data.cost}
-    console.log(object)
     const res = await AddTest(object)
     if (res.success ===true) {
       toast.success(res.message, {
@@ -257,9 +253,26 @@ const handleAddModalOpen=()=>{
     handleAddModalOpen();
     setIsLoading(false);
   }
-const handleUpdateSubmit=(data:TestFormValue)=>{
-  console.log(data)
-
+const handleUpdateSubmit=async(data:TestFormValue)=>{
+  setIsLoading(true);
+    const user = getUser();
+    const object ={preparations:data.preparations,cost:Number(data.cost)}
+    const res = await UpdateTest(object,data.id)
+    if (res.success ===true) {
+      toast.success(res.message, {
+        duration: 2000,
+        position: 'bottom-center',
+      })
+      router.refresh();
+      
+    } else {
+      res.message.forEach((err: string) => toast.error(err || 'An unexpected error occurred.', {
+        duration: 2000,
+        position: 'bottom-center',
+      }))
+    }
+    handleEditModalOpen();
+    setIsLoading(false);
 }
 
 
@@ -372,7 +385,7 @@ const handleDeleteTest = async() => {
 <Dialog open={isAddOpen} onOpenChange={handleAddModalOpen}>
         <DialogTrigger asChild>
           <Button disabled={isLoading} className="w-full sm:w-auto">
-            <PlusCircle className="mr-2 h-4 w-4" />
+            <PlusCircle className="ltr:mr-2 rtl:ml-1 h-4 w-4" />
             {t(`Add_Test.title`)}
           </Button>
         </DialogTrigger>
