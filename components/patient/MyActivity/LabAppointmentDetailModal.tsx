@@ -208,8 +208,17 @@ export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, a
                         <Card key={test.id}>
                           <CardHeader>
                             <CardTitle className="text-lg">{test.testDetails.test.name}</CardTitle>
+                            <div className="mt-1">
+              <h3 className="text-sm font-sempibold mb-1">Preperations:</h3>
+              <ul className="list-disc list-inside text-sm text-muted-foreground">
+                {test.testDetails.preparations.length > 0 ? test.testDetails.preparations.map((prep, index) => (
+                  <li key={index}>{prep}</li>
+                )) : <li>none</li>}
+              </ul>
+            </div>
                           </CardHeader>
                           <CardContent>
+                          
                             <div className="flex flex-wrap gap-2">
                               {test.testResult.map((result, index) => (
                                 <Button
