@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Brain, Stethoscope, Activity } from 'lucide-react'
 import { Card } from '@/components/ui/card'
+import { useTranslations } from 'next-intl'
 
 interface AIThinkingProps {
   message?: string
@@ -10,12 +11,13 @@ interface AIThinkingProps {
 
 export default function AIThinking({  }: AIThinkingProps) {
   const [currentMessage, setCurrentMessage] = useState(0)
+  const t = useTranslations('patient.AIThinking')
   
   const messages = [
-    "Analyzing your symptoms...",
-    "Reviewing medical patterns...",
-    "Matching with specializations...",
-    "Preparing recommendations..."
+    "Analyzing_your_symptoms",
+    "Reviewing_medical_patterns",
+    "Matching_with_specializations",
+    "Preparing_recommendations"
   ]
 
   useEffect(() => {
@@ -52,10 +54,10 @@ export default function AIThinking({  }: AIThinkingProps) {
         {/* Loading Message */}
         <div className="text-center space-y-2">
           <p className="text-lg font-medium text-primary">
-            {messages[currentMessage]}
+            {`${t(`${messages[currentMessage]}`)}`}
           </p>
           <p className="text-sm text-muted-foreground">
-            Our AI is carefully evaluating your case
+            {t(`Our_AI_is_evaluating_your_case`)}
           </p>
         </div>
 

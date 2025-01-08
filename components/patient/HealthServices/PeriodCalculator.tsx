@@ -10,7 +10,7 @@ import { CalendarIcon } from 'lucide-react'
 import { format, addDays } from "date-fns"
 import { Calendar } from "@/components/ui/calendar"
 import PeriodCal from "@/public/PeriodCal.png"
-
+import { useTranslations } from 'next-intl'
 import {
   Popover,
   PopoverContent,
@@ -22,6 +22,7 @@ export default function PeriodCalculator() {
   const [cycleLength, setCycleLength] = useState(28)
   const [lastPeriodDate, setLastPeriodDate] = useState<Date | undefined>(new Date())
   const [result, setResult] = useState<{ nextPeriod: Date, ovulationDate: Date } | null>(null)
+  const t = useTranslations('patient.HealthServices.Period_Calculator')
 
   const calculateDates = () => {
     if (lastPeriodDate) {
@@ -46,9 +47,9 @@ export default function PeriodCalculator() {
               className="w-2/3 h-auto rounded-lg mb-4"
               />
               </div>
-            <h1 className="text-3xl font-bold mb-2 text-center">Period Calculator</h1>
+            <h1 className="text-3xl font-bold mb-2 text-center">{t(`title`)}</h1>
             <p className="text-center text-gray-600">
-              Track your menstrual cycle and predict your next period and ovulation dates
+              {t(`description`)}
             </p>
             <div className="absolute top-4 right-4">
               <div className="w-3 h-3 rounded-full bg-teal-500" />
@@ -65,26 +66,26 @@ export default function PeriodCalculator() {
                   <line x1="8" y1="2" x2="8" y2="6"></line>
                   <line x1="3" y1="10" x2="21" y2="10"></line>
                 </svg>
-                <p className="text-2xl font-bold mb-2">Next Period: {format(result.nextPeriod, "MMMM d, yyyy")}</p>
-                <p className="text-xl">Ovulation: {format(result.ovulationDate, "MMMM d, yyyy")}</p>
+                <p className="text-2xl font-bold mb-2">{t(`Next_Period`)}: {format(result.nextPeriod, "MMMM d, yyyy")}</p>
+                <p className="text-xl">{t(`Ovulation`)}: {format(result.ovulationDate, "MMMM d, yyyy")}</p>
               </div>
 
               <Card className="w-full">
                 <CardContent className="p-4 space-y-2">
                   <div className="flex justify-between items-center">
-                    <span>Follicular Phase</span>
+                    <span>{t(`Follicular_Phase`)}</span>
                     <div className="w-1/2 bg-gray-200 rounded-full h-2.5">
                       <div className="bg-teal-500 h-2.5 rounded-full" style={{ width: "50%" }}></div>
                     </div>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span>Ovulation</span>
+                    <span>{t(`Ovulation`)}</span>
                     <div className="w-1/2 bg-gray-200 rounded-full h-2.5">
                       <div className="bg-orange-400 h-2.5 rounded-full" style={{ width: "10%" }}></div>
                     </div>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span>Luteal Phase</span>
+                    <span>{t(`Luteal_Phase`)}</span>
                     <div className="w-1/2 bg-gray-200 rounded-full h-2.5">
                       <div className="bg-teal-500 h-2.5 rounded-full" style={{ width: "40%" }}></div>
                     </div>
@@ -97,14 +98,14 @@ export default function PeriodCalculator() {
                 variant="outline"
                 className="w-full"
               >
-                Calculate Again
+                {t(`Calculate_Again`)}
               </Button>
             </div>
           ) : (
             <div className="space-y-6">
               <div>
                 <Label htmlFor="lastPeriodDate" className="text-sm text-gray-500 block mb-2">
-                  Start Date of Last Period
+                  {t(`Start_Date`)}
                 </Label>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -115,7 +116,7 @@ export default function PeriodCalculator() {
                       }`}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {lastPeriodDate ? format(lastPeriodDate, "PPP") : <span>Pick a date</span>}
+                      {lastPeriodDate ? format(lastPeriodDate, "PPP") : <span></span>}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0">
@@ -131,7 +132,7 @@ export default function PeriodCalculator() {
 
               <div>
                 <Label htmlFor="cycleLength" className="text-sm text-gray-500 block mb-2">
-                  Cycle Length (days)
+                  {t(`Cycle_Length_days`)}
                 </Label>
                 <Input
                   id="cycleLength"
@@ -144,7 +145,7 @@ export default function PeriodCalculator() {
 
               <div>
                 <Label htmlFor="periodLength" className="text-sm text-gray-500 block mb-2">
-                  Period Length (days)
+                  {t(`Period_Length_days`)}
                 </Label>
                 <Input
                   id="periodLength"
@@ -159,7 +160,7 @@ export default function PeriodCalculator() {
                 onClick={calculateDates}
                 className="w-full bg-teal-500 hover:bg-teal-600"
               >
-                Calculate Dates
+                {t(`button`)}
               </Button>
             </div>
           )}

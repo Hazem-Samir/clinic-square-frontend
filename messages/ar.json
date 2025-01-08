@@ -4,6 +4,34 @@
     "EGP":"جنيه مصري"
 
     },
+"Categories":{
+  "Cosmetics": "مستحضرات التجميل",
+  "Hair Care": "العناية بالشعر",
+  "Every Day Essentials": "مستلزمات يومية",
+  "Medical Equipment & Supplies": "المعدات والمستلزمات الطبية",
+  "Mom & Baby": "الأم والطفل",
+  "Sexual Health": "الصحة الجنسية",
+  "Medicine": "ادوية",
+  "Skin Care": "العناية بالبشرة"
+},
+    "Specializations": {
+      "Allergist": "طبيب حساسية",
+      "Cardiologist": "طبيب قلب",
+      "Dermatologist": "طبيب جلدية",
+      "Endocrinologist": "طبيب الغدد الصماء",
+      "Gastroenterologist": "طبيب الجهاز الهضمي",
+      "Gynecologist": "طبيب النساء والتوليد",
+      "Hepatologist": "طبيب الكبد",
+      "Internal Medcine": "طبيب باطني",
+      "Neurologist": "طبيب أعصاب",
+      "Osteopathic": "طبيب عظام",
+      "Otolaryngologist": "طبيب الأنف والأذن والحنجرة",
+      "Pediatrician": "طبيب أطفال",
+      "Phlebologist": "طبيب الأوردة",
+      "Pulmonologist": "طبيب رئة",
+      "Rheumatologists": "طبيب روماتيزم",
+      "Tuberculosis": "طبيب سل"
+    },
     "Dashboard":{
       "Reservations":"الحجوزات",
       "REM":"الارباح كل شهر",

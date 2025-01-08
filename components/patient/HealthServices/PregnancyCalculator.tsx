@@ -10,7 +10,7 @@ import { CalendarIcon } from 'lucide-react'
 import { format, addDays, differenceInWeeks } from "date-fns"
 import { Calendar } from "@/components/ui/calendar"
 import PregnancyCal from "@/public/PregnancyCal.png"
-
+import { useTranslations } from 'next-intl'
 import {
   Popover,
   PopoverContent,
@@ -21,6 +21,7 @@ export default function PregnancyCalculator() {
   const [lastPeriodDate, setLastPeriodDate] = useState<Date | undefined>(new Date())
   const [cycleLength, setCycleLength] = useState(28)
   const [result, setResult] = useState<{ dueDate: Date, currentWeek: number } | null>(null)
+  const t = useTranslations('patient.HealthServices.Pregnancy_Calculator')
 
   const calculateDueDate = () => {
     if (lastPeriodDate) {
@@ -50,9 +51,9 @@ export default function PregnancyCalculator() {
               className="w-2/3 h-auto rounded-lg mb-4"
             />
             </div>
-            <h1 className="text-3xl font-bold mb-2 text-center">Pregnancy Calculator</h1>
+            <h1 className="text-3xl font-bold mb-2 text-center">{t(`title`)}</h1>
             <p className="text-center text-gray-600">
-              This pregnancy calculator helps you determine the important stages of pregnancy and the expected date of birth
+              {t(`description`)}
             </p>
             <div className="absolute top-4 right-4">
               <div className="w-3 h-3 rounded-full bg-teal-500" />
@@ -68,26 +69,26 @@ export default function PregnancyCalculator() {
                   <path d="M12 8a3 3 0 0 0-3 3v1h6v-1a3 3 0 0 0-3-3z" />
                 </svg>
                 <p className="text-2xl font-bold mb-2">{format(result.dueDate, "MMMM d, yyyy")}</p>
-                <p className="text-xl">{result.currentWeek} weeks, {result.currentWeek * 7 % 7} days</p>
-                <p className="text-lg mt-2">Your baby is the size of a {getFruitSize(result.currentWeek)} 🍎</p>
+                <p className="text-xl">{result.currentWeek} {t(`weeks`)} {result.currentWeek * 7 % 7} {t(`days`)}</p>
+                <p className="text-lg mt-2">{t(`baby_size`)}{" "}{t(`fruits.${getFruitSize(result.currentWeek)}`)} 🍎</p>
               </div>
 
               <Card className="w-full">
                 <CardContent className="p-4 space-y-2">
                   <div className="flex justify-between items-center">
-                    <span>First Trimester</span>
+                    <span>{t(`First_Trimester`)}</span>
                     <div className="w-1/2 bg-gray-200 rounded-full h-2.5">
                       <div className="bg-teal-500 h-2.5 rounded-full" style={{ width: `${Math.min(100, (result.currentWeek / 13) * 100)}%` }}></div>
                     </div>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span>Second Trimester</span>
+                    <span>{t(`Second_Trimester`)}</span>
                     <div className="w-1/2 bg-gray-200 rounded-full h-2.5">
                       <div className="bg-teal-500 h-2.5 rounded-full" style={{ width: `${Math.max(0, Math.min(100, ((result.currentWeek - 13) / 13) * 100))}%` }}></div>
                     </div>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span>Third Trimester</span>
+                    <span>{t(`Third_Trimester`)}</span>
                     <div className="w-1/2 bg-gray-200 rounded-full h-2.5">
                       <div className="bg-teal-500 h-2.5 rounded-full" style={{ width: `${Math.max(0, Math.min(100, ((result.currentWeek - 26) / 14) * 100))}%` }}></div>
                     </div>
@@ -100,14 +101,14 @@ export default function PregnancyCalculator() {
                 variant="outline"
                 className="w-full"
               >
-                Calculate Again
+                {t(`Calculate_Again`)}
               </Button>
             </div>
           ) : (
             <div className="space-y-6">
               <div>
                 <Label htmlFor="lastPeriodDate" className="text-sm text-gray-500 block mb-2">
-                  Start Date of Last Period
+                  {t(`Start_Date`)}
                 </Label>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -118,7 +119,7 @@ export default function PregnancyCalculator() {
                       }`}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {lastPeriodDate ? format(lastPeriodDate, "PPP") : <span>Pick a date</span>}
+                      {lastPeriodDate ? format(lastPeriodDate, "PPP") : <span>{t(`Pick_a_date`)}</span>}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0">
@@ -134,7 +135,7 @@ export default function PregnancyCalculator() {
 
               <div>
                 <Label htmlFor="cycleLength" className="text-sm text-gray-500 block mb-2">
-                  Average Cycle Length (days)
+                  {t(`Average_Cycle_Length_days`)}
                 </Label>
                 <Input
                   id="cycleLength"
@@ -149,7 +150,7 @@ export default function PregnancyCalculator() {
                 onClick={calculateDueDate}
                 className="w-full bg-teal-500 h over:bg-teal-600"
               >
-                Calculate Due Date
+                {t(`button`)}
               </Button>
             </div>
           )}

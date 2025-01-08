@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Card, CardContent } from "@/components/ui/card"
 import { Plus, Minus } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 export default function BMICalculator() {
   const [weight, setWeight] = useState(70)
@@ -14,6 +15,7 @@ export default function BMICalculator() {
   const [gender, setGender] = useState("male")
   const [bmi, setBMI] = useState<number | null>(null)
   const [progress, setProgress] = useState(0)
+  const t = useTranslations('patient.HealthServices.BMI_Calculator')
 
   const calculateBMI = () => {
     const heightInMeters = height / 100
@@ -48,7 +50,7 @@ export default function BMICalculator() {
       <Card className="max-w-2xl mx-auto">
         <CardContent className="p-6 md:p-8">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-2">BMI Calculator</h1>
+            <h1 className="text-3xl font-bold mb-2">{t(`title`)}</h1>
             <div className="absolute top-4 right-4">
               <div className="w-3 h-3 rounded-full bg-teal-500" />
               <div className="w-2 h-2 rounded-full bg-orange-400 mt-2" />
@@ -69,34 +71,34 @@ export default function BMICalculator() {
                   />
                   <div className="absolute inset-0 flex items-center justify-center flex-col">
                     <span className="text-4xl font-bold">{bmi}</span>
-                    <span className="text-sm text-gray-500">BMI</span>
+                    <span className="text-sm text-gray-500">{t(`BMI`)}</span>
                   </div>
                 </div>
               </div>
 
               <div className="text-center">
                 <p className="text-xl">
-                  You have <span className="text-teal-500 font-semibold">{getBMICategory(bmi)}</span> body weight!
+                  {t(`You_have`)} <span className="text-teal-500 font-semibold">{t(`${getBMICategory(bmi)}`)}</span> {t(`body_weight!`)}
                 </p>
               </div>
 
               <Card className="w-full">
                 <CardContent className="p-4 space-y-2">
                   <div className="flex justify-between">
-                    <span>Less than 18.5</span>
-                    <span>Underweight</span>
+                    <span>{t(`Less_than`)} 18.5</span>
+                    <span>{t(`Underweight`)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>18.5 to 24.9</span>
-                    <span>Healthy</span>
+                    <span>18.5 {t(`to`)} 24.9</span>
+                    <span>{t(`Healthy`)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>25 to 29.9</span>
-                    <span>Overweight</span>
+                    <span>25 {t(`to`)} 29.9</span>
+                    <span>{t(`Overweight`)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>30 or above</span>
-                    <span>Obese</span>
+                    <span>30 {t(`or_above`)}</span>
+                    <span>{t(`Obese`)}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -106,14 +108,14 @@ export default function BMICalculator() {
                 variant="outline"
                 className="w-full"
               >
-                Calculate Again
+                {t(`Calculate_Again`)}
               </Button>
             </div>
           ) : (
             <div className="space-y-6">
               <div className="grid md:grid-cols-2 gap-4">
                 <div className=" p-4 rounded-lg">
-                  <Label className="text-sm text-gray-500">WEIGHT</Label>
+                  <Label className="text-sm text-gray-500">{t(`weight`)}</Label>
                   <div className="flex items-center justify-between mt-2">
                     <span className="text-2xl font-bold">{weight}</span>
                     <div className="flex gap-2">
@@ -138,7 +140,7 @@ export default function BMICalculator() {
                 </div>
 
                 <div className=" p-4 rounded-lg">
-                  <Label className="text-sm text-gray-500">AGE</Label>
+                  <Label className="text-sm text-gray-500">{t(`age`)}</Label>
                   <div className="flex items-center justify-between mt-2">
                     <span className="text-2xl font-bold">{age}</span>
                     <div className="flex gap-2">
@@ -164,9 +166,9 @@ export default function BMICalculator() {
               </div>
 
               <div className=" p-4 rounded-lg">
-                <Label className="text-sm text-gray-500">HEIGHT</Label>
+                <Label className="text-sm text-gray-500">{t(`height`)}</Label>
                 <div className="flex items-center justify-between mt-2">
-                  <span className="text-2xl font-bold">{height}<span className="text-sm ml-1">cm</span></span>
+                  <span className="text-2xl font-bold">{height}<span className="text-sm ml-1">{t(`cm`)}</span></span>
                   <input
                     type="range"
                     min="140"
@@ -179,7 +181,7 @@ export default function BMICalculator() {
               </div>
 
               <div>
-                <Label className="text-sm text-gray-500">GENDER</Label>
+                <Label className="text-sm text-gray-500">{t(`gender`)}</Label>
                 <RadioGroup
                   value={gender}
                   onValueChange={setGender}
@@ -187,11 +189,11 @@ export default function BMICalculator() {
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="male" id="male" />
-                    <Label htmlFor="male">Male</Label>
+                    <Label htmlFor="male">{t(`male`)}</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="female" id="female" />
-                    <Label htmlFor="female">Female</Label>
+                    <Label htmlFor="female">{t(`female`)}</Label>
                   </div>
                 </RadioGroup>
               </div>
@@ -200,7 +202,7 @@ export default function BMICalculator() {
                 onClick={calculateBMI}
                 className="w-full bg-teal-500 hover:bg-teal-600"
               >
-                Calculate BMI
+                {t(`button`)}
               </Button>
             </div>
           )}

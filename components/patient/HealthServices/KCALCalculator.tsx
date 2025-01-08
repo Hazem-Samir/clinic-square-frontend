@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Card, CardContent } from "@/components/ui/card"
 import { Plus, Minus } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import CalorieCal from "@/public/CalorieCal.png"
 
 export default function KCALCalculator() {
@@ -16,6 +17,7 @@ export default function KCALCalculator() {
   const [gender, setGender] = useState("male")
   const [activityLevel, setActivityLevel] = useState(1.2)
   const [calories, setCalories] = useState<number | null>(null)
+  const t = useTranslations('patient.HealthServices.Calorie_Counter')
 
   const calculateCalories = () => {
     let bmr
@@ -49,7 +51,7 @@ export default function KCALCalculator() {
               className="w-2/3 h-auto rounded-lg mb-4"
             />
             </div>
-            <h1 className="text-3xl font-bold mb-2 text-center">Calorie Calculator</h1>
+            <h1 className="text-3xl font-bold mb-2 text-center">{t(`title`)}</h1>
             <div className="absolute top-4 right-4">
               <div className="w-3 h-3 rounded-full bg-teal-500" />
               <div className="w-2 h-2 rounded-full bg-orange-400 mt-2" />
@@ -60,13 +62,13 @@ export default function KCALCalculator() {
             <div className="flex flex-col items-center space-y-6">
               <div className="text-center">
                 <p className="text-4xl font-bold text-teal-500 mb-2">{calories}</p>
-                <p className="text-xl">Calories per day</p>
+                <p className="text-xl">{t(`Calories_per_day`)}</p>
               </div>
 
               <Card className="w-full">
                 <CardContent className="p-4 space-y-2">
                   <p className="text-center text-gray-600">
-                    This is the estimated number of calories you need to maintain your current weight based on your BMR (Basal Metabolic Rate) and activity level.
+                  {t(`description`)}
                   </p>
                 </CardContent>
               </Card>
@@ -76,14 +78,14 @@ export default function KCALCalculator() {
                 variant="outline"
                 className="w-full"
               >
-                Calculate Again
+                {t(`Calculate_Again`)}
               </Button>
             </div>
           ) : (
             <div className="space-y-6">
               <div className="grid md:grid-cols-2 gap-4">
                 <div className=" p-4 rounded-lg">
-                  <Label className="text-sm text-gray-500">WEIGHT (kg)</Label>
+                  <Label className="text-sm text-gray-500">{`${t(`weight`)} (${t(`kg`)})`}</Label>
                   <div className="flex items-center justify-between mt-2">
                     <span className="text-2xl font-bold">{weight}</span>
                     <div className="flex gap-2">
@@ -108,7 +110,7 @@ export default function KCALCalculator() {
                 </div>
 
                 <div className=" p-4 rounded-lg">
-                  <Label className="text-sm text-gray-500">AGE</Label>
+                  <Label className="text-sm text-gray-500">{t(`age`)}</Label>
                   <div className="flex items-center justify-between mt-2">
                     <span className="text-2xl font-bold">{age}</span>
                     <div className="flex gap-2">
@@ -134,7 +136,7 @@ export default function KCALCalculator() {
               </div>
 
               <div className=" p-4 rounded-lg">
-                <Label className="text-sm text-gray-500">HEIGHT (cm)</Label>
+                <Label className="text-sm text-gray-500">{`${t(`height`)} (${t(`cm`)})`}</Label>
                 <div className="flex items-center justify-between mt-2">
                   <span className="text-2xl font-bold">{height}</span>
                   <input
@@ -149,7 +151,7 @@ export default function KCALCalculator() {
               </div>
 
               <div>
-                <Label className="text-sm text-gray-500">GENDER</Label>
+                <Label className="text-sm text-gray-500">{t(`gender`)}</Label>
                 <RadioGroup
                   value={gender}
                   onValueChange={setGender}
@@ -157,27 +159,27 @@ export default function KCALCalculator() {
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="male" id="male" />
-                    <Label htmlFor="male">Male</Label>
+                    <Label htmlFor="male">{t(`male`)}</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="female" id="female" />
-                    <Label htmlFor="female">Female</Label>
+                    <Label htmlFor="female">{t(`female`)}</Label>
                   </div>
                 </RadioGroup>
               </div>
 
               <div>
-                <Label className="text-sm text-gray-500">ACTIVITY LEVEL</Label>
+                <Label className="text-sm text-gray-500">{t(`Activity_Level`)}</Label>
                 <select
                   value={activityLevel}
                   onChange={(e) => setActivityLevel(parseFloat(e.target.value))}
                   className="w-full mt-2 p-2 border rounded-md"
                 >
-                  <option value={1.2}>Sedentary</option>
-                  <option value={1.375}>Lightly Active</option>
-                  <option value={1.55}>Moderately Active</option>
-                  <option value={1.725}>Very Active</option>
-                  <option value={1.9}>Extra Active</option>
+                  <option value={1.2}>{t(`Sedentary`)}</option>
+                  <option value={1.375}>{t(`Lightly_Active`)}</option>
+                  <option value={1.55}>{t(`Moderately_Active`)}</option>
+                  <option value={1.725}>{t(`Very_Active`)}</option>
+                  <option value={1.9}>{t(`Extra_Active`)}</option>
                 </select>
               </div>
 
@@ -185,7 +187,7 @@ export default function KCALCalculator() {
                 onClick={calculateCalories}
                 className="w-full bg-teal-500 hover:bg-teal-600"
               >
-                Calculate Calories
+                {t(`button`)}
               </Button>
             </div>
           )}

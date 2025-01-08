@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import { UseModel } from '@/lib/patient/clientApi'
 import { Doctors_Specializations } from '@/schema/Essentials'
+import { useTranslations } from 'next-intl'
 
 interface SearchSectionProps {
   onAnalyzing: (analyzing: boolean) => void
@@ -25,6 +26,8 @@ export default function SearchSection({ onAnalyzing }: SearchSectionProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [specialization, setSpecialization] = useState('')
   const router = useRouter()
+  const t = useTranslations('patient.search')
+  const tspec = useTranslations('Specializations')
 
   const filteredSymptoms = allSymptoms.filter(symptom => 
     symptom.toLowerCase().includes(symptomFilter.toLowerCase())
@@ -82,59 +85,59 @@ export default function SearchSection({ onAnalyzing }: SearchSectionProps) {
   }
 
   return (
-    <section className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <Card className="bg-card shadow-xl rounded-3xl border border-border">
         <CardContent className="p-4 sm:p-6 md:p-8">
           <Tabs defaultValue="name" className="w-full">
             <TabsList className="grid w-full grid-cols-1 md:grid-cols-2 mb-8 md:mb-4 bg-transparent md:space-y-0 space-y-1 md:bg-muted p-0">
               <TabsTrigger value="name" className="text-xs sm:text-sm md:text-base lg:text-lg h-full   data-[state=active]:bg-teal-400 data-[state=active]:text-primary-foreground">
-                Search for Doctor
+                {t(`Search_for_Doctor`)}
               </TabsTrigger>
               <TabsTrigger value="symptoms" className="text-xs sm:text-sm md:text-base lg:text-lg h-full data-[state=active]:bg-teal-400 data-[state=active]:text-primary-foreground">
-                Search by Symptoms
+                {t(`Search_by_Symptoms`)}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="name" className="space-y-4">
               <form onSubmit={handleSearch} className="flex flex-col md:flex-row md:space-y-0 gap-4 items-center space-y-2">
                 <Input 
-                  placeholder="Enter doctor name" 
+                  placeholder={t(`Enter_Doctor_Name`)}
                   className="flex-grow text-base py-2"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <Select value={specialization} onValueChange={setSpecialization}>
                   <SelectTrigger className="w-full text-sm py-2">
-                    <SelectValue placeholder="Select specialization" />
+                    <SelectValue placeholder={t(`Select_Specialization`)} />
                   </SelectTrigger>
                   <SelectContent>
                        {Doctors_Specializations.map(spec => (
                     
-                                        <SelectItem  key={spec} value={`${spec}`}>{spec}</SelectItem>
+                                        <SelectItem  key={spec} value={`${spec}`}>{tspec(`${spec}`)}</SelectItem>
                                         ))}
                   </SelectContent>
                 </Select>
                 <Button type="submit" size="sm" className="w-full">
-                  <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" /> Search
+                  <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" /> {t(`Search_for_Doctor_button`)}
                 </Button>
               </form>
             </TabsContent>
             <TabsContent value="symptoms" className="space-y-4">
               <div className="flex flex-col sm:flex-row items-center sm:space-x-2 space-y-2 sm:space-y-0">
                 <Input
-                  placeholder="Filter symptoms"
+                  placeholder={t(`Filter_Symptoms`)}
                   value={symptomFilter}
                   onChange={(e) => setSymptomFilter(e.target.value)}
                   className="text-sm sm:text-base md:text-lg py-2"
                 />
                 <Button onClick={DetectSpecialization} className="w-full sm:w-auto">
-                  <Search className="mr-2 h-4 w-4" /> Search by Symptoms
+                  <Search className="mr-2 h-4 w-4" /> {t(`Search_by_Symptoms_button`)}
                 </Button>
               </div>
               {selectedSymptoms.length > 0 && (
                 <div className="flex flex-wrap gap-2 mb-4">
                   {selectedSymptoms.map((symptom) => (
                     <Badge key={symptom} variant="secondary" className="px-2 py-1 text-xs sm:text-sm">
-                      {symptom}
+                      {t(`symptoms.${symptom}`)}
                       <Button
                         variant="ghost"
                         size="sm"
@@ -148,7 +151,7 @@ export default function SearchSection({ onAnalyzing }: SearchSectionProps) {
                   ))}
                 </div>
               )}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 max-h-60 overflow-y-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 max-h-60 overflow-y-auto">
                 {filteredSymptoms.map((symptom, index) => (
                   <Button
                     key={index}
@@ -160,7 +163,7 @@ export default function SearchSection({ onAnalyzing }: SearchSectionProps) {
                     }`}
                     onClick={() => toggleSymptom(symptom)}
                   >
-                    {symptom}
+                    {t(`symptoms.${symptom}`)}
                   </Button>
                 ))}
               </div>
