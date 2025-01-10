@@ -66,7 +66,7 @@ export default function NavBar() {
       </div>
       <div className="flex items-center">
         {/* Desktop menu */}
-        <div className="hidden md:flex items-center space-x-4">
+        <div className="hidden md:flex items-center gap-4">
           {menuItems.map((item) => (
             <Link
               key={item.href}
