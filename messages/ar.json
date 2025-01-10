@@ -197,10 +197,10 @@
         "Search_by_Symptoms": "البحث حسب الأعراض",
         "Search_by_Symptoms_button": "البحث حسب الأعراض",
         "symptoms": {
+          "dischromic patches": "بقع متغيرة اللون",
           "itching": "حكة",
           "skin rash": "طفح جلدي",
           "nodal skin eruptions": "طفح جلدي عقدي",
-          "dischromic patches": "بقع متغيرة اللون",
           "continuous sneezing": "عطس مستمر",
           "shivering": "رعشة",
           "chills": "قشعريرة",
