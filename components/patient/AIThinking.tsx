@@ -54,7 +54,7 @@ export default function AIThinking({  }: AIThinkingProps) {
         {/* Loading Message */}
         <div className="text-center space-y-2">
           <p className="text-lg font-medium text-primary">
-            {`${t(`${messages[currentMessage]}`)}`}
+            {`${t(`${messages[currentMessage]}`)}...`}
           </p>
           <p className="text-sm text-muted-foreground">
             {t(`Our_AI_is_evaluating_your_case`)}

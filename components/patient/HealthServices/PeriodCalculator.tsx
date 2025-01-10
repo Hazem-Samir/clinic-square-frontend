@@ -115,7 +115,7 @@ export default function PeriodCalculator() {
                         !lastPeriodDate && "text-muted-foreground"
                       }`}
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      <CalendarIcon className="ltr:mr-2 rtl:ml-1 h-4 w-4" />
                       {lastPeriodDate ? format(lastPeriodDate, "PPP") : <span></span>}
                     </Button>
                   </PopoverTrigger>

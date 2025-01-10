@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Input } from "@/components/ui/input"
 import { shortName } from '@/lib/utils'
 import { getAge } from '@/utils/utils'
-import { ArrowLeft, Edit } from 'lucide-react'
+import { ArrowLeft,ArrowRight, Edit } from 'lucide-react'
 import Link from "next/link"
 import { getUser } from '@/lib/auth'
 import {
@@ -27,14 +27,14 @@ import {
   zodResolver
 } from "@hookform/resolvers/zod"
 import * as z from "zod"
-
+import { useTranslations } from 'next-intl'
 import toast, { Toaster } from 'react-hot-toast'
 import Spinner from '@/components/Spinner'
 import { UpdateQuestion } from '@/lib/patient/clientApi'
 import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
-  question: z.string().min(2,"Question is Required")
+      question: z.string().min(6,"Patient_Question_required")
 });
 
 interface IProps {
@@ -64,7 +64,8 @@ export default function QuestionDetail({question}: IProps) {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
+  const t = useTranslations('patient.medical_questions.Update_Question')
+  const tcommon = useTranslations('common')
   const user=getUser();
   const form = useForm < z.infer < typeof formSchema >> ({
     resolver: zodResolver(formSchema),
@@ -97,8 +98,9 @@ export default function QuestionDetail({question}: IProps) {
   return (
     <div className="container mx-auto p-4">
       <Link href="/patient/medical-questions" className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 mb-4">
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        Back
+      <ArrowLeft className="mr-2 h-4 w-4 rtl:hidden" />
+      <ArrowRight className="ml-2 h-4 w-4 ltr:hidden" />
+        {tcommon(`Back`)}
       </Link>
       
       <Card className="mb-6">
@@ -109,19 +111,19 @@ export default function QuestionDetail({question}: IProps) {
           </Avatar>
           <div className="flex-grow">
             <CardTitle>{question.patient.name}</CardTitle>
-            <p className="text-sm text-muted-foreground">Age: {getAge(question.patient.dateOfBirth)} | Gender: {question.patient.gender}</p>
+            <p className="text-sm text-muted-foreground">{`${t(`PAge`,{age:getAge(question.patient.dateOfBirth)})} | ${t(`PGender`)}: ${t(`${question.patient.gender}`)}`}</p>
           </div>
      {user.id===question.patient.id&&question.answers.length <= 0? 
          <Dialog open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen}>
          <DialogTrigger asChild>
            <Button variant="outline" size="sm">
-             <Edit className="w-4 h-4 mr-2" />
-             Update Question
+             <Edit className="w-4 h-4 ltr:mr-2 rtl:ml-1" />
+             {t(`button`)}
            </Button>
          </DialogTrigger>
          <DialogContent className="sm:max-w-[425px]">
            <DialogHeader>
-             <DialogTitle>Update Question</DialogTitle>
+             <DialogTitle>{t(`title`)}</DialogTitle>
              <DialogDescription>
               
              </DialogDescription>
@@ -134,20 +136,20 @@ export default function QuestionDetail({question}: IProps) {
           name="question"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Question</FormLabel>
+              <FormLabel>{t(`Question_Field_Label`)}</FormLabel>
               <FormControl>
                 <Input 
-                placeholder="Enter Your New Question"
+                placeholder={t(`placeholder`)}
                 disabled={isLoading}
                 type=""
                 {...field} />
               </FormControl>
-              <FormDescription> Make changes to your question here. Click save when you&apos;re done.</FormDescription>
-              <FormMessage />
+              <FormDescription>{t(`description`)}</FormDescription>
+              <FormMessage translate={'errors'} />
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isLoading}>{isLoading?<Spinner/>:"Submit"}</Button>
+        <Button type="submit" disabled={isLoading}>{isLoading?<Spinner/>:t(`submit`)}</Button>
       </form>
     </Form>
          </DialogContent>
@@ -155,12 +157,12 @@ export default function QuestionDetail({question}: IProps) {
     }
         </CardHeader>
         <CardContent>
-          <h2 className="text-xl font-semibold mb-2">Question:</h2>
+          <h2 className="text-xl font-semibold mb-2">{t(`Question`)}</h2>
           <p className="mb-4">{question.question}</p>
         </CardContent>
       </Card>
 
-      <h2 className="text-xl font-bold mb-4">Answers:</h2>
+      <h2 className="text-xl font-bold mb-4">{t(`Answers`)}</h2>
       {question.answers.length > 0 ? question.answers.map((answer) => (
         <Card key={answer.id} className="mb-4">
           <CardHeader className="flex flex-row items-center justify-between">
@@ -176,7 +178,7 @@ export default function QuestionDetail({question}: IProps) {
             <p>{answer.answer}</p>
           </CardContent>
         </Card>
-      )) : <p>No Answers Yet</p>}
+      )) : <p>{t(`No_Answers`)}</p>}
       <Toaster />
     </div>
   )

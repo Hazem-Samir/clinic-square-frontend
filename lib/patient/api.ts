@@ -202,11 +202,13 @@ export const getAllLabs = async (limit:number,page: number) => {
 }
 
     
-export const GetLabTests = async (id:string) => {
+export const GetLabTests = async (id:string,page:number,limit:number) => {
   const cookieStore = cookies()
   const token = JSON.parse (cookieStore.get('token').value)
   const queryParams = new URLSearchParams({
-    id
+    id,
+    limit: limit.toString(),
+    page: page.toString(),
   }).toString();
   const response = await fetch(`${FRONT_URL}/api/patient/labs/oneLab/test?${queryParams}`, {
     method: 'GET',
@@ -278,11 +280,14 @@ export const getOnePharmacy = async (id:string) => {
 
   
 
-export const GetPharmacyMedicine = async (id:string) => {
+
+export const GetPharmacyMedicine = async (id:string,page:number,limit:number) => {
 const cookieStore = cookies()
 const token = JSON.parse (cookieStore.get('token').value)
 const queryParams = new URLSearchParams({
-id
+  id,
+  limit: limit.toString(),
+  page: page.toString(),
 }).toString();
 const response = await fetch(`${FRONT_URL}/api/patient/pharmacies/onePharmacy/medicine?${queryParams}`, {
 method: 'GET',

@@ -16,6 +16,7 @@ import {TestTubeDiagonal, ShoppingCart,Search } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Spinner from '@/components/Spinner'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useTranslations } from 'next-intl'
 
 interface Lab {
   id: string
@@ -59,16 +60,17 @@ interface IResult  {
 
 
 const LabsData=({Labs,currentPage,totalPages,handlePageChange,isLoading}:ILabData) =>{
+  const t = useTranslations('patient.labs')
   return(
 
   <>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {Labs.length<=0?<div className="my-4 flex col-span-4 justify-center items-center">No Labs</div>
+    {Labs.length<=0?<div className="my-4 flex col-span-4 justify-center items-center">{t(`No_Labs`)}</div>
 
         :Labs.map((lab) => (
           <Card key={lab.id} className="flex flex-col">
             <CardContent className="p-4">
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center gap-2">
                 <div className="relative w-16 h-16">
                   {/* <Image
                     src={lab.profilePic||""}
@@ -77,12 +79,12 @@ const LabsData=({Labs,currentPage,totalPages,handlePageChange,isLoading}:ILabDat
                     style={{ objectFit: 'cover' }}
                     className="rounded-full"
                   /> */}
-                      <Avatar className="relative w-16 h-16">
+                      <Avatar className="relative w-16 h-16 ">
                   <AvatarImage src={lab.profilePic} alt={lab.name} />
                   <AvatarFallback>{shortName(lab.name)}</AvatarFallback>
                 </Avatar>
                 </div>
-                <div>
+                <div className="">
                   <h2 className="text-xl font-semibold">{lab.name}</h2>
                   <p className="text-sm text-gray-500">{lab.phoneNumbers[0]}</p>
                 </div>
@@ -90,7 +92,7 @@ const LabsData=({Labs,currentPage,totalPages,handlePageChange,isLoading}:ILabDat
             </CardContent>
             <CardFooter className="mt-auto">
               <Link href={`/patient/labs/${lab.id}`} className="w-full">
-                <Button className="w-full">View Details</Button>
+                <Button className="w-full">{t(`View_Details`)}</Button>
               </Link>
             </CardFooter>
           </Card>
@@ -102,6 +104,8 @@ const LabsData=({Labs,currentPage,totalPages,handlePageChange,isLoading}:ILabDat
 
  }
  const Results = ({ Tests, currentPage, handlePageChange, isLoading, totalPages }: IResult) => {
+  const t = useTranslations('patient.labs')
+  const tcommon = useTranslations('common')
   const { addToCart } = useCartStore()
 
   const handleAddToCart = async (testId: string) => {
@@ -121,12 +125,12 @@ const LabsData=({Labs,currentPage,totalPages,handlePageChange,isLoading}:ILabDat
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {Tests.length<=0?<div className="my-4 flex col-span-4 justify-center items-center">No Tests</div>
+      {Tests.length<=0?<div className="my-4 flex col-span-4 justify-center items-center">{t(`No_Tests`)}</div>
 
         :Tests.map((test) => (
           <Card key={test.id}>
                 <CardContent className="p-4 flex-1">
-              <div className="flex items-center justify-center space-x-2 mb-3 h-10">
+              <div className="flex items-center justify-center gap-2 mb-3 h-10">
                 <TestTubeDiagonal className="h-5 w-5 flex-shrink-0 mt-1" />
                 <h3 className="text-lg font-semibold leading-tight line-clamp-2">
                   {test.test.name}
@@ -134,26 +138,26 @@ const LabsData=({Labs,currentPage,totalPages,handlePageChange,isLoading}:ILabDat
               </div>
             
                 <div className="space-y-2">
-                  <h4 className="font-medium">Preparations:</h4>
+                  <h4 className="font-medium">{t(`Preparations`)}</h4>
                   <ScrollArea className="h-10 w-full pr-4">
                     <ul className="list-disc list-inside text-sm space-y-1">
                       {test.preparations.length>0? test.preparations.map((prep, index) => (
                         <li key={index} className="text-muted-foreground">
                           {prep}
                         </li>
-                      )):<li>None</li>}
+                      )):<li>{t(`None`)}</li>}
                     </ul>
                   </ScrollArea>
                 </div>
-                <p className="text-2xl text-center font-bold mb-3">{test.cost} EGP</p>
+                <p className="text-2xl text-center font-bold mb-3">{`${test.cost} ${tcommon(`EGP`)}`}</p>
             
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
               <Button className="w-full" onClick={() => handleAddToCart(test.id)}>
-                <ShoppingCart className="w-4 h-4 mr-2" />
-                Add to Cart
+                <ShoppingCart className="w-4 h-4 ltr:mr-2 rtl:ml-1" />
+                {t(`Add_to_Cart`)}
               </Button>
-              <Link href={`/patient/labs/${test.lab.id}`}   className="flex items-center space-x-2 w-full  no-underline pt-2 border-t hover:text-teal-500">
+              <Link href={`/patient/labs/${test.lab.id}`}   className="flex items-center gap-2 w-full  no-underline pt-2 border-t hover:text-teal-500">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={test.lab.profilePic} alt={test.lab.name} />
                   <AvatarFallback>{shortName(test.lab.name)}</AvatarFallback>
@@ -177,6 +181,7 @@ export default function LabsList({currentPage,totalPages,Labs}:IProps) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter()
 
+  const t = useTranslations('patient.labs')
 
   const handleSearch =async (e: React.FormEvent) => {
     e.preventDefault()
@@ -253,30 +258,30 @@ console.log("hna")
   }
   return (
     <div className="container mx-auto px-4 py-8">
-    <h1 className="text-3xl font-bold text-center mb-8">Our Labs</h1>
+    <h1 className="text-3xl font-bold text-center mb-8">{t(`Our_Labs`)}</h1>
       
       <form onSubmit={handleSearch} className="mb-8">
         <div className="flex gap-2 sm:flex-row flex-col">
           <Input
             type="text"
-            placeholder="Search for lab or tests..."
+            placeholder={`${t(`Search_Placeholder`)}...`}
             value={searchTerm}
             onChange={(e) => {setSearchTerm(e.target.value); check(e)}}
             className="flex-grow"
           />
                <Select  value={searchType} onValueChange={setSearchType}>
                   <SelectTrigger className="sm:w-1/4 text-sm py-2 ">
-                    <SelectValue placeholder="Search in" />
+                    <SelectValue placeholder={t(`Search_in`)} />
 
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem  value="Lab">Labs</SelectItem>
-                    <SelectItem value="Test">Tests</SelectItem>
+                    <SelectItem  value="Lab">{t(`Labs`)}</SelectItem>
+                    <SelectItem value="Test">{t(`Tests`)}</SelectItem>
                   </SelectContent>
                 </Select>
           <Button type="submit">
-            <Search className="w-4 h-4 mr-2" />
-            Search
+            <Search className="w-4 h-4 ltr:mr-2 rtl:ml-1" />
+            {t(`Search`)}
           </Button>
         </div>
       </form>

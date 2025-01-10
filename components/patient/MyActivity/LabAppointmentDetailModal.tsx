@@ -112,7 +112,7 @@ export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, a
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[550px]">
+      <DialogContent className="sm:max-w-[550px] ">
         <ScrollArea className="h-[calc(70vh-2rem)] pr-4" style={{ overflow: 'auto' }}>
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">Appointment Details</DialogTitle>
@@ -248,7 +248,7 @@ export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, a
                 </div>
 
                 {appointment.state !== "completed" && (
-                  <DialogFooter>
+                  <DialogFooter className="p-1">
                     <Button type="button" disabled={isLoading} variant="outline" onClick={onClose}>
                       Cancel
                     </Button>

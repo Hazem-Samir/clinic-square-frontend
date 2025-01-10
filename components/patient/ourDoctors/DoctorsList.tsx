@@ -18,6 +18,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Pagination from '@/components/Pagination'
 import { Doctors_Specializations } from '@/schema/Essentials'
 import Spinner from '@/components/Spinner'
+import { useTranslations } from 'next-intl'
+
 interface Doctor {
   id: string;
   profilePic: string;
@@ -43,10 +45,13 @@ interface IDoctorsData extends IProps  {
 
 
 const DoctorsData=({Doctors,currentPage,totalPages,handlePageChange,isLoading}:IDoctorsData)=>{
+  const t = useTranslations('patient.doctors')
+  const tspec = useTranslations('Specializations')
+
   return (
     <>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Doctors.length<=0?<div className="my-4 flex col-span-4 justify-center items-center">No Doctors</div>
+        {Doctors.length<=0?<div className="my-4 flex col-span-4 justify-center items-center">{t(`No_Doctors`)}</div>
         :Doctors.map((doctor) => (
           <Card key={doctor.id} className="flex flex-col h-[500px]">
             <CardContent className="p-0 flex-grow">
@@ -61,8 +66,8 @@ const DoctorsData=({Doctors,currentPage,totalPages,handlePageChange,isLoading}:I
                 />
               </div>
               <div className="p-4">
-                <h2 className="text-xl font-semibold">Dr. {doctor.name}</h2>
-                <p className="text-sm text-gray-500">{doctor.specialization}</p>
+                <h2 className="text-xl font-semibold">{`${t(`Dr`)} ${doctor.name}`}</h2>
+                <p className="text-sm text-gray-500">{tspec(`${doctor.specialization}`)}</p>
                 {/* <div className="flex items-center mt-2">
                   <Star className="w-4 h-4 text-yellow-400 fill-current" />
                   <span className="ml-1 text-sm">{doctor.rating || 'N/A'}</span>
@@ -73,7 +78,7 @@ const DoctorsData=({Doctors,currentPage,totalPages,handlePageChange,isLoading}:I
                     <AccordionTrigger className="text-sm py-2">
                       <div className="flex items-center">
                         <MapPin className="w-4 h-4 text-gray-400 mr-1" />
-                        Addresses
+                        {t(`Locations`)}
                       </div>
                     </AccordionTrigger>
                     <AccordionContent>
@@ -90,7 +95,7 @@ const DoctorsData=({Doctors,currentPage,totalPages,handlePageChange,isLoading}:I
             </CardContent>
             <CardFooter className="mt-auto">
               <Link href={`/patient/our-doctors/${doctor.id}`} className="w-full">
-                <Button className="w-full">View Details</Button>
+                <Button className="w-full">{t(`View_Details`)}</Button>
               </Link>
             </CardFooter>
           </Card>
@@ -107,6 +112,8 @@ export default function DoctorsList({ Doctors, currentPage, totalPages,searchPar
   const [isLoading, setIsLoading] = useState(false);
   const [specialization, setSpecialization] = useState(spec)
   const router = useRouter()
+  const t = useTranslations('patient.doctors')
+  const tspec = useTranslations('Specializations')
 
 
   const handleSearch =async (e: React.FormEvent) => {
@@ -148,31 +155,31 @@ export default function DoctorsList({ Doctors, currentPage, totalPages,searchPar
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center mb-8">Our Doctors</h1>
+      <h1 className="text-3xl font-bold text-center mb-8">{t(`Our_Doctors`)}</h1>
       <form onSubmit={handleSearch} className="mb-8">
         <div className="flex gap-2">
           <Input
             type="text"
-            placeholder="Search for Doctors..."
+            placeholder={`${t(`Search_Placeholder`)}...`}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="flex-grow"
           />
             <Select  value={specialization} onValueChange={setSpecialization}>
                   <SelectTrigger className="w-full text-sm py-2 ">
-                    <SelectValue placeholder="Select specialization" />
+                    <SelectValue placeholder={t(`Select_Specialization`)} />
                   </SelectTrigger>
                   <SelectContent>
                     {Doctors_Specializations.map(spec => (
 
-                    <SelectItem  key={spec} value={`${spec}`}>{spec}</SelectItem>
+                    <SelectItem  key={spec} value={`${spec}`}>{tspec(`${spec}`)}</SelectItem>
                     ))}
                  
                   </SelectContent>
                 </Select>
           <Button type="submit">
-            <Search className="w-4 h-4 mr-2" />
-            Search
+            <Search className="w-4 h-4 ltr:mr-2 rtl:ml-1" />
+            {t(`Search`)}
           </Button>
         </div>
       </form>

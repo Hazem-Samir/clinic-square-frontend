@@ -20,15 +20,18 @@ import { DaysOfWeek, HandleTimeFormat } from '@/schema/Essentials'
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { cartFormSchema, type CartFormData } from "@/schema/cart-form"
+import { useTranslations } from 'next-intl'
 
 
 export default function CartPage() {
   const [isCheckingOut, setIsCheckingOut] = useState(false)
-  // const [selectedDate, setSelectedDate] = useState<string >('')
-  // const [selectedDay, setSelectedDay] = useState("")
+
   const { cart, isLoading, error, fetchCart, removeMedicine, updateMedicineQuantity, removeTest } = useCartStore()
   const router = useRouter()
   const [availableDatesMap, setAvailableDatesMap] = useState<Record<string, Date[]>>({})
+  const t = useTranslations('patient.cart')
+  const tcommon = useTranslations('common')
+  const tday = useTranslations('days')
 
   const form = useForm<CartFormData>({
     resolver: zodResolver(cartFormSchema),
@@ -208,7 +211,7 @@ export default function CartPage() {
             <div>
 
               <h3 className="text-xl font-semibold">{pharmacy.pharmacyId.name}</h3>
-              <p className="text-xs text-muted-foreground">Locations: {pharmacy.pharmacyId.address}</p>
+              {/* <p className="text-xs text-muted-foreground">Locations: {pharmacy.pharmacyId.address}</p> */}
             </div>
           </div>
           {pharmacy.purchasedMedicines.map((medicine) => (
@@ -218,7 +221,7 @@ export default function CartPage() {
                   <Pill className="w-5 h-5" />
                   <div>
                     <CardTitle>{medicine.medicineId.medicine.name}</CardTitle>
-                    <CardDescription>Price: {medicine.price} EGP</CardDescription>
+                    <CardDescription>{`${t(`Price`)}: ${medicine.price} ${tcommon(`EGP`)}`}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -243,15 +246,15 @@ export default function CartPage() {
                     </Button>
                   </div>
                   <div className="text-lg font-semibold flex space-x-1 items-center">
-                    <h5>Total Price: </h5>
-                    <p className="text-md font-semibold">{medicine.price * medicine.quantity} EGP</p>
+                    <h5>{t(`Total_Price`)}</h5>
+                    <p className="text-md font-semibold">{`${medicine.price * medicine.quantity} ${tcommon(`EGP`)}`}</p>
                   </div>
                 </div>
               </CardContent>
               <CardFooter className="justify-end">
                 <Button variant="destructive" size="sm" onClick={() => removeMedicine(medicine.id)}>
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Remove
+                  <Trash2 className="h-4 w-4 ltr:mr-2 rtl:ml-1" />
+                  {t(`Remove`)}
                 </Button>
               </CardFooter>
             </Card>
@@ -279,26 +282,26 @@ export default function CartPage() {
                   <TestTube className="w-5 h-5" />
                   <div>
                     <CardTitle>{test.testId.test.name}</CardTitle>
-                    <CardDescription>Price: {test.price} EGP</CardDescription>
+                    <CardDescription>{`${t(`Price`)}: ${test.price} ${tcommon(`EGP`)}`}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="flex justify-between items-center">
                   <div className="mt-2">
-                    <h3 className="text-sm font-semibold mb-1">Preparations:</h3>
+                    <h3 className="text-sm font-semibold mb-1">{t(`Preparations`)}</h3>
                     <ul className="list-disc list-inside text-sm text-muted-foreground">
                       {test.testId.preparations.length > 0 ? test.testId.preparations.map((prep, index) => (
                         <li key={index}>{prep}</li>
-                      )) : <li>none</li>}
+                      )) : <li>{t(`None`)}</li>}
                     </ul>
                   </div>
                 </div>
               </CardContent>
               <CardFooter className="justify-end">
                 <Button variant="destructive" size="sm" onClick={() => removeTest(test.id)}>
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Remove
+                  <Trash2 className="h-4 w-4 ltr:mr-2 rtl:ml-1r-2" />
+                  {t(`Remove`)}
                 </Button>
               </CardFooter>
           
@@ -307,7 +310,7 @@ export default function CartPage() {
           ))}
               <div className="flex items-center gap-2 mt-4">
                 <div className="w-full">
-                  <Label>Select Day</Label>
+                  <Label>{t(`Select_Day`)}</Label>
                   <Select
                     onValueChange={(value) => {
                       form.setValue(`labSchedules.${index}.selectedDay`, value)
@@ -320,19 +323,19 @@ export default function CartPage() {
                     }}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a day" />
+                      <SelectValue placeholder={t(`Select_Day_placeholder`)} />
                     </SelectTrigger>
                     <SelectContent>
                       {lab.labId.schedule.days.map((day) => (
                         <SelectItem key={day.day} value={day.day}>
-                          {`${day.day} (${HandleTimeFormat(day.startTime)} - ${HandleTimeFormat(day.endTime)})`}
+                          {`${tday(`${(day.day).toLowerCase()}`)} (${HandleTimeFormat(day.startTime)} - ${HandleTimeFormat(day.endTime)})`}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="w-full">
-                  <Label>Select Date</Label>
+                  <Label>{t(`Select_Date`)}</Label>
                   <Select
                     disabled={!form.watch(`labSchedules.${index}.selectedDay`)}
                     onValueChange={(value) => {
@@ -340,7 +343,7 @@ export default function CartPage() {
                     }}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a date" />
+                      <SelectValue placeholder={t(`Select_Date_placeholder`)} />
                     </SelectTrigger>
                     <SelectContent>
                       {availableDatesMap[lab.id]?.map((date) => (
@@ -360,11 +363,11 @@ export default function CartPage() {
   return (
     <main className="flex-grow p-4 md:p-8 space-y-8 md:space-y-12 max-w-7xl mx-auto w-full bg-background text-foreground">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <h1 className="text-3xl font-bold mb-6">Your Cart</h1>
+        <h1 className="text-3xl font-bold mb-6">{t(`Your_Cart`)}</h1>
         <Tabs defaultValue="medicines" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="medicines">Medicines ({cart ? cart.medicines.flatMap(p => p.purchasedMedicines).length : 0})</TabsTrigger>
-            <TabsTrigger value="tests">Tests ({cart ? cart.tests.flatMap(l => l.purchasedTests).length : 0})</TabsTrigger>
+            <TabsTrigger value="medicines">{`${t(`Medicines`)} (${cart ? cart.medicines.flatMap(p => p.purchasedMedicines).length : 0})`} </TabsTrigger>
+            <TabsTrigger value="tests">{`${t(`Tests`)} (${cart ? cart.tests.flatMap(l => l.purchasedTests).length : 0})`}</TabsTrigger>
           </TabsList>
           <TabsContent value="medicines">
             {cart && cart.medicines.length > 0 ? (
@@ -373,11 +376,11 @@ export default function CartPage() {
                 <Card className="mt-6">
                   <CardContent className="pt-6">
                     <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-xl font-semibold">Total</h2>
-                      <p className="text-2xl font-bold">{cart.totalMedicinePrice} EGP</p>
+                      <h2 className="text-xl font-semibold">{t(`Total`)}</h2>
+                      <p className="text-2xl font-bold">{`${cart.totalMedicinePrice} ${tcommon(`EGP`)}`} </p>
                     </div>
                     <div className="mb-4">
-                      <h3 className="text-lg font-semibold mb-2">Payment Method</h3>
+                      <h3 className="text-lg font-semibold mb-2">{t(`Payment_Method`)}</h3>
                       <RadioGroup
                         value={form.watch("paymentMethod")}
                         onValueChange={(value) => form.setValue("paymentMethod", value as 'cash' | 'visa')}
@@ -403,7 +406,7 @@ export default function CartPage() {
                               <circle cx="12" cy="12" r="2" />
                               <path d="M6 12h.01M18 12h.01" />
                             </svg>
-                            <span>Cash</span>
+                            <span>{t(`Cash`)}</span>
                           </Label>
                         </div>
                         <div className="flex items-center">
@@ -425,7 +428,7 @@ export default function CartPage() {
                               <rect width="20" height="14" x="2" y="5" rx="2" />
                               <line x1="2" x2="22" y1="10" y2="10" />
                             </svg>
-                            <span>Visa</span>
+                            <span>{t(`Visa`)}</span>
                           </Label>
                         </div>
                       </RadioGroup>
@@ -436,7 +439,7 @@ export default function CartPage() {
                       onClick={handleMedicineCheckout}
                       disabled={isCheckingOut}
                     >
-                      {isCheckingOut ? 'Processing...' : 'Proceed to Checkout'}
+                      {isCheckingOut ? <Spinner /> : t(`submit`)}
                     </Button>
                   </CardContent>
                 </Card>
@@ -444,9 +447,9 @@ export default function CartPage() {
             ) : (
               <Card>
                 <CardContent className="pt-6 text-center">
-                  <p className="text-lg mb-4">No medicines in your cart.</p>
+                  <p className="text-lg mb-4">{t(`No_Medicines`)}</p>
                   <Link href="/patient/pharmacies">
-                    <Button>Browse Medicines</Button>
+                    <Button>{t(`Browse_Medicines`)}</Button>
                   </Link>
                 </CardContent>
               </Card>
@@ -459,11 +462,11 @@ export default function CartPage() {
                 <Card className="mt-6">
                   <CardContent className="pt-6">
                     <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-xl font-semibold">Total</h2>
-                      <p className="text-2xl font-bold">{cart.totalTestPrice} EGP</p>
+                      <h2 className="text-xl font-semibold">{t(`Total`)}</h2>
+                      <p className="text-2xl font-bold">{`${cart.totalTestPrice} ${tcommon(`EGP`)}`}</p>
                     </div>
                     <div className="mb-4">
-                      <h3 className="text-lg font-semibold mb-2">Payment Method</h3>
+                      <h3 className="text-lg font-semibold mb-2">{t(`Payment_Method`)}</h3>
                       <RadioGroup
                         value={form.watch("paymentMethod")}
                         onValueChange={(value) => form.setValue("paymentMethod", value as 'cash' | 'visa')}
@@ -489,7 +492,7 @@ export default function CartPage() {
                               <circle cx="12" cy="12" r="2" />
                               <path d="M6 12h.01M18 12h.01" />
                             </svg>
-                            <span>Cash</span>
+                            <span>{t(`Cash`)}</span>
                           </Label>
                         </div>
                         <div className="flex items-center">
@@ -511,7 +514,7 @@ export default function CartPage() {
                               <rect width="20" height="14" x="2" y="5" rx="2" />
                               <line x1="2" x2="22" y1="10" y2="10" />
                             </svg>
-                            <span>Visa</span>
+                            <span>{t(`Visa`)}</span>
                           </Label>
                         </div>
                       </RadioGroup>
@@ -522,7 +525,7 @@ export default function CartPage() {
                       onClick={handleTestCheckout}
                       disabled={isCheckingOut || !form.watch("labSchedules").every(schedule => schedule.selectedDate)}
                     >
-                      {isCheckingOut ? 'Processing...' : 'Proceed to Checkout'}
+                      {isCheckingOut ? <Spinner />: t(`submit`)}
                     </Button>
                   </CardContent>
                 </Card>
@@ -530,9 +533,9 @@ export default function CartPage() {
             ) : (
               <Card>
                 <CardContent className="pt-6 text-center">
-                  <p className="text-lg mb-4">No tests in your cart.</p>
+                  <p className="text-lg mb-4">{t(`No_Tests`)}</p>
                   <Link href="/patient/labs">
-                    <Button>Browse Tests</Button>
+                    <Button>{t(`Browse_Tests`)}</Button>
                   </Link>
                 </CardContent>
               </Card>

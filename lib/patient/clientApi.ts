@@ -23,7 +23,55 @@ export const BookSession = async (data:{doctor:string,date:string})=>{
       }
     }
 
+export const SearchLabTests = async (id:string,keyword:string,page:number,limit:number) => {
+  const token = getToken();
 
+  const queryParams = new URLSearchParams({
+    id,
+    keyword,
+    limit: limit.toString(),
+    page: page.toString(),
+  }).toString();
+  const response = await fetch(`/api/patient/labs/oneLab/test/search?${queryParams}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    cache:"reload",
+  });
+
+  if (!response.ok) {
+        throw new Error ('Failed to fetch Doctors');
+  }
+
+  const res = await response.json();
+  return res;
+}
+
+    
+export const SearchPharmacyMedicine = async (id:string,keyword:string,page:number,limit:number) => {
+  const token = getToken();
+  const queryParams = new URLSearchParams({
+  id,
+  keyword,
+  page: page.toString(),
+  limit: limit.toString(),
+  }).toString();
+  const response = await fetch(`/api/patient/pharmacies/onePharmacy/medicine/search?${queryParams}`, {
+  method: 'GET',
+  headers: {
+    'Authorization': `Bearer ${token}`,
+  },
+  cache:"reload",
+  });
+  
+  if (!response.ok) {
+      throw new Error ('Failed to fetch Doctors');
+  }
+  
+  const res = await response.json();
+  return res;
+  }
     export const GetMyCart = async () => {
       const token = getToken();
       const response = await fetch(`/api/patient/cart`, {

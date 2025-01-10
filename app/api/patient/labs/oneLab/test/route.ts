@@ -16,10 +16,11 @@ export async function GET(request: NextRequest) {
 
   const searchParams = request.nextUrl.searchParams
   const id=searchParams.get('id')||'';
-
+  const limit=parseInt(searchParams.get('limit')||'5',10);
+  const page=parseInt(searchParams.get('page')||'1',10);
 
   try {
-    const apiResponse = await fetch(`${SERVER_URL}/lab/lab-tests/${id}?populate=test`, {
+    const apiResponse = await fetch(`${SERVER_URL}/lab/lab-tests/${id}?page=${page}&limit=${limit}&populate=test`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       }

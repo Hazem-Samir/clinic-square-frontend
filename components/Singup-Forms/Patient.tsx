@@ -9,7 +9,7 @@ import { format } from "date-fns"
 import {  File } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft ,ArrowRight} from "lucide-react"
 import {
   Form,
   FormControl,
@@ -126,7 +126,8 @@ export default function Patient({ role ,onBack}: IProps) {
   return (
     <>
     <Button disabled={isLoading} type="button" variant="ghost" onClick={onBack}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
+    <ArrowLeft className="mr-2 h-4 w-4 rtl:hidden" />
+    <ArrowRight className="ml-2 h-4 w-4 ltr:hidden" />
             Back
           </Button>
     <Form {...signupForm}>

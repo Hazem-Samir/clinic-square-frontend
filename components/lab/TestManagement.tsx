@@ -344,7 +344,7 @@ const handleDeleteTest = async() => {
         <Dialog open={isRequestOpen} onOpenChange={setIsRequestOpen}>
           <DialogTrigger asChild>
             <Button disabled={isLoading} variant="outline" size="sm" className="w-full sm:w-auto mb-4 sm:mb-0">
-              <Send className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
+              <Send className="ltr:mr-2 rtl:ml-1 h-4 w-4" />
               {t(`Request_Test.title`)}
             </Button>
           </DialogTrigger>
@@ -478,7 +478,7 @@ const handleDeleteTest = async() => {
                         form.setValue("preparations", [...currentPreps, ""])
                       }}
                     >
-                      <Plus className="h-4 w-4 mr-2" />  {t(`Add_Test.prep_add_button`)}
+                      <Plus className="h-4 w-4 ltr:mr-2 rtl:ml-1" />  {t(`Add_Test.prep_add_button`)}
                     </Button>
                   </FormItem>
                 )}
@@ -613,7 +613,7 @@ const handleDeleteTest = async() => {
                         form.setValue("preparations", [...currentPreps, ""])
                       }}
                     >
-                      <Plus className="h-4 w-4 mr-2" /> {t(`Add_Test.prep_add_button`)}
+                      <Plus className="h-4 w-4 ltr:mr-2 rtl:ml-1" /> {t(`Add_Test.prep_add_button`)}
                     </Button>
                   </FormItem>
                 )}

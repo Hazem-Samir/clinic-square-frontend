@@ -22,7 +22,7 @@ import { FormDataHandler, onSignupSubmit } from "@/utils/AuthHandlers"
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast';
 import Spinner from "@/components/Spinner"
-import { Eye, EyeOff,ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff,ArrowLeft,ArrowRight } from 'lucide-react';
 
 
 
@@ -108,7 +108,8 @@ export default function Pharmacy({ role ,onBack}: IProps) {
   return (
     <>
     <Button   disabled={isLoading} type="button" variant="ghost" onClick={onBack}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
+    <ArrowLeft className="mr-2 h-4 w-4 rtl:hidden" />
+    <ArrowRight className="ml-2 h-4 w-4 ltr:hidden" />
             Back
           </Button>
     <Form {...signupForm}>

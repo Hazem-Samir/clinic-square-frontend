@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { Upload, CalendarIcon, ChevronLeft, ChevronRight,PlusCircle, File,Eye, EyeOff,ArrowLeft } from "lucide-react"
+import { Upload, CalendarIcon, ChevronLeft, ChevronRight,PlusCircle, File,Eye, EyeOff,ArrowLeft,ArrowRight } from "lucide-react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm ,useFieldArray} from "react-hook-form"
 import { format } from "date-fns"
@@ -113,7 +113,8 @@ export default function Doctor({ role ,onBack}: IProps) {
   return (step ===1 ?(
     <>
     <Button type="button" variant="ghost" onClick={onBack}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
+    <ArrowLeft className="mr-2 h-4 w-4 rtl:hidden" />
+    <ArrowRight className="ml-2 h-4 w-4 ltr:hidden" />
             Back
           </Button>
     <Form {...signupForm}>

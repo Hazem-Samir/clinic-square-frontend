@@ -16,11 +16,12 @@ export async function GET(request: NextRequest) {
 
   const searchParams = request.nextUrl.searchParams
   const id=searchParams.get('id')||'';
-  const limit=parseInt(searchParams.get('limit')||'5',10);
+  const keyword=searchParams.get('keyword')||'';
+  const limit=parseInt(searchParams.get('limit')||'1',10);
   const page=parseInt(searchParams.get('page')||'1',10);
 
   try {
-    const apiResponse = await fetch(`${SERVER_URL}/pharmacy/pharmacy-medicine/${id}?page=${page}&limit=${limit}&populate=medicine`, {
+    const apiResponse = await fetch(`${SERVER_URL}/pharmacy/pharmacy-medicine/${id}?keyword[medicine]=${keyword}&page=${page}&limit=${limit}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       }

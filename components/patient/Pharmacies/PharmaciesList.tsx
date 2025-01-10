@@ -17,6 +17,7 @@ import { ShoppingCart } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Spinner from '@/components/Spinner'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 interface Pharmacy {
   id: string
@@ -33,7 +34,7 @@ interface Medicine {
     photo: string;
     cost: string;
   }
-  preparations: string[];
+  stock: string;
   cost: string;
   pharmacy:Pharmacy
 }
@@ -46,14 +47,14 @@ interface IProps {
 
 interface IPharmacyData extends IProps {
   handlePageChange:(newPage:number)=>void
-  isLoading:boolean
+  isSearching:boolean
 }
 type searchT="Pharmacy"|"Medicine"
 
 
 interface IResult  {
   handlePageChange:(newPage:number)=>void
-  isLoading:boolean
+  isSearching:boolean
   Medicines:Medicine[]
   currentPage: number;
   totalPages: number;
@@ -62,17 +63,18 @@ interface IResult  {
 
 
 
-const PharmaciesData=({Pharmacies,currentPage,totalPages,handlePageChange,isLoading}:IPharmacyData) =>{
+const PharmaciesData=({Pharmacies,currentPage,totalPages,handlePageChange,isSearching}:IPharmacyData) =>{
+  const t = useTranslations('patient.pharmacies')
   return(
 
   <>
    
    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Pharmacies.length<=0?<div className="my-4 flex col-span-4 justify-center items-center">No Pharmacies</div>
+        {Pharmacies.length<=0?<div className="my-4 flex col-span-4 justify-center items-center">{t(`No_Pharmacies`)}</div>
         :Pharmacies.map((pharmacy) => (
           <Card key={pharmacy.id} className="flex flex-col">
             <CardContent className="p-4">
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center gap-2">
                 <div className="relative w-16 h-16">
                   {/* <Image
                     src={lab.profilePic||""}
@@ -94,22 +96,27 @@ const PharmaciesData=({Pharmacies,currentPage,totalPages,handlePageChange,isLoad
             </CardContent>
             <CardFooter className="mt-auto">
               <Link href={`/patient/pharmacies/${pharmacy.id}`} className="w-full">
-                <Button className="w-full">View Details</Button>
+                <Button className="w-full">{t(`View_Details`)}</Button>
               </Link>
             </CardFooter>
           </Card>
         ))}
       </div>
-     <Pagination currentPage={currentPage} handlePageChange={handlePageChange} totalPages={totalPages} isLoading={isLoading}/>
+     <Pagination currentPage={currentPage} handlePageChange={handlePageChange} totalPages={totalPages} isLoading={isSearching}/>
   </>
   )
 
  }
- const Results = ({ Medicines, currentPage, handlePageChange, isLoading, totalPages }: IResult) => {
+ const Results = ({ Medicines, currentPage, handlePageChange, isSearching, totalPages }: IResult) => {
   const { addToCart } = useCartStore()
-
-
+const[isLoading,setIsLoading]=useState(false)
+const [medicineID,setMedicineID] = useState<string|null>(null)
+const t = useTranslations('patient.pharmacies')
+const tcommon = useTranslations('common')
+console.log(Medicines)
   const handleAddToCart = async (medicineId: string) => {
+    setIsLoading(true)
+
     const res = await addToCart({ medicineId });
     if (!res.success) {
       toast.error("Something went wrong! Try Again Later", {
@@ -122,72 +129,88 @@ const PharmaciesData=({Pharmacies,currentPage,totalPages,handlePageChange,isLoad
         position: 'bottom-center',
       });
     }
+
+    setIsLoading(false)
+
   }
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+  {Medicines.length <= 0 ? (
+    <div className="my-4 flex col-span-4 justify-center items-center">
+      {t(`No_Medicines`)}
+    </div>
+  ) : (
+    Medicines.map((medicine) => (
+      <Card key={medicine.id} className="flex flex-col h-full">
+        <CardContent className="p-4 flex-1 flex flex-col space-y-4">
+          <div className="relative w-full aspect-square">
+            <Image 
+              src={medicine.medicine.photo} 
+              alt={medicine.medicine.name} 
+              fill
+              className="rounded-lg object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <medicineTubeDiagonal size={24} />
+            <h3 className="text-lg font-semibold">{medicine.medicine.name}</h3>
+          </div>
+          <p className="text-2xl font-bold">
+            {`${medicine.medicine.cost} ${tcommon(`EGP`)}`}
+          </p>
+          {Number(medicine.stock) <= 5 && Number(medicine.stock) > 0 ? (
+            <span className="w-full flex justify-center items-center text-red-400">
+              {t(`Last_in_Stock`, {stock: medicine.stock})}
+            </span>
+          ) : null}
+        </CardContent>
+        
+        <CardFooter className="mt-auto p-4 pt-0 flex flex-col space-y-4">
+          <Button 
+            className="w-full" 
+            disabled={isLoading || Number(medicine.stock) <= 0} 
+            onClick={() => {
+              setMedicineID(medicine.id);
+              handleAddToCart(medicine.id);
+            }}
+          >
+            {isLoading && medicine.id === medicineID ? (
+              <Spinner />
+            ) : Number(medicine.stock) <= 0 ? (
+              t(`Out_Of_Stock`)
+            ) : (
+              <>
+                <ShoppingCart className="w-4 h-4 ltr:mr-2 rtl:ml-1" />
+                {t(`Add_to_Cart`)}
+              </>
+            )}
+          </Button>
 
-        {Medicines.length<=0?<div className="my-4 flex col-span-4 justify-center items-center">No Medicines</div>
-        :Medicines.map((medicine) => (
-          <Card key={medicine.id}>
-            <CardContent className="p-4 flex flex-col items-center space-y-2">
-            <div className="relative w-full aspect-square">
-                <Image 
-                  src={medicine.medicine.photo} 
-                  alt={medicine.medicine.name} 
-                  fill
-            className="rounded-lg object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"y
-                />
-              </div>
-              <div className="flex items-center space-x-1">
-                <medicineTubeDiagonal size={24} />
-                <h3 className="text-lg font-semibold">{medicine.medicine.name}</h3>
-              </div>
-              <p className="text-2xl font-bold">{medicine.medicine.cost} EGP</p>
-            </CardContent>
-            <CardFooter className="flex flex-col space-y-4">
-              {/* {0> 0 ? (
-                <div className="flex items-center justify-between w-full">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleUpdateQuantity(medicine, false)}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <span className="mx-2 font-semibold">{getItemQuantity(medicine.id)}</span>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => updateMedicineQuantity(medicine.id, medicine)}
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-              ) : (
-                <Button className="w-full" onClick={() =>{ handleAddToCart(medicine.id); getItemQuantity(medicine.id)}}>
-                  <ShoppingCart className="w-4 h-4 mr-2" />
-                  Add to Cart
-                </Button>
-              )} */}
-         
-                <Button className="w-full" onClick={() =>{ handleAddToCart(medicine.id);}}>
-                  <ShoppingCart className="w-4 h-4 mr-2" />
-                  Add to Cart
-                </Button>
-                <Link href={`/patient/pharmacies/${medicine.pharmacy.id}`}   className="flex items-center space-x-2 w-full  no-underline pt-2 border-t hover:text-teal-500">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={medicine.pharmacy.profilePic} alt={medicine.pharmacy.name} />
-                  <AvatarFallback>{shortName(medicine.pharmacy.name)}</AvatarFallback>
-                </Avatar>
-                <span className="text-sm ">{medicine.pharmacy.name}</span>
-              </Link>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
-     <Pagination currentPage={currentPage} handlePageChange={handlePageChange} totalPages={totalPages} isLoading={isLoading}/>
+          <Link
+            href={`/patient/pharmacies/${medicine.pharmacy.id}`}
+            className="flex items-center gap-2 w-full no-underline pt-2 border-t hover:text-teal-500"
+          >
+            <Avatar className="h-8 w-8">
+              <AvatarImage 
+                src={medicine.pharmacy.profilePic} 
+                alt={medicine.pharmacy.name} 
+              />
+              <AvatarFallback>
+                {shortName(medicine.pharmacy.name)}
+              </AvatarFallback>
+            </Avatar>
+            <span className="text-sm">{medicine.pharmacy.name}</span>
+          </Link>
+        </CardFooter>
+      </Card>
+    ))
+  )}
+</div>
+
+
+     <Pagination currentPage={currentPage} handlePageChange={handlePageChange} totalPages={totalPages} isLoading={isSearching}/>
 
     </>
   )
@@ -196,14 +219,15 @@ const PharmaciesData=({Pharmacies,currentPage,totalPages,handlePageChange,isLoad
 export default function PharmaciesList({currentPage,totalPages,Pharmacies}:IProps) {
 const [searchTerm, setSearchTerm] = useState('')
   const [SearchResult, setSearchResult] = useState<{currentPage:number,totalPages:number,data:[],type:searchT}|null>(null)
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const [searchType, setSearchType] = useState<searchT>('')
   const router = useRouter()
 
+  const t = useTranslations('patient.pharmacies')
 
   const handleSearch =async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true);
+    setIsSearching(true);
    if(searchTerm.trim().length>0&&searchType!==''){
     let res;
     if(searchType==='Pharmacy'){
@@ -236,11 +260,11 @@ const [searchTerm, setSearchTerm] = useState('')
     })
   }
   
-  setIsLoading(false);
+  setIsSearching(false);
   
   }
   const handlePageChange = async(newPage: number) => {
-    setIsLoading(true);
+    setIsSearching(true);
  if(SearchResult!==null&& SearchResult.totalPages>1&&searchType!==''){
       let res;
       if(searchType==='Pharmacy'){
@@ -254,7 +278,6 @@ const [searchTerm, setSearchTerm] = useState('')
       if (res.success === true) {
     
         setSearchResult({data:res.data.data,totalPages:res.data.paginationResult.numberOfPages,currentPage:res.data.paginationResult.currentPage,type:searchType})
-        console.log(SearchResult)
       } else {
         res.message.forEach((err: string) => toast.error(err || 'An unexpected error occurred.', {
           duration: 2000,
@@ -266,7 +289,7 @@ const [searchTerm, setSearchTerm] = useState('')
 
       router.push(`pharmacies?page=${newPage}`);
     }
-    setIsLoading(false);
+    setIsSearching(false);
   };
 
 
@@ -280,40 +303,40 @@ const [searchTerm, setSearchTerm] = useState('')
   }
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center mb-8">Our Pharmacies</h1>
+      <h1 className="text-3xl font-bold text-center mb-8">{t(`Our_Pharmacies`)}</h1>
       
       <form onSubmit={handleSearch} className="mb-8">
         <div className="flex gap-2 sm:flex-row flex-col">
           <Input
             type="text"
-            placeholder="Search for pharmacies or medicines..."
+            placeholder={`${t(`Search_Placeholder`)}...`}
             value={searchTerm}
             onChange={(e) => {setSearchTerm(e.target.value); check(e)}}
             className="flex-grow"
           />
             <Select  value={searchType} onValueChange={setSearchType}>
                   <SelectTrigger className="sm:w-1/4 text-sm py-2 ">
-                    <SelectValue placeholder="Search in" />
+                    <SelectValue placeholder={t(`Search_in`)} />
 
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem  value="Pharmacy">Pharmacies</SelectItem>
-                    <SelectItem value="Medicine">Medicines</SelectItem>
+                    <SelectItem  value="Pharmacy">{t(`Pharmacies`)}</SelectItem>
+                    <SelectItem value="Medicine">{t(`Medicines`)}</SelectItem>
                   </SelectContent>
                 </Select>
           <Button type="submit">
-            <Search className="w-4 h-4 mr-2" />
-            Search
+            <Search className="w-4 h-4 ltr:mr-2 rtl:ml-1" />
+            {t(`Search`)}
           </Button>
         </div>
       </form>
-      {isLoading ? (
+      {isSearching ? (
       <div className="flex justify-center items-center p-8">
         <Spinner invert />
       </div>
-    ) : (SearchResult===null?<PharmaciesData Pharmacies={Pharmacies} currentPage={currentPage} handlePageChange={handlePageChange} isLoading={isLoading} totalPages={totalPages} />
-:(SearchResult.type==="Pharmacy"?<PharmaciesData Pharmacies={SearchResult.data} currentPage={SearchResult.currentPage} handlePageChange={handlePageChange} isLoading={isLoading} totalPages={SearchResult.totalPages} />
-:(SearchResult.type==="Medicine"?<Results Medicines={SearchResult.data} currentPage={SearchResult.currentPage} handlePageChange={handlePageChange} isLoading={isLoading} totalPages={SearchResult.totalPages} />:null)))}
+    ) : (SearchResult===null?<PharmaciesData Pharmacies={Pharmacies} currentPage={currentPage} handlePageChange={handlePageChange} isSearching={isSearching} totalPages={totalPages} />
+:(SearchResult.type==="Pharmacy"?<PharmaciesData Pharmacies={SearchResult.data} currentPage={SearchResult.currentPage} handlePageChange={handlePageChange} isSearching={isSearching} totalPages={SearchResult.totalPages} />
+:(SearchResult.type==="Medicine"?<Results Medicines={SearchResult.data} currentPage={SearchResult.currentPage} handlePageChange={handlePageChange} isSearching={isSearching} totalPages={SearchResult.totalPages} />:null)))}
     <Toaster />
   
     </div>

@@ -24,7 +24,6 @@ async function DoctorsData({ page,name,specialization,resultsPage }: {resultsPag
     const {data} = await SearchForActor(`${specialization}`,'doctor',resultsPage);
     searchResults=data
   }
-  console.log(searchResults)
   return (
     <DoctorsList
     searchResult={searchResults?{currentPage:resultsPage,totalPages:searchResults.paginationResult.numberOfPages,Doctors:searchResults.data}:searchResults}
@@ -40,7 +39,6 @@ export default function OurDoctors({ searchParams }: { searchParams: {resultsPag
   const resultsPage = Number(searchParams.resultsPage) || 1
   const name =  searchParams.name|| ''
   const specialization = searchParams.specialization || ''
-console.log(specialization)
   return (
     <ProtectedRoute allowedRoles={['patient']}>
 

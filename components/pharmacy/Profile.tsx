@@ -399,7 +399,7 @@ export default function PharmacyProfileUpdate({ profile }: IProps) {
                           </ScrollArea>
                           <Button  disabled={isLoading} type="button" variant="outline" size="sm" className="text-xs sm:text-sm">
                             <label htmlFor="license" className="flex w-full h-full items-center cursor-pointer">
-                              <PlusCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                              <PlusCircle className="h-3 w-3 sm:h-4 sm:w-4 ltr:mr-1 rtl:ml-1 ltr:sm:mr-2" />
                               {t(`update_profile.Upload_License`)}
                             </label>
                           </Button>

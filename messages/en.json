@@ -2,7 +2,9 @@
   "common": {
     "switchLanguage": "Switch language",
     "EGP":"EGP",
-    "footer":"© {year} Clinic Square. All rights reserved."
+    "footer":"© {year} Clinic Square. All rights reserved.",
+      "Back":"Back"
+
   },
   "nav":{
     "Home":"Home",
@@ -19,9 +21,7 @@
     "Pharmacies":"Pharmacies",
     "Cart":"Cart"
   },
-  "symptoms":{
-   
-  },
+
   "search":{
     "For_Patient":"Search For Patient",
     "For_Doctor":"Search For Doctor",
@@ -137,11 +137,11 @@
       "button":"Explore Medical Questions"
     },
     "AIThinking":{
-      "Analyzing_your_symptoms":"Analyzing your symptoms...",
-      "Reviewing_medical_patterns": "Reviewing medical patterns...",
-    "Matching_with_specializations": "Matching with specializations...",
-    "Preparing_recommendations":   "Preparing recommendations...",
-    "Our_AI_is_evaluating_your_case":"Our AI is carefully evaluating your case..."
+      "Analyzing_your_symptoms":"Analyzing your symptoms",
+      "Reviewing_medical_patterns": "Reviewing medical patterns",
+    "Matching_with_specializations": "Matching with specializations",
+    "Preparing_recommendations":   "Preparing recommendations",
+    "Our_AI_is_evaluating_your_case":"Our AI is carefully evaluating your case"
     },
 "search":{
 "Filter_Symptoms":"Filter Symptoms",
@@ -287,7 +287,135 @@
     "banner":{
       "FYPD":"Find Your Perfect Doctor",
       "EAD":"Explore All Doctors"
+    },
+    "doctors":{
+      "Our_Doctors":"Our Doctors",
+      "No_Doctors":"No Doctors",
+      "Dr":"Dr.",
+      "Locations":"Locations",
+      "View_Details":"View Details",
+      "Search":"Search",
+      "Search_Placeholder":"Search for Doctors",
+      "Select_Specialization":"Select Specialization",
+      "Per_Session":"Per Session",
+      "Contact_Information":"Contact Information",
+      "Schedule":"Schedule",
+      "License_Certifications":"License & Certifications",
+      "License":"License",
+      "About_the_Doctor":"About the Doctor",
+      "Booking_Information":"Booking Information",
+      "Booking_Examination":"Booking Examination",
+      "Fees":"Fees",
+      "Book_Title":"Book an Appointment with {name}",
+      "Book_Description":"Select an available date for your appointment.",
+      "Patient_Name":"Patient Name: {name}",
+      "Patient_Phone":"Patient Phone: {phone}",
+      "Select_Day":"Select Day",
+      "Select_Date":"Select Date",
+      "Payment_Method":"Payment Method",
+      "Cash":"Cash",
+      "Visa":"Visa",
+      "submit":"Confirm Booking"
+    },
+    "labs":{
+      "Our_Labs":"Our Labs",
+      "Search_Placeholder":"Search for lab or tests",
+      "No_Labs":"No Labs",
+      "No_Tests":"No Tests",
+      "Preparations":"Preparations:",
+      "None":"None",
+      "Add_to_Cart":"Add to Cart",
+      "Labs":"Labs",
+      "Tests":"Tests",
+      "View_Details":"View Details",
+      "Search":"Search",
+      "Contact_Information":"Contact Information",
+      "Locations":"Locations",
+      "Schedule":"Schedule",
+      "Search_in":"Search in",
+      "Available_Tests":"Available Tests",
+      "Search_Tests_Placeholder":"Search for Test"
+
+    },
+    "pharmacies":{
+      "Our_Pharmacies":"Our Pharmacies",
+      "Search_Placeholder":"Search for pharmacy or medicine",
+      "No_Pharmacies":"No Pharmacies",
+      "No_Medicines":"No Medicines",
+      "Add_to_Cart":"Add to Cart",
+      "Out_Of_Stock":"Out Of Stock",
+      "Pharmacies":"Pharmacies",
+      "Medicines":"Medicines",
+      "View_Details":"View Details",
+      "Search":"Search",
+      "Contact_Information":"Contact Information",
+      "Locations":"Locations",
+      "Schedule":"Schedule",
+      "Search_in":"Search in",
+      "Available_Medcines":"Available Medcines",
+      "Search_Medcines_Placeholder":"Search for Medcine",
+      "Last_in_Stock":"Last {stock} in Stock"
+
+    },
+    "medical_questions":{
+      "Patients_Questions":"Patients Questions",
+      "New_Question":{
+        "button":"Add New Question",
+        "title":"Add New Question",
+        "Question_Field_Label":"Question",
+        "placeholder":"Enter Your Question",
+        "description":"Enter your medical question below. We'll do our best to answer it promptly.",
+        "submit":"Submit"
+      },
+      "Update_Question":{
+        "button":"Update Question",
+        "title":"Update Question",
+        "placeholder":"Enter Your New Question",
+        "Question_Field_Label":"Question",
+        "Question":"Question:",
+        "Answers":"Answers:",
+        "No_Answers":"No Answers Yet",
+        "PAge":"Age: {age}",
+        "PGender":"Gender",
+       "male":"male",
+       "female":"female",
+        "description":" Make changes to your question here. Click save when you're done.",
+        "submit":"Submit"
+      }
+    },
+    "cart":{
+      "Your_Cart":"Your Cart",
+      "Medicines":"Medicines",
+      "Tests":"Tests",
+      "Total":"Total",
+      "Price":"Price",
+      "Payment_Method":"Payment Method",
+      "Total_Price":"Total Price:",
+      "Remove":"Remove",
+      "Preparations":"Preparations:",
+      "None":"None",
+      "Cash":"Cash",
+      "Visa":"Visa",
+      "Select_Day":"Select Day",
+      "Select_Day_placeholder":"Select a day",
+      "Select_Date":"Select Date",
+      "Select_Date_placeholder":"Select a date",
+      "submit":"Proceed to Checkout",
+      "No_Medicines":"No medicines in your cart.",
+      "Browse_Medicines":"Browse Medicines",
+      "No_Tests":"No tests in your cart.",
+      "Browse_Tests":"Browse Tests"
     }
+
+  },
+  "days": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
   },
   "Dashboard":{
           "Reservations":"Reservations",
@@ -511,7 +639,8 @@
       },
       "errors":{
         "password_8chars":"Password must be at least 8 characters",
-        "password_not_match":"Passwords do not match"
+        "password_not_match":"Passwords do not match",
+        "Patient_Question_required":"Question must be at least 6 characters"
       },
       "Orders":{
         "title":"New Orders",

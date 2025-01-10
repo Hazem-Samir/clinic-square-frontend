@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     
 
       try {
-        const apiResponse = await fetch(`${SERVER_URL}/pharmacy/All-pharmacies-medicines?populate=pharmacy&keyword[medicine]=${keyword}&page=${page}&limit=7`, {
+        const apiResponse = await fetch(`${SERVER_URL}/pharmacy/All-pharmacies-medicines?populate=pharmacy&keyword[medicine]=${keyword}&page=${page}&limit=8`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }

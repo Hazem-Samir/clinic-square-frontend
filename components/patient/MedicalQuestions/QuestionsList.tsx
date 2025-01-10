@@ -1,5 +1,5 @@
 "use client"
-
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
@@ -36,10 +36,11 @@ import {
 import { getUser } from '@/lib/auth'
 import { AddQuestion } from '@/lib/patient/clientApi'
     const formSchema = z.object({
-      question: z.string().min(2,"Question is Required")
+      question: z.string().min(6,"Patient_Question_required")
     });
 import toast, { Toaster } from 'react-hot-toast'
 import Spinner from '@/components/Spinner'
+import Pagination from '@/components/Pagination'
     
     
 interface IProps {
@@ -62,6 +63,7 @@ export default function QuestionsList({ questions, currentPage, totalPages }: IP
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const t = useTranslations('patient.medical_questions')
 
 
   const form = useForm < z.infer < typeof formSchema >> ({
@@ -101,17 +103,17 @@ export default function QuestionsList({ questions, currentPage, totalPages }: IP
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Patient Questions</h1>
+        <h1 className="text-2xl font-bold">{t(`Patients_Questions`)}</h1>
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
           <DialogTrigger asChild>
             <Button className="flex items-center gap-2">
               <PlusCircle className="h-4 w-4" />
-              <span className="hidden sm:inline">Add New Question</span>
+              <span className="hidden sm:inline">{t(`New_Question.button`)}</span>
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Add New Question</DialogTitle>
+              <DialogTitle>{t(`New_Question.title`)}</DialogTitle>
               <DialogDescription>
               </DialogDescription>
             </DialogHeader>
@@ -123,7 +125,7 @@ export default function QuestionsList({ questions, currentPage, totalPages }: IP
           name="question"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Question</FormLabel>
+              <FormLabel>{t(`New_Question.Question_Field_Label`)}</FormLabel>
               <FormControl>
                 <Input 
                 placeholder="Enter Your Question"
@@ -132,13 +134,14 @@ export default function QuestionsList({ questions, currentPage, totalPages }: IP
                 {...field} />
               </FormControl>
               <FormDescription>
-                Enter your medical question below. We&apos;ll do our best to answer it promptly.
+                {t(`New_Question.description`)}
                 </FormDescription>
-              <FormMessage />
+                <FormMessage translate={'errors'} />
+
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isLoading}>{isLoading?<Spinner/>:"Submit"}</Button>
+        <Button type="submit" disabled={isLoading}>{isLoading?<Spinner/>:t(`New_Question.submit`)}</Button>
       </form>
     </Form>
           </DialogContent>
@@ -164,27 +167,7 @@ export default function QuestionsList({ questions, currentPage, totalPages }: IP
           </Link>
         ))}
       </div>
-      <div className="flex justify-center items-center p-4 gap-4">
-        <Button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1 || isLoading}
-          size="icon"
-          variant="outline"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
-        <span className="text-sm font-medium">
-          {currentPage} / {totalPages}
-        </span>
-        <Button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages || isLoading}
-          size="icon"
-          variant="outline"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </div>
+  <Pagination currentPage={currentPage} handlePageChange={handlePageChange} totalPages={totalPages} isLoading={isLoading} />
       <Toaster />
     </div>
   )

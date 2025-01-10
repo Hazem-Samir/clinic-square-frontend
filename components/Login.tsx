@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft ,ArrowRight} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -83,7 +83,8 @@ export default function Login({ role ,onBack}: IProps) {
      
       <>
       <Button type="button" variant="ghost" onClick={onBack}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
+            <ArrowLeft className="mr-2 h-4 w-4 rtl:hidden" />
+            <ArrowRight className="ml-2 h-4 w-4 ltr:hidden" />
             Back
           </Button>
      

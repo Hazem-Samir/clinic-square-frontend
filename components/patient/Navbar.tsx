@@ -118,14 +118,14 @@ export default function NavBar() {
         {/* Mobile menu */}
         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="md:hidden ml-2 rtl:mr-2 rtl:ml-0">
+            <Button variant="ghost" size="icon" className="md:hidden rtl:ml-1 ltr:mr-2 ">
               <Menu className="h-6 w-6" />
               <span className="sr-only">Toggle menu</span>
             </Button>
           </SheetTrigger>
           <SheetContent side="right">
             <nav className="flex flex-col space-y-4">
-              <div className="flex items-center">
+              <div className="flex items-center justify-start mt-4">
                 <CartIcon />
                 <LanguageSwitcherIcon />
                 <ModeToggle />

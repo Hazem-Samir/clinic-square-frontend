@@ -22,6 +22,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import { BookSession, DoctorOnlinePayment } from '@/lib/patient/clientApi'
 import { useRouter } from 'next/navigation'
 import Spinner from '@/components/Spinner'
+import { useTranslations } from 'next-intl'
 
 interface ScheduleDay {
   day: string;
@@ -54,10 +55,18 @@ interface IProps {
 }
 
 
-const DoctorInfo = ({ doctor }: { doctor: Doctor }) => (
+const DoctorInfo = ({ doctor }: { doctor: Doctor }) => {
+     const t = useTranslations('patient.doctors')
+  const tcommon = useTranslations('common')
+  const tspec = useTranslations('Specializations')
+  return(
+
+
+ 
+
   <div>
     <h1 className="text-3xl font-bold">{doctor.name}</h1>
-    <p className="text-xl text-gray-600 mb-2">{doctor.specialization}</p>
+    <p className="text-xl text-gray-600 mb-2">{tspec(`${doctor.specialization}`)}</p>
     <p className="text-sm text-gray-500 mb-4">{doctor.about}</p>
     {/* <div className="flex items-center mb-4">
       <Star className="w-5 h-5 text-yellow-400 fill-current" />
@@ -65,14 +74,17 @@ const DoctorInfo = ({ doctor }: { doctor: Doctor }) => (
     </div> */}
     <div className="flex items-center">
       <Banknote className="w-5 h-5 text-gray-400" />
-      <span className="ml-2">{doctor.schedule.cost} EGP - Per Session</span>
+      <span className="ml-2">{`${doctor.schedule.cost} ${tcommon(`EGP`)}  -  ${t(`Per_Session`)}`} </span>
     </div>
   </div>
 )
+}
 
-const LocationInfo = ({ addresses }: { addresses: string[] }) => (
+const LocationInfo = ({ addresses }: { addresses: string[] }) => {
+  const t = useTranslations('patient.doctors')
+return(
   <div>
-    <h3 className="text-lg font-semibold mb-2">Locations</h3>
+    <h3 className="text-lg font-semibold mb-2">{t(`Locations`)}</h3>
     {addresses.map((address, index) => (
       <p key={index} className="flex items-center mb-2">
         <MapPin className="w-5 h-5 text-gray-400 mr-2" />
@@ -81,10 +93,14 @@ const LocationInfo = ({ addresses }: { addresses: string[] }) => (
     ))}
   </div>
 )
+}
 
-const ContactInfo = ({ phoneNumbers }: { phoneNumbers: string[] }) => (
+const ContactInfo = ({ phoneNumbers }: { phoneNumbers: string[] }) => {
+  const t = useTranslations('patient.doctors')
+return(
+
   <div>
-    <h3 className="text-lg font-semibold mb-2">Contact Information</h3>
+    <h3 className="text-lg font-semibold mb-2">{t(`Contact_Information`)}</h3>
     {phoneNumbers.map((phone, index) => (
       <p key={index} className="flex items-center mb-2">
         <Phone className="w-5 h-5 text-gray-400 mr-2" />
@@ -93,24 +109,29 @@ const ContactInfo = ({ phoneNumbers }: { phoneNumbers: string[] }) => (
     ))}
   </div>
 )
+}
 
-const ScheduleInfo = ({ days }: { days: ScheduleDay[] }) => (
+const ScheduleInfo = ({ days }: { days: ScheduleDay[] }) => {
+  const t = useTranslations('patient.doctors')
+  const tday = useTranslations('days')
+  return(
   <div>
-    <h3 className="text-lg font-semibold mb-2">Schedule</h3>
+    <h3 className="text-lg font-semibold mb-2">{t(`Schedule`)}</h3>
     <div className="grid grid-cols-2 gap-4">
       {days.map(day => (
         <div key={day.day} className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4">
-          <p className="capitalize font-semibold">{day.day}</p>
+          <p className="capitalize font-semibold">{tday(`${(day.day).toLowerCase()}`)}</p>
           <p>{HandleTimeFormat(day.startTime)} - {HandleTimeFormat(day.endTime)}</p>
         </div>
       ))}
     </div>
   </div>
 )
+}
 
 const LicenseInfo = ({ licenses }: { licenses: string[] }) => {
   const [currentLicenseIndex, setCurrentLicenseIndex] = useState(0)
-
+  const t = useTranslations('patient.doctors')
   const nextLicense = useCallback(() => {
     setCurrentLicenseIndex((prevIndex) => 
       prevIndex === licenses.length - 1 ? 0 : prevIndex + 1
@@ -125,7 +146,7 @@ const LicenseInfo = ({ licenses }: { licenses: string[] }) => {
 
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-2">License & Certifications</h3>
+      <h3 className="text-lg font-semibold mb-2">{t(`License_Certifications`)}</h3>
       <div className="relative w-full max-w-md mx-auto">
         <div className="relative w-72 h-72 mx-auto">
           <Image
@@ -157,7 +178,7 @@ const LicenseInfo = ({ licenses }: { licenses: string[] }) => {
         </Button>
       </div>
       <p className="text-center mt-2 text-sm text-gray-500">
-        License {currentLicenseIndex + 1} of {licenses.length}
+        {`${t(`License`)} ${currentLicenseIndex + 1} of ${licenses.length}`}
       </p>
     </div>
   )
@@ -165,6 +186,9 @@ const LicenseInfo = ({ licenses }: { licenses: string[] }) => {
 
 export default function DoctorDetails({ Doctor }: IProps) {
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'visa'>('cash')
+  const t = useTranslations('patient.doctors')
+  const tcommon = useTranslations('common')
+  const tday = useTranslations('days')
 
   const [isBookingOpen, setIsBookingOpen] = useState(false)
   const [selectedDay, setSelectedDay] = useState("")
@@ -284,7 +308,7 @@ if(paymentMethod==="cash"){
 
           <Card className="mt-6">
             <CardContent className="p-6">
-              <h2 className="text-2xl font-semibold mb-4">About the Doctor</h2>
+              <h2 className="text-2xl font-semibold mb-4">{t(`About_the_Doctor`)}</h2>
               <div className="space-y-4">
                 {memoizedLocationInfo}
                 {memoizedContactInfo}
@@ -298,14 +322,14 @@ if(paymentMethod==="cash"){
         <div className="lg:w-1/3">
           <Card>
             <CardContent className="p-6">
-              <h2 className="text-2xl font-semibold mb-4">Booking Information</h2>
+              <h2 className="text-2xl font-semibold mb-4">{t(`Booking_Information`)}</h2>
               <Button className="w-full mb-4" onClick={() => setIsBookingOpen(true)}>
-                Book Examination
+                {t(`Booking_Examination`)}
               </Button>
               <div className="space-y-4">
                 <div className="flex justify-between">
-                  <span>Fees</span>
-                  <span>{Doctor.schedule.cost} EGP</span>
+                  <span>{t(`Fees`)}</span>
+                  <span>{`${Doctor.schedule.cost} ${tcommon(`EGP`)}`}</span>
                 </div>
               </div>
             </CardContent>
@@ -316,17 +340,17 @@ if(paymentMethod==="cash"){
       <Dialog open={isBookingOpen} onOpenChange={setIsBookingOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Book an Appointment with {Doctor.name}</DialogTitle>
+            <DialogTitle>{t(`Book_Title`,{name:Doctor.name})}</DialogTitle>
             <DialogDescription>
-              Select an available date for your appointment.
+              {t(`Book_Description`)}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label>Patient Name: {PatientName}</Label>
+              <Label>{t(`Patient_Name`,{name:PatientName})}</Label>
             </div>
             <div>
-              <Label>Patient Phone: {PatientPhoneNumbers.length > 1 ? PatientPhoneNumbers.map((phone:string) => `${phone} - `) : PatientPhoneNumbers[0]}</Label>
+              <Label> {t(`Patient_Phone`,{phone:(PatientPhoneNumbers.length > 1 ? PatientPhoneNumbers.map((phone:string) => `${phone} - `) : PatientPhoneNumbers[0])})}</Label>
             </div>
             <div>
               <Label>Select Day</Label>
@@ -338,7 +362,7 @@ if(paymentMethod==="cash"){
                       htmlFor={day.day}
                       className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                     >
-                      <span className="capitalize">{day.day}</span>
+                      <span className="capitalize">{tday(`${(day.day).toLowerCase()}`)}</span>
                       <span className="text-sm">{HandleTimeFormat(day.startTime)} - {HandleTimeFormat(day.endTime)}</span>
                     </Label>
                   </div>
@@ -347,10 +371,10 @@ if(paymentMethod==="cash"){
             </div>
             {selectedDay && (
               <div>
-                <Label>Select Date</Label>
+                <Label>{t(`Select_Date`)}</Label>
                 <Select onValueChange={(value) => setSelectedDate(new Date(value))}>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a date" />
+                    <SelectValue placeholder={t(`Select_Date`)}/>
                   </SelectTrigger>
                   <SelectContent>
                     {availableDates.map((date) => (
@@ -364,7 +388,7 @@ if(paymentMethod==="cash"){
             )}
           </div>
           <div className="mb-4">
-                      <h3 className="text-lg font-semibold mb-2">Payment Method</h3>
+                      <h3 className="text-lg font-semibold mb-2">{t(`Payment_Method`)}</h3>
                       <RadioGroup 
                         value={paymentMethod} 
                         onValueChange={(value) => setPaymentMethod(value as 'cash' | 'visa')}
@@ -390,7 +414,7 @@ if(paymentMethod==="cash"){
                               <circle cx="12" cy="12" r="2" />
                               <path d="M6 12h.01M18 12h.01" />
                             </svg>
-                            <span>Cash</span>
+                            <span>{t(`Cash`)}</span>
                           </Label>
                         </div>
                         <div className="flex items-center">
@@ -412,13 +436,13 @@ if(paymentMethod==="cash"){
                               <rect width="20" height="14" x="2" y="5" rx="2" />
                               <line x1="2" x2="22" y1="10" y2="10" />
                             </svg>
-                            <span>Visa</span>
+                            <span>{t(`Visa`)}</span>
                           </Label>
                         </div>
                       </RadioGroup>
                     </div>
           <DialogFooter>
-            <Button onClick={handleBook} disabled={!selectedDay || !selectedDate || isLoading}>{isLoading?<Spinner />:"Confirm Booking"}</Button>
+            <Button onClick={handleBook} disabled={!selectedDay || !selectedDate || isLoading}>{isLoading?<Spinner />:t(`submit`)}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

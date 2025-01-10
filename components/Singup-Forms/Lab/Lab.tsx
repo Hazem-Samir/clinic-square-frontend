@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/form"
 import { LabSchema, LabValue } from "@/schema/Lab"
 import LabSchedule from "./LabSchedule"
-import { Eye, EyeOff,ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff,ArrowLeft,ArrowRight } from 'lucide-react';
 
 
 
@@ -87,7 +87,8 @@ export default function Lab({ role ,onBack}: IProps) {
   return (step ===1 ?(
     <>
     <Button type="button" variant="ghost" onClick={onBack}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
+    <ArrowLeft className="mr-2 h-4 w-4 rtl:hidden" />
+    <ArrowRight className="ml-2 h-4 w-4 ltr:hidden" />
             Back
           </Button>
     <Form {...signupForm}>
@@ -356,7 +357,7 @@ export default function Lab({ role ,onBack}: IProps) {
                     <Button type="button" variant="outline" size="sm" className="text-xs sm:text-sm ">
                 <FormLabel htmlFor="license" className="flex w-full h-full items-center" >
                  
-                    <PlusCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    <PlusCircle className="h-3 w-3 sm:h-4 sm:w-4 ltr:mr-1 rtl:ml-1 ltr:sm:mr-2" />
                     Upload License Photo
                 </FormLabel>
                   </Button> 

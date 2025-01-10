@@ -117,7 +117,7 @@ export default function SearchSection({ onAnalyzing }: SearchSectionProps) {
                   </SelectContent>
                 </Select>
                 <Button type="submit" size="sm" className="w-full">
-                  <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" /> {t(`Search_for_Doctor_button`)}
+                  <Search className="ltr:mr-2 rtl:ml-1 h-4 w-4 sm:h-5 sm:w-5" /> {t(`Search_for_Doctor_button`)}
                 </Button>
               </form>
             </TabsContent>
@@ -130,7 +130,7 @@ export default function SearchSection({ onAnalyzing }: SearchSectionProps) {
                   className="text-sm sm:text-base md:text-lg py-2"
                 />
                 <Button onClick={DetectSpecialization} className="w-full sm:w-auto">
-                  <Search className="mr-2 h-4 w-4" /> {t(`Search_by_Symptoms_button`)}
+                  <Search className="mr-ltr:mr-2 rtl:ml-1 h-4 w-4" /> {t(`Search_by_Symptoms_button`)}
                 </Button>
               </div>
               {selectedSymptoms.length > 0 && (

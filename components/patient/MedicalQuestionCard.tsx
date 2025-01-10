@@ -21,7 +21,7 @@ const MedicalQuestionCard =()=>{
             <CardFooter>
               <Link href="/patient/medical-questions">
                 <Button className="w-full sm:w-auto">
-                  <MessageCircle className="mr-2 h-4 w-4" />
+                  <MessageCircle className="ltr:mr-2 rtl:ml-1 h-4 w-4" />
                   {t(`button`)}
                 </Button>
               </Link>
