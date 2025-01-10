@@ -106,32 +106,32 @@ export default function PregnancyCalculator() {
             </div>
           ) : (
             <div className="space-y-6">
-              <div>
-                <Label htmlFor="lastPeriodDate" className="text-sm text-gray-500 block mb-2">
-                  {t(`Start_Date`)}
-                </Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      className={`w-full justify-start text-left font-normal ${
-                        !lastPeriodDate && "text-muted-foreground"
-                      }`}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {lastPeriodDate ? format(lastPeriodDate, "PPP") : <span>{t(`Pick_a_date`)}</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={lastPeriodDate}
-                      onSelect={setLastPeriodDate}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
+               <div className="space-y-2">
+        <Label htmlFor="lastPeriodDate" className="text-sm text-gray-500 block">
+          {t(`Start_Date`)}
+        </Label>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"outline"}
+              className={`w-full justify-start text-left font-normal ${
+                !lastPeriodDate && "text-muted-foreground"
+              }`}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {lastPeriodDate ? format(lastPeriodDate, "PPP") : <span>{t(`Pick_a_date`)}</span>}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={lastPeriodDate}
+              onSelect={setLastPeriodDate}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
+      </div>
 
               <div>
                 <Label htmlFor="cycleLength" className="text-sm text-gray-500 block mb-2">

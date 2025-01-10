@@ -77,8 +77,11 @@ export default function BMICalculator() {
               </div>
 
               <div className="text-center">
-                <p className="text-xl">
-                  {t(`You_have`)} <span className="text-teal-500 font-semibold">{t(`${getBMICategory(bmi)}`)}</span> {t(`body_weight!`)}
+                <p className="text-xl rtl:hidden">
+                  {t(`You_have`)} <span className="text-teal-500 font-semibold">{t(`${getBMICategory(bmi)}`)}</span> {`${t(`body_weight`)}!`}
+                </p>
+                <p className="text-xl ltr:hidden">
+                  {t(`You_have`)}  {t(`body_weight`) } <span className="text-teal-500 font-semibold">{t(`${getBMICategory(bmi)}`)}!</span>
                 </p>
               </div>
 
