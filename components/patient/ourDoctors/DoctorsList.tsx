@@ -1,5 +1,5 @@
 "use client"
-
+import { toast, Toaster } from 'react-hot-toast'
 import {  MapPin,Search } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from "@/components/ui/button"
@@ -19,6 +19,7 @@ import Pagination from '@/components/Pagination'
 import { Doctors_Specializations } from '@/schema/Essentials'
 import Spinner from '@/components/Spinner'
 import { useTranslations } from 'next-intl'
+import { SearchForActor } from '@/lib/patient/clientApi'
 
 interface Doctor {
   id: string;
@@ -110,32 +111,79 @@ const DoctorsData=({Doctors,currentPage,totalPages,handlePageChange,isLoading}:I
 export default function DoctorsList({ Doctors, currentPage, totalPages,searchParams:{name='',spec=''},searchResult=null }: IProps) {
   const [searchTerm, setSearchTerm] = useState(name)
   const [isLoading, setIsLoading] = useState(false);
+  const [SearchResult, setSearchResult] = useState<{currentPage:number,totalPages:number,Doctors:[]}|null>(searchResult)
+  
   const [specialization, setSpecialization] = useState(spec)
   const router = useRouter()
   const t = useTranslations('patient.doctors')
   const tspec = useTranslations('Specializations')
 
 
-  const handleSearch =async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true);
-    if(searchTerm.trim().length>0&&specialization.length>0){
-
-      router.push(`our-doctors?name=${searchTerm}&specialization=${specialization}`)
+ const handleSearch =async (e: React.FormEvent) => {
+      e.preventDefault()
+      setIsLoading(true);
+      console.log(searchTerm,specialization)
+     if(searchTerm.trim().length>0||specialization.trim().length>0){
+       let res;
+       if(searchTerm.trim().length>0&&specialization.trim().length>0){
+         
+         res = await SearchForActor(`${searchTerm},${specialization}`,'doctor',1);
+        }
+        else if(searchTerm.trim().length>0){
+            res = await SearchForActor(`${searchTerm}`,'doctor',1);
+          }
+          else if(specialization.length>0){
+            res = await SearchForActor(`${specialization}`,'doctor',1);
+      
+          }
+      if (res&&res.success === true) {
+  
+        setSearchResult({Doctors:res.data.data,totalPages:res.data.paginationResult.numberOfPages,currentPage:res.data.paginationResult.currentPage})
+        console.log(SearchResult)
+      } else {
+        res.message.forEach((err: string) => toast.error(err || 'An unexpected error occurred.', {
+          duration: 2000,
+          position: 'bottom-center',
+        }));
+      }
     }
-    else if(searchTerm.trim().length>0){
-      router.push(`our-doctors?name=${searchTerm}`)
+    else{
+      toast.error("You have to enter text and choose what you search for", {
+        duration: 2000,
+        position: 'top-center',
+      })
     }
-    else if(specialization.length>0){
-      router.push(`our-doctors?specialization=${specialization}`)
-
+    
+    setIsLoading(false);
+    
     }
-
-  setIsLoading(false);
-
-  }
-
-      const handlePageChange = (newPage: number) => {
+    const handlePageChange = async(newPage: number) => {
+      setIsLoading(true);
+   if(SearchResult!==null&& SearchResult.totalPages>1){
+        let res;
+    if(searchTerm.trim().length>0&&specialization.trim().length>0){
+         
+      res = await SearchForActor(`${searchTerm},${specialization}`,'doctor',newPage);
+     }
+     else if(searchTerm.trim().length>0){
+         res = await SearchForActor(`${searchTerm}`,'doctor',newPage);
+       }
+       else if(specialization.length>0){
+         res = await SearchForActor(`${specialization}`,'doctor',newPage);
+   
+       }
+          
+        if (res&&res.success === true) {
+      
+          setSearchResult({Doctors:res.data.data,totalPages:res.data.paginationResult.numberOfPages,currentPage:res.data.paginationResult.currentPage})
+        } else {
+          res.message.forEach((err: string) => toast.error(err || 'An unexpected error occurred.', {
+            duration: 2000,
+            position: 'bottom-center',
+          }));
+        }
+      }
+      else{
         if(name.trim().length>0&&specialization.length>0){
 
           router.push(`our-doctors?name=${searchTerm}&specialization=${specialization}&resultsPage=${newPage}`)
@@ -148,10 +196,56 @@ export default function DoctorsList({ Doctors, currentPage, totalPages,searchPar
     
         }
         else{
-
           router.push(`our-doctors?page=${newPage}`);
         }
-          };
+        }
+     
+      setIsLoading(false);
+    };
+    const check=(e)=>{
+      if(e.target.value.trim().length===0&&specialization.trim().length<=0){
+        setSearchResult(null)
+        // router.refresh()
+        // router.refresh(`doctor?page=${currentPage}&date=${currentDate}`);
+      }
+    
+    }
+  // const handleSearch =async (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   setIsLoading(true);
+  //   if(searchTerm.trim().length>0&&specialization.length>0){
+
+  //     router.push(`our-doctors?name=${searchTerm}&specialization=${specialization}`)
+  //   }
+  //   else if(searchTerm.trim().length>0){
+  //     router.push(`our-doctors?name=${searchTerm}`)
+  //   }
+  //   else if(specialization.length>0){
+  //     router.push(`our-doctors?specialization=${specialization}`)
+
+  //   }
+
+  // setIsLoading(false);
+
+  // }
+
+      // const handlePageChange = (newPage: number) => {
+      //   if(name.trim().length>0&&specialization.length>0){
+
+      //     router.push(`our-doctors?name=${searchTerm}&specialization=${specialization}&resultsPage=${newPage}`)
+      //   }
+      //   else if(name.trim().length>0){
+      //     router.push(`our-doctors?name=${searchTerm}&resultsPage=${newPage}`)
+      //   }
+      //   else if(specialization.length>0){
+      //     router.push(`our-doctors?specialization=${specialization}&resultsPage=${newPage}`)
+    
+      //   }
+      //   else{
+
+      //     router.push(`our-doctors?page=${newPage}`);
+      //   }
+      //     };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -162,7 +256,7 @@ export default function DoctorsList({ Doctors, currentPage, totalPages,searchPar
             type="text"
             placeholder={`${t(`Search_Placeholder`)}...`}
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {check(e); setSearchTerm(e.target.value)}}
             className="flex-grow"
           />
             <Select  value={specialization} onValueChange={setSpecialization}>
@@ -187,10 +281,9 @@ export default function DoctorsList({ Doctors, currentPage, totalPages,searchPar
 {isLoading? <div className="flex justify-center items-center p-8">
         <Spinner invert />
       </div>
-      : ( (searchResult&& searchResult.Doctors.length<=0&&(name.trim().length>0||specialization.length>0))?(
-<div className="flex justify-center mt-6"><h2>No Doctors Found</h2>
-</div>):(searchResult===null?<DoctorsData Doctors={Doctors} totalPages={totalPages} currentPage={currentPage} isLoading={isLoading} handlePageChange={handlePageChange} />
-     :<DoctorsData Doctors={searchResult.Doctors} totalPages={searchResult.totalPages} currentPage={searchResult.currentPage} isLoading={isLoading} handlePageChange={handlePageChange} />))}
+      : SearchResult===null?<DoctorsData Doctors={Doctors} totalPages={totalPages} currentPage={currentPage} isLoading={isLoading} handlePageChange={handlePageChange} />
+     :<DoctorsData Doctors={SearchResult.Doctors} totalPages={SearchResult.totalPages} currentPage={SearchResult.currentPage} isLoading={isLoading} handlePageChange={handlePageChange} />}
+     <Toaster />
     </div>
   )
 }
