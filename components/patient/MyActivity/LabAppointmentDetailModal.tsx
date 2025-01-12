@@ -1,5 +1,5 @@
 'use client'
-
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import { format, addDays } from 'date-fns'
 import { useForm } from 'react-hook-form'
@@ -68,6 +68,8 @@ const formSchema = z.object({
 
 export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, appointment, onUpdate }: AppointmentDetailModalProps) {
   const [selectedDay, setSelectedDay] = useState<string | null>(null)
+  const t = useTranslations('patient.my_activity')
+  const tday = useTranslations('days')
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -115,7 +117,7 @@ export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, a
       <DialogContent className="sm:max-w-[550px] ">
         <ScrollArea className="h-[calc(70vh-2rem)] pr-4" style={{ overflow: 'auto' }}>
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">Appointment Details</DialogTitle>
+            <DialogTitle className="text-2xl font-bold">{t(`Appointment_Details`)}</DialogTitle>
           </DialogHeader>
           <div className="mt-4">
             <div className="flex items-center space-x-4 mb-6">
@@ -136,7 +138,7 @@ export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, a
                       name="day"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Select Day</FormLabel>
+                          <FormLabel>{t(`Select_Day`)}</FormLabel>
                           <Select
                             onValueChange={(value) => {
                               field.onChange(value)
@@ -147,13 +149,13 @@ export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, a
                           >
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select available day" />
+                                <SelectValue placeholder={t(`Select_available_day`)} />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
                               {appointment.lab.schedule.days.map((schedule) => (
                                 <SelectItem key={schedule.day} value={schedule.day}>
-                                  {schedule.day} ({HandleTimeFormat(schedule.startTime)} - {HandleTimeFormat(schedule.endTime)})
+                                  {tday(`${(schedule.day).toLowerCase()}`)} ({HandleTimeFormat(schedule.startTime)} - {HandleTimeFormat(schedule.endTime)})
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -169,7 +171,7 @@ export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, a
                         name="date"
                         render={({ field }) => (
                           <FormItem className="space-y-3">
-                            <FormLabel>Select Appointment Date</FormLabel>
+                            <FormLabel>{t(`Select_Appointment_Date`)}</FormLabel>
                             <FormControl>
                               <Select
                                 onValueChange={field.onChange}
@@ -177,7 +179,7 @@ export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, a
                               >
                                 <SelectTrigger>
                                   <SelectValue>
-                                    {field.value ? format(new Date(field.value), 'EEEE, MMMM d, yyyy') : "Select available date"}
+                                    {field.value ? format(new Date(field.value), 'EEEE, MMMM d, yyyy') : t(`Select_available_date`)}
                                   </SelectValue>
                                 </SelectTrigger>
                                 <SelectContent>
@@ -201,7 +203,7 @@ export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, a
                 )}
 
                 <div>
-                  <Label className="text-lg font-semibold mb-2 block">Test Results</Label>
+                  <Label className="text-lg font-semibold mb-2 block">{t(`Test_Results`)}</Label>
                   <ScrollArea className="h-[300px] w-full rounded-md border">
                     <div className="p-4 space-y-4">
                       {appointment.requestedTests.map((test) => (
@@ -209,11 +211,11 @@ export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, a
                           <CardHeader>
                             <CardTitle className="text-lg">{test.testDetails.test.name}</CardTitle>
                             <div className="mt-1">
-              <h3 className="text-sm font-sempibold mb-1">Preperations:</h3>
+              <h3 className="text-sm font-sempibold mb-1">{`${t(`Preperations`)}:`}</h3>
               <ul className="list-disc list-inside text-sm text-muted-foreground">
                 {test.testDetails.preparations.length > 0 ? test.testDetails.preparations.map((prep, index) => (
                   <li key={index}>{prep}</li>
-                )) : <li>none</li>}
+                )) : <li>{t(`None`)}</li>}
               </ul>
             </div>
                           </CardHeader>
@@ -235,7 +237,7 @@ export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, a
                                     title={`View Result File ${index + 1}`}
                                   >
                                     <FileText className="h-4 w-4" />
-                                    <span>Result {index + 1}</span>
+                                    <span>{t(`Result`,{index:index+1})}</span>
                                   </a>
                                 </Button>
                               ))}
@@ -250,9 +252,9 @@ export default function LabAppointmentDetailModal({ isOpen, onClose,isLoading, a
                 {appointment.state !== "completed" && (
                   <DialogFooter className="p-1">
                     <Button type="button" disabled={isLoading} variant="outline" onClick={onClose}>
-                      Cancel
+                      {t(`Cancel`)}
                     </Button>
-                    <Button type="submit" disabled={isLoading}>{isLoading?<Spinner />:"Update Appointment"}</Button>
+                    <Button type="submit" disabled={isLoading}>{isLoading?<Spinner />:t(`Update_Lab_Appointment_submit`)}</Button>
                   </DialogFooter>
                 )}
               </form>

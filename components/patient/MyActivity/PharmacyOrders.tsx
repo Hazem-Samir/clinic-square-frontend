@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { shortName } from '@/lib/utils'
 import Pagination from '@/components/Pagination'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 
 
@@ -33,6 +34,8 @@ interface IProps {
 
 export default function PharmacyOrders({orders,currentPage,totalPages}:IProps) {
   const router = useRouter();
+  const t = useTranslations('patient.my_activity')
+  const tcommon = useTranslations('common')
 
 const handlePageChange=(newPage:number)=>{
   router.push(`my-activity?pharmaciesPage=${newPage}&activeTab=pharmacies`);
@@ -57,15 +60,15 @@ const handlePageChange=(newPage:number)=>{
               </div>
               <div className="flex flex-col items-center" >
 
-              <p className="text-sm text-gray-500">State: {order.state}</p>
-              <p className="text-sm text-gray-500">Pay Method: {order.paymentMethod}</p>
+              <p className="text-sm text-gray-500">{`${t(`State`)}: ${t(`${order.state}`)}`}</p>
+              <p className="text-sm text-gray-500">{`${t(`Pay_Method`)}: ${t(`${(order.paymentMethod).toLowerCase()}`)}`}</p>
               </div>
             </div>
             <div>
             <div className="flex justify-between">
 
-<h4 className="font-semibold mb-2">Products:</h4>
-<h4 className="font-semibold mb-2">Unit Price</h4>
+<h4 className="font-semibold mb-2">{`${t(`Products`)}:`}</h4>
+<h4 className="font-semibold mb-2">{`${t(`Unit_Price`)}:`}</h4>
       </div>
               <ul className="space-y-1">
                 {order.medicines.map((product) => (
@@ -78,13 +81,13 @@ const handlePageChange=(newPage:number)=>{
                 </Avatar>
                     <span>{product.medicineId.medicine.name} (x{product.quantity})</span>
                     </div>
-                    <span>{product.price * product.quantity} EGP</span>
+                    <span>{`${product.price * product.quantity} ${tcommon(`EGP`)}`}</span>
                   </li>
                 ))}
               </ul>
             </div>
             <div className="mt-4 text-right font-semibold">
-              Total: {order.totalCost} EGP
+              {`${t(`Total`)}: ${order.totalCost} ${tcommon(`EGP`)}`}
             </div>
           </CardContent>
         </Card>

@@ -12,6 +12,7 @@ import { CancelLabReservation, UpdateMyLabReservation } from '@/lib/patient/clie
 import { shortName } from '@/lib/utils'
 import { format } from "date-fns"
 import Pagination from '@/components/Pagination'
+import { useTranslations } from 'next-intl'
 
 
 interface testDtails {
@@ -45,7 +46,8 @@ export default function LabAppointments({appointments,currentPage,totalPages}:IP
  const [detailModalOpen, setDetailModalOpen] = useState(false)
   const [cancelModalOpen, setCancelModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
+  const t = useTranslations('patient.my_activity')
+  const tcommon = useTranslations('common')
   const [selectedAppointment, setSelectedAppointment] = useState<ILabReservation | null>(null)
   const router = useRouter();
   const handleCancel = (appointment: ILabReservation) => {
@@ -128,34 +130,32 @@ export default function LabAppointments({appointments,currentPage,totalPages}:IP
               </div>
               <div className="flex flex-col items-center" >
 
-              <p className="text-sm text-gray-500">State: {appointment.state}</p>
-              <p className="text-sm text-gray-500">Date: {format(new Date(appointment.date), 'yyyy-MM-dd') }</p>
+              <p className="text-sm text-gray-500">{`${t(`State`)}: ${t(`${appointment.state}`)}`}</p>
+              <p className="text-sm text-gray-500">{`${t(`Date`)}: ${format(new Date(appointment.date), 'yyyy-MM-dd') }`}</p>
               </div>
             </div>
             <div>
                   <div className="flex justify-between">
 
-              <h4 className="font-semibold mb-2">Tests:</h4>
-              <h4 className="font-semibold mb-2">Price</h4>
+              <h4 className="font-semibold mb-2">{`${t(`Tests`)}:`}</h4>
+              <h4 className="font-semibold mb-2">{t(`Price`)}</h4>
                     </div>
               <ul className="space-y-1">
                 {appointment.requestedTests.map((test, index) => (
                       <li key={index} className="flex justify-between items-center">
                     <span>{test.testDetails.test.name}</span>
-                    <span>{test.testDetails.cost} EGP</span>
+                    <span>{`${test.testDetails.cost} ${tcommon(`EGP`)}`}</span>
                   </li>
                 ))}
               </ul>
                 </div>
-                <div className="mt-4 text-right font-semibold">
-              Total: {appointment.totalCost} EGP
-            </div>
+                <div className="mt-4 text-right font-semibold">{`${t(`Total`)}: ${appointment.totalCost} ${tcommon(`EGP`)}`}</div>
           </CardContent>
           <CardFooter className="flex flex-col sm:flex-row justify-start gap-2">
         
-            <Button onClick={() => handleShowDetails(appointment)} className="w-full sm:w-auto">Details</Button>
+            <Button onClick={() => handleShowDetails(appointment)} className="w-full sm:w-auto">{t(`Details`)}</Button>
             {appointment.state!=="completed"?
-            <Button variant="outline" onClick={() => handleCancel(appointment)} className="w-full sm:w-auto">Cancel</Button>:null
+            <Button variant="outline" onClick={() => handleCancel(appointment)} className="w-full sm:w-auto">{t(`Cancel`)}</Button>:null
             }
             {/* <Button variant="outline" onClick={() => handleCancel(appointment)} className="w-full sm:w-auto">Cancel</Button> */}
           </CardFooter>

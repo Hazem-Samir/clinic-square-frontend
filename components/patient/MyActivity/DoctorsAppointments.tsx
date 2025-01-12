@@ -13,6 +13,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { FormDataHandler } from '@/utils/AuthHandlers'
 import Pagination from '@/components/Pagination'
+import { useTranslations } from 'next-intl'
 
 
 
@@ -42,6 +43,8 @@ export default function DoctorAppointments({appointments,currentPage,totalPages}
   const [detailModalOpen, setDetailModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [selectedAppointment, setSelectedAppointment] = useState<IDoctorReservation | null>(null)
+  const t = useTranslations('patient.my_activity')
+  const tspec = useTranslations('Specializations')
 
   const handleCancel = (appointment: IDoctorReservation) => {
     setSelectedAppointment(appointment)
@@ -125,20 +128,20 @@ export default function DoctorAppointments({appointments,currentPage,totalPages}
                 </Avatar>
                 <div>
                   <h3 className="font-semibold">{appointment.doctor.name}</h3>
-                  <p className="text-sm text-gray-500">{appointment.doctor.specialization}</p>
+                  <p className="text-sm text-gray-500">{tspec(`${appointment.doctor.specialization}`)}</p>
                 </div>
               </div>
               <div className="flex flex-col items-center" >
 
-              <p className="text-sm text-gray-500">State: {appointment.state}</p>
-              <p className="text-sm text-gray-500">Date: {format(new Date(appointment.date), 'yyyy-MM-dd') }</p>
+              <p className="text-sm text-gray-500">{`${t(`State`)}: ${t(`${appointment.state}`)}`}</p>
+              <p className="text-sm text-gray-500">{`${t(`Date`)}: ${format(new Date(appointment.date), 'yyyy-MM-dd') }`}</p>
               </div>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col sm:flex-row justify-start gap-2">
-            <Button onClick={() => handleShowDetails(appointment)} className="w-full sm:w-auto">Details</Button>
+            <Button onClick={() => handleShowDetails(appointment)} className="w-full sm:w-auto">{t(`Details`)}</Button>
             {appointment.state!=="completed"?
-            <Button variant="outline" onClick={() => handleCancel(appointment)} className="w-full sm:w-auto">Cancel</Button>:null
+            <Button variant="outline" onClick={() => handleCancel(appointment)} className="w-full sm:w-auto">{t(`Cancel`)}</Button>:null
             }
          <Toaster />
           </CardFooter>

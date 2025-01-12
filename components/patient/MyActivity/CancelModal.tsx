@@ -9,6 +9,7 @@ import {
       AlertDialogHeader,
       AlertDialogTitle,
     } from "@/components/ui/alert-dialog"
+import { useTranslations } from 'next-intl'
     
     type CancelModalProps = {
       isOpen: boolean
@@ -19,18 +20,20 @@ import {
     }
     
     export default function CancelModal({ isOpen, onClose, onConfirm,isLoading, itemName }: CancelModalProps) {
+          const t = useTranslations('patient.my_activity')
+      
       return (
         <AlertDialog open={isOpen} >
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogTitle>{t(`cancel_title`)}</AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently cancel your {itemName}.
+                {t(`cancel_description`,{itemName})}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel onClick={onClose}>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={()=>{onConfirm()}}>{isLoading?<Spinner />:"Confirm"}</AlertDialogAction>
+              <AlertDialogCancel onClick={onClose}>{t(`Cancel`)}</AlertDialogCancel>
+              <AlertDialogAction onClick={()=>{onConfirm()}}>{isLoading?<Spinner />:t(`cancel_submit`)}</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

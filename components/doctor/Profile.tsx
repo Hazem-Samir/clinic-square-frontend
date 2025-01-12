@@ -75,6 +75,8 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
   const [showPasswordConfirm2, setShowPasswordConfirm2] = useState(false);
   const t = useTranslations('profile')
+  const tmonth = useTranslations('months')
+  const tspec = useTranslations('Specializations')
 
   const form = useForm<ProfileValue>({
     resolver: zodResolver(DoctorProfileSchema),
@@ -199,7 +201,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                   <div className="text-center">
                     <h2 className="text-3xl font-bold">{profile.name}</h2>
                     <p className="text-xl text-gray-500">{profile.email}</p>
-                    <p className="text-sm text-gray-500">{profile.specialization}</p>
+                    <p className="text-sm text-gray-500">{tspec(`${profile.specialization}`)}</p>
                   </div>
                 </div>
                 <div className="space-y-6">
@@ -379,7 +381,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                               {field.value ? (
                                 format(field.value, "PPP")
                               ) : (
-                                <span>Pick a date</span>
+                                 <span>{t(`update_profile.Pick_date`)}</span>
                               )}
                               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                             </Button>
@@ -413,7 +415,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                                   <ChevronLeft className="h-4 w-4" />
                                 </Button>
                                 <div className="w-[100px] text-center font-medium">
-                                  {months[month]}
+                                  {tmonth(`${months[month]}`)}
                                 </div>
                                 <Button
                                   variant="outline"

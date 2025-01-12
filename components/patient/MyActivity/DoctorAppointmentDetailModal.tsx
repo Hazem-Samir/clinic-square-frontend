@@ -13,6 +13,7 @@ import Spinner from '@/components/Spinner'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { addDays, format } from "date-fns"
 import { HandleTimeFormat } from '@/schema/Essentials'
+import { useTranslations } from 'next-intl'
 
 interface IDoctorReservation {
   doctor:{name:string,id:string,porfilePic:string,gender:string,specialization:string,phoneNumbers:string[],  schedule: {
@@ -44,6 +45,10 @@ const formSchema = z.object({
 });
 
 export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointment, onUpdate, isLoading}: AppointmentDetailModalProps) {
+  const t = useTranslations('patient.my_activity')
+  const tday = useTranslations('days')
+  const tspec = useTranslations('Specializations')
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -109,24 +114,24 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
       <DialogContent className="sm:max-w-[425px] h-[65vh]">
         <ScrollArea className="h-[calc(65vh-2rem)] pr-4" style={{ overflow: 'auto' }}>
           <DialogHeader>
-            <DialogTitle>Appointment Details</DialogTitle>
+            <DialogTitle>{t(`Appointment_Details`)}</DialogTitle>
           </DialogHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-8 p-1 pb-8">
               <div className="grid gap-4 py-4">
                 {/* Existing doctor info fields */}
                 <div className="flex gap-2 items-center">
-                  <h3 className=" text-md sm:text-md font-semibold">Doctor:</h3>
+                  <h3 className=" text-md sm:text-md font-semibold">{`${t(`Doctor`)}:`}</h3>
                   <span id="name">{appointment.doctor.name}</span>
                         
                 </div>
                 <div className="flex gap-2 items-center">
-                  <h3 className=" text-md sm:text-md font-semibold">Specialization:</h3>
-                  <span id="name">{appointment.doctor.specialization}</span>
+                  <h3 className=" text-md sm:text-md font-semibold">{`${t(`Specialization`)}:`}</h3>
+                  <span id="name">{tspec(`${appointment.doctor.specialization}`)}</span>
                         
                 </div>
                 <div className="flex gap-2 items-center">
-                  <h3 className=" text-md sm:text-md font-semibold">Diagnosis:</h3>
+                  <h3 className=" text-md sm:text-md font-semibold">{`${t(`Diagnosis`)}:`}</h3>
                   <span id="name">{appointment.report.diagnose}</span>
                         
                 </div>
@@ -134,29 +139,29 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                 
               
                 <div>
-                  <h3 className="mb-4 text-md sm:text-md font-semibold">Prescriptions:</h3>
+                  <h3 className="mb-4 text-md sm:text-md font-semibold">{`${t(`Prescriptions`)}:`}</h3>
                   <ul className="space-y-2">
                     {appointment.report.medicine.length >0 ? (appointment.report.medicine.map((medicine, index) => (
                       <li key={index} className="flex justify-between items-center text-sm">
                         <span>{medicine.name}</span>
                         <span className="text-gray-500">{medicine.dose}</span>
                       </li>
-                    ))): <p className="ml-1 text-sm">No Medicines</p>}
+                    ))): <p className="ml-1 text-sm">{t(`No_Medicines`)}</p>}
                   </ul>
                 </div>
                 <div>
-                  <h3 className="mb-4 text-md sm:text-md font-semibold">Requested Tests:</h3>
+                  <h3 className="mb-4 text-md sm:text-md font-semibold">{`${t(`Requested_Tests`)}:`}</h3>
                   <ul className="space-y-2">
                     {appointment.report.requestedTests.length >0 ? (appointment.report.requestedTests.map((test, index) => (
                       <li key={index} className="flex justify-between items-center text-md">
                         <span>{test}</span>
                       </li>
-                    ))): <p className="ml-1 text-sm">No Tests</p>}
+                    ))): <p className="ml-1 text-sm">{t(`No_Tests`)}</p>}
                   </ul>
                 </div>
                 {/* Files section */}
                 <div className="flex items-center gap-2">
-                  <h3 className="text-md sm:text-md font-semibold">Files:</h3>
+                  <h3 className="text-md sm:text-md font-semibold">{`${t(`Files`)}:`}</h3>
                   <div className="flex gap-2 p-4 flex-wrap items-center justify-start">
                     {appointment.report.results.length>0? appointment.report.results.map((result, index) => (
                       <Button
@@ -168,10 +173,10 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                       >
                         <a href={result} target="_blank" rel="noopener noreferrer" title={`View Result File ${index + 1}`}>
                           <FileText className="h-4 w-4" />
-                          <span>File {index + 1}</span>
+                          <span>{t(`File`,{index:index+1})}</span>
                         </a>
                       </Button>
-                    )) :<p className="ml-1 text-sm">No Files</p>}
+                    )) :<p className="ml-1 text-sm">{t(`No_Files`)}</p>}
                   </div>
                 </div>
 
@@ -181,7 +186,7 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                       name="files"
                       render={() => (
                         <FormItem className="grid  items-center ">
-                          <FormLabel className="text-md">Upload Files</FormLabel>
+                          <FormLabel className="text-md">{t(`Upload_Files`)}</FormLabel>
                           <FormControl className="col-span-3">
                             <Input
                               type="file"
@@ -202,14 +207,14 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                     {/* Uploaded Files List */}
                     {fields.map((field, index) => (
                       <div key={field.id} className="grid grid-cols-4 items-center gap-4">
-                        <span className="col-start-2 col-span-2">{`File ${index+1}`}</span>
+                        <span className="col-start-2 col-span-2">{t(`File`,{index:index+1})}</span>
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
                           onClick={() => remove(index)}
                         >
-                          Remove
+                          {t(`Remove`)}
                         </Button>
                       </div>
                     ))}
@@ -221,17 +226,17 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                       name="scheduleDay"
                       render={({ field }) => (
                         <FormItem className="grid  items-center ">
-                          <FormLabel className="text-md" >Schedule Day</FormLabel>
+                          <FormLabel className="text-md" >{t(`Schedule_Day`)}</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl className="col-span-3">
                               <SelectTrigger>
-                                <SelectValue placeholder="Select available day" />
+                                <SelectValue placeholder={t(`Select_available_day`)} />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
                               {appointment.doctor.schedule.days.map((schedule) => (
                                 <SelectItem key={schedule.day} value={schedule.day}>
-                                  {schedule.day} ({HandleTimeFormat(schedule.startTime)} - {HandleTimeFormat(schedule.endTime)})
+                                    {tday(`${(schedule.day).toLowerCase()}`)} ({HandleTimeFormat(schedule.startTime)} - {HandleTimeFormat(schedule.endTime)})
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -248,7 +253,7 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                         name="appointmentDate"
                         render={({ field }) => (
                           <FormItem className="grid  items-center ">
-                            <FormLabel className="text-md">Available Dates</FormLabel>
+                            <FormLabel className="text-md">{t(`Available_Dates`)}</FormLabel>
                             <div className="col-span-3 space-y-4">
                               <Select 
                                 onValueChange={field.onChange}
@@ -257,7 +262,7 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                                 <FormControl>
                                   <SelectTrigger>
                                     <SelectValue>
-                                      {field.value ? format(new Date(field.value), 'EEEE, MMMM d, yyyy') : "Select from available dates"}
+                                      {field.value ? format(new Date(field.value), 'EEEE, MMMM d, yyyy') : t(`Select_available_date`)}
                                     </SelectValue>
                                   </SelectTrigger>
                                 </FormControl>
@@ -289,7 +294,7 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                     Cancel
                   </Button>
                   <Button type="submit" disabled={isLoading || (!form.watch("appointmentDate") && (!form.watch("files") || form.watch("files").length === 0))}>
-                    {isLoading ? <Spinner /> : "Update"}
+                    {isLoading ? <Spinner /> : t(`Update_Doctor_Appointment_submit`)}
                   </Button>
                 </DialogFooter>
               )}

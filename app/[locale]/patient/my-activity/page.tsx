@@ -5,12 +5,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import DoctorAppointments from '@/components/patient/MyActivity/DoctorsAppointments'
 import LabAppointments from '@/components/patient/MyActivity/LabAppointments'
 import PharmacyOrders from '@/components/patient/MyActivity/PharmacyOrders'
+import { useTranslations } from 'next-intl'
 
 type activeTabOptions= "doctors"|"labs"|"pharmacies";
 
 async function MyDoctorsResrvations({ page }: { page: number }) {
   const {data:doctors} = await getMyDoctorsResrvations(5,page);
-  console.log("docotrs",doctors.data)
   return (
    <DoctorAppointments
    currentPage={page}
@@ -47,6 +47,7 @@ export default function MyActivityPage({ searchParams }: {searchParams:{doctorsP
   const labsPage = Number(searchParams.labsPage) || 1;
   const pharmaciesPage = Number(searchParams.pharmaciesPage) || 1;
   const activeTab = searchParams.activeTab || "doctors";
+  const t = useTranslations('patient.my_activity')
 
 
   return (
@@ -56,12 +57,12 @@ export default function MyActivityPage({ searchParams }: {searchParams:{doctorsP
       <BlurFade delay={0} className="flex-grow p-4 md:p-8 space-y-8 md:space-y-12 max-w-7xl mx-auto w-full bg-background  text-foreground" inView>
       <main    className="flex-grow p-4 md:p-8 space-y-8 md:space-y-12 max-w-7xl mx-auto w-full bg-background  text-foreground" >
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">My Medical Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-4">{t(`My_Medical_Activities`)}</h1>
       <Tabs defaultValue={activeTab}>
         <TabsList className="grid w-full grid-cols-1 md:grid-cols-3 md:mb-5 mb-24 md:space-y-0 space-y-2 md:bg-muted bg-transparent ">
-          <TabsTrigger className=" data-[state=active]:bg-teal-400 data-[state=active]:text-primary-foreground" value="doctors">Doctor Appointments</TabsTrigger>
-          <TabsTrigger className=" data-[state=active]:bg-teal-400 data-[state=active]:text-primary-foreground" value="labs">Lab Appointments</TabsTrigger>
-          <TabsTrigger  className=" data-[state=active]:bg-teal-400 data-[state=active]:text-primary-foreground" value="pharmacies">Pharmacy Orders</TabsTrigger>
+          <TabsTrigger className=" data-[state=active]:bg-teal-400 data-[state=active]:text-primary-foreground" value="doctors">{t(`Doctor_Appointments`)}</TabsTrigger>
+          <TabsTrigger className=" data-[state=active]:bg-teal-400 data-[state=active]:text-primary-foreground" value="labs">{t(`Lab_Appointments`)}</TabsTrigger>
+          <TabsTrigger  className=" data-[state=active]:bg-teal-400 data-[state=active]:text-primary-foreground" value="pharmacies">{t(`Pharmacy_Orders`)}</TabsTrigger>
         </TabsList>
         <TabsContent value="doctors">
       <MyDoctorsResrvations page={doctorsPage} />

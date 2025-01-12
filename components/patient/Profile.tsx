@@ -1,5 +1,5 @@
 "use client"
-
+import { useTranslations } from 'next-intl'
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -71,6 +71,8 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
   const [showPasswordConfirm2, setShowPasswordConfirm2] = useState(false);
+  const t = useTranslations('profile')
+  const tmonth = useTranslations('months')
 
   const form = useForm<ProfileValue>({
     resolver: zodResolver(PatientProfileSchema),
@@ -182,7 +184,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
       
           <Card className="w-full border-none">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold text-center">User Profile</CardTitle>
+              <CardTitle className="text-2xl font-bold text-center">{t(`user_profile`)}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-8">
@@ -194,23 +196,22 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                   <div className="text-center">
                     <h2 className="text-3xl font-bold">{profile.name}</h2>
                     <p className="text-xl text-gray-500">{profile.email}</p>
-                    <p className="text-sm text-gray-500">{profile.specialization}</p>
                   </div>
                 </div>
                 <div className="space-y-6">
               
                   <div>
-                    <Label className="text-lg">Age</Label>
+                    <Label className="text-lg">{t(`age`)}</Label>
                     <p   className="text-xl mt-1">{getAge(profile.dateOfBirth)}</p>
 
                   </div>
                   <div>
-                    <Label className="text-lg">Gender</Label>
-                    <p   className="text-xl mt-1">{profile.gender}</p>
+                    <Label className="text-lg">{t(`gender`)}</Label>
+                    <p   className="text-xl mt-1">{t(`${profile.gender}`)}</p>
 
                   </div>
                   <div>
-                    <Label className="text-lg">Address</Label>
+                    <Label className="text-lg">{t(`address`)}</Label>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {profile.address.map((address, index) => (
                     <p  key={index} className="text-xl mt-1">{address} - </p>
@@ -219,7 +220,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                     </div>
                   </div>
                   <div>
-                    <Label className="text-lg">Phone Numbers</Label>
+                    <Label className="text-lg">{t(`phoneNumbers`)}</Label>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {profile.phoneNumbers.map((phone, index) => (
                     <p  key={index} className="text-xl mt-1">{phone} - </p>
@@ -234,11 +235,11 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
 
                 <Dialog open={isOpenUpdateProfile} onOpenChange={setIsOpenUpdateProfile}>
       <DialogTrigger asChild>
-        <Button>Update Profile</Button>
+        <Button>{t(`update_profile.button`)}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Update Doctor Profile</DialogTitle>
+          <DialogTitle>{t(`update_profile.title`)}</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -251,7 +252,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                   name="profilePic"
                   render={() => (
                     <FormItem>
-                      <FormLabel>Profile Picture</FormLabel>
+                      <FormLabel>{t(`update_profile.Profile_Pic`)}</FormLabel>
                       <FormControl>
                         <div className="flex items-center space-x-4">
                         <div className="relative w-28 h-20 rounded-full overflow-hidden bg-muted">
@@ -280,7 +281,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Full Name</FormLabel>
+                      <FormLabel>{t(`update_profile.Full_Name`)}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -294,7 +295,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{t(`update_profile.email`)}</FormLabel>
                       <FormControl>
                         <Input {...field} type="email" />
                       </FormControl>
@@ -308,16 +309,16 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                   name="gender"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Gender</FormLabel>
+                      <FormLabel>{t(`gender`)}</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a gender" />
+                            <SelectValue placeholder={t(`update_profile.gender_placeholder`)} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="male">Male</SelectItem>
-                          <SelectItem value="female">Female</SelectItem>
+                          <SelectItem value="male">{t(`male`)}</SelectItem>
+                          <SelectItem value="female">{t(`female`)}</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -330,7 +331,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                   name="dateOfBirth"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Date of birth</FormLabel>
+                      <FormLabel>{t(`update_profile.DOB`)}</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -344,7 +345,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                               {field.value ? (
                                 format(field.value, "PPP")
                               ) : (
-                                <span>Pick a date</span>
+                                 <span>{t(`update_profile.Pick_date`)}</span>
                               )}
                               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                             </Button>
@@ -378,7 +379,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                                   <ChevronLeft className="h-4 w-4" />
                                 </Button>
                                 <div className="w-[100px] text-center font-medium">
-                                  {months[month]}
+                                {tmonth(`${months[month]}`)}
                                 </div>
                                 <Button
                                   variant="outline"
@@ -439,7 +440,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                     name={`phoneNumbers.${index}`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{index === 0 ? "Phone Number" : `Phone Number ${index + 1}`}</FormLabel>
+                        <FormLabel>{t(`update_profile.phoneNumber`,{index:index+1})} </FormLabel>
                         <FormControl>
                           <div className="flex items-center space-x-2">
                             <Input {...field} />
@@ -466,7 +467,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                   size="sm"
                   onClick={() => appendPhone("")}
                 >
-                  Add Another Phone Number
+                  {t(`update_profile.Add_Another_Phone_Button`)}
                 </Button>
 
                 {addressFields.map((field, index) => (
@@ -476,7 +477,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                     name={`address.${index}`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{index === 0 ? "Address" : `Address ${index + 1}`}</FormLabel>
+                        <FormLabel>{t(`update_profile.address`,{index:index+1})}</FormLabel>
                         
                         <FormControl>
                           <div className="flex items-center space-x-2">
@@ -504,13 +505,13 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                   size="sm"
                   onClick={() => appendAddress("")}
                 >
-                  Add Another Address
+                   {t(`update_profile.Add_Another_Address_Button`)}
                 </Button>
 
             
               </div>
             </ScrollArea>
-            <Button type="submit" className="w-full" disabled={isLoading}>{isLoading?<Spinner />:"Update Profile"}</Button>
+            <Button type="submit" className="w-full" disabled={isLoading}>{isLoading?<Spinner />:t(`update_profile.submit`)}</Button>
           </form>
         </Form>
         
@@ -519,11 +520,11 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
 
     <Dialog open={isOpenUpdatePassword} onOpenChange={setIsOpenUpdatePassword}>
       <DialogTrigger asChild>
-        <Button>Update Password</Button>
+        <Button>{t(`change_password.button`)}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Update Patient Profile</DialogTitle>
+          <DialogTitle>{t(`change_password.title`)}</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <Form {...passwordForm}>
@@ -538,7 +539,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                   name="currentPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Current Password</FormLabel>
+                      <FormLabel>{t(`change_password.current_Password`)}</FormLabel>
                       <FormControl>
                   <div className="relative">
                         <Input {...field}type={showPassword ? "text" : "password"}/>
@@ -561,7 +562,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
           </Button>
           </div>
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage translate={'errors'} />
                     </FormItem>
                   )}
                 />
@@ -571,7 +572,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                   name="newPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>New Password</FormLabel>
+                      <FormLabel>{t(`change_password.new_Password`)}</FormLabel>
                       <FormControl>
                 <div className="relative">
                         <Input {...field}type={showPasswordConfirm ? "text" : "password"} />
@@ -594,7 +595,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
           </Button>
                 </div>
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage translate={'errors'} />
                     </FormItem>
                   )}
                 />
@@ -603,7 +604,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
                   name="passwordConfirm"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Confirm New Password</FormLabel>
+                      <FormLabel>{t(`change_password.confirm_new_Password`)}</FormLabel>
                       <FormControl>
                 <div className="relative">
                         <Input {...field}type={showPasswordConfirm2 ? "text" : "password"} />
@@ -626,7 +627,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
           </Button>
                 </div> 
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage translate={'errors'} />
                     </FormItem>
                   )}
                 />
@@ -635,7 +636,7 @@ export default function DoctorProfileUpdate({ profile }: IProps) {
               
               </div>
             </ScrollArea>
-            <Button type="submit" className="w-full"  disabled={isLoading}>{isLoading?<Spinner/>:"Update Password"}</Button>
+            <Button type="submit" className="w-full"  disabled={isLoading}>{isLoading?<Spinner/>:t(`change_password.submit`)}</Button>
           </form>
         </Form>
             <Toaster />
