@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
       if (!token) {
         return NextResponse.json({  success: false, message: 'Invalid token' }, { status: 401 })
       }
-
+      
       const searchParams = request.nextUrl.searchParams
       const page = parseInt(searchParams.get('page') || '1',10)
       const limit=parseInt(searchParams.get('limit')||'500000',10);

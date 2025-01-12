@@ -16,7 +16,7 @@ const monthNames = [
 async function StatData({year}:{year:string}) {
   const {data:stats}=await getReservationsStat(50000000,1);
 
-  
+  console.log()
 
 const cookieStore = cookies();
 const userCookie = cookieStore.get('user'); 
