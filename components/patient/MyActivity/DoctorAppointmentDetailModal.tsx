@@ -179,7 +179,8 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                     )) :<p className="ml-1 text-sm">{t(`No_Files`)}</p>}
                   </div>
                 </div>
-
+                {(appointment.state !== "completed" && appointment.state !== "consultation" )&& (
+                  <>
                     {/* File Upload Fields */}
                     <FormField
                       control={form.control}
@@ -218,8 +219,7 @@ export default function DoctorAppointmentDetailModal({ isOpen, onClose, appointm
                         </Button>
                       </div>
                     ))}
-                {(appointment.state !== "completed" && appointment.state !== "consultation" )&& (
-                  <>
+        
                     {/* Schedule Day Selection */}
                     <FormField
                       control={form.control}

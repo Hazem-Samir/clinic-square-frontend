@@ -553,6 +553,29 @@ export const UpdateQuestion = async (data:{question:string},questionID:string)=>
 }
 
 
+export const DeleteQuestion = async (id:string)=>{
+  const token = getToken();
+  const queryParams = new URLSearchParams({
+    id,
+  }).toString();
+  try {
+    const response = await fetch(`/api/medicalQuestions?${queryParams}`, {
+      method: 'DELETE',
+      headers: {
+          'Authorization': `Bearer ${token}`,
+          // 'Content-Type': 'application/json',
+      },
+    })
+
+  
+
+const res = await response.json();
+return res;
+  } catch (error) {
+    console.error('Error Add Schedule:', error)
+  }
+} 
+
 
 
 

@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Input } from "@/components/ui/input"
 import { shortName } from '@/lib/utils'
 import { getAge } from '@/utils/utils'
-import { ArrowLeft,ArrowRight, Edit } from 'lucide-react'
+import { ArrowLeft,ArrowRight, Edit,Trash2 } from 'lucide-react'
 import Link from "next/link"
 import { getUser } from '@/lib/auth'
 import {
@@ -30,8 +30,9 @@ import * as z from "zod"
 import { useTranslations } from 'next-intl'
 import toast, { Toaster } from 'react-hot-toast'
 import Spinner from '@/components/Spinner'
-import { UpdateQuestion } from '@/lib/patient/clientApi'
+import { DeleteQuestion, UpdateQuestion } from '@/lib/patient/clientApi'
 import { useRouter } from 'next/navigation'
+import { redirect } from 'next/navigation'
 
 const formSchema = z.object({
       question: z.string().min(6,"Patient_Question_required")
@@ -62,6 +63,7 @@ interface IProps {
 
 export default function QuestionDetail({question}: IProps) {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const t = useTranslations('patient.medical_questions.Update_Question')
@@ -75,7 +77,6 @@ export default function QuestionDetail({question}: IProps) {
   })
   const handleUpdateQuestion = async(data:z.infer < typeof formSchema >) => {
     // Here you would typically send the updated question to your backend
-    console.log('Updated question:', data)
     setIsLoading(true);
     const res = await UpdateQuestion({question:data.question},question.id);
     if (res.success === true) {
@@ -92,6 +93,27 @@ export default function QuestionDetail({question}: IProps) {
     }
     setIsLoading(false);
     setIsUpdateModalOpen(false)
+    // You might want to update the local state or refetch the question data here
+  }
+  const handleDeleteQuestion = async(data:z.infer < typeof formSchema >) => {
+    // Here you would typically send the updated question to your backend
+    setIsLoading(true);
+    const res = await DeleteQuestion(question.id);
+    if (res.success === true) {
+      toast.success(res.message, {
+        duration: 2000,
+        position: 'top-center',
+      });
+      router.replace('/patient/medical-questions');
+      router.refresh();
+    } else {
+      res.message.forEach((err: string) => toast.error(err || 'An unexpected error occurred.', {
+        duration: 2000,
+        position: 'bottom-center',
+      }));
+    }
+    setIsLoading(false);
+    setIsDeleteModalOpen(false)
     // You might want to update the local state or refetch the question data here
   }
 
@@ -114,6 +136,8 @@ export default function QuestionDetail({question}: IProps) {
             <p className="text-sm text-muted-foreground">{`${t(`PAge`,{age:getAge(question.patient.dateOfBirth)})} | ${t(`PGender`)}: ${t(`${question.patient.gender}`)}`}</p>
           </div>
      {user.id===question.patient.id&&question.answers.length <= 0? 
+
+<div className="flex gap-2">
          <Dialog open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen}>
          <DialogTrigger asChild>
            <Button variant="outline" size="sm">
@@ -153,7 +177,37 @@ export default function QuestionDetail({question}: IProps) {
       </form>
     </Form>
          </DialogContent>
-       </Dialog>:null 
+       </Dialog>
+       
+       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+       <DialogTrigger asChild>
+         <Button variant="outline" size="sm">
+           <Trash2 className="w-4 h-4 ltr:mr-2 rtl:ml-1" />
+           {t(`delete_button`)}
+         </Button>
+       </DialogTrigger>
+       <DialogContent className="sm:max-w-[425px]">
+         <DialogHeader>
+           <DialogTitle>{t(`delete_title`)}</DialogTitle>
+           <DialogDescription>
+             {t(`delete_description`)}
+           </DialogDescription>
+         </DialogHeader>
+         <div className="flex justify-end gap-2 mt-4">
+           <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
+             {t(`cancel`)}
+           </Button>
+           <Button variant="destructive"  onClick={() => {
+            handleDeleteQuestion(question.id)
+           }} disabled={isLoading}>{isLoading?<Spinner/>:
+             t(`confirm_delete`) }
+           </Button>
+         </div>
+       </DialogContent>
+     </Dialog>
+   </div>
+       
+       :null 
     }
         </CardHeader>
         <CardContent>

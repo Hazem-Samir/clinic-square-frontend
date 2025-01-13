@@ -371,6 +371,11 @@
       "Update_Question":{
         "button":"Update Question",
         "title":"Update Question",
+        "delete_button":"Delete",
+        "delete_title":"Are you sure deleting this question?",
+        "confirm_delete":"Delete",
+        "cancel":"Cancel",
+        "delete_description":"Notice this action is irreversible",
         "placeholder":"Enter Your New Question",
         "Question_Field_Label":"Question",
         "Question":"Question:",
