@@ -94,7 +94,7 @@ export default function QuestionDetail({question}: IProps) {
     setIsUpdateModalOpen(false)
     // You might want to update the local state or refetch the question data here
   }
-  const handleDeleteQuestion = async(data:z.infer < typeof formSchema >) => {
+  const handleDeleteQuestion = async() => {
     // Here you would typically send the updated question to your backend
     setIsLoading(true);
     const res = await DeleteQuestion(question.id);
@@ -197,7 +197,7 @@ export default function QuestionDetail({question}: IProps) {
              {t(`cancel`)}
            </Button>
            <Button variant="destructive"  onClick={() => {
-            handleDeleteQuestion(question.id)
+            handleDeleteQuestion()
            }} disabled={isLoading}>{isLoading?<Spinner/>:
              t(`confirm_delete`) }
            </Button>
