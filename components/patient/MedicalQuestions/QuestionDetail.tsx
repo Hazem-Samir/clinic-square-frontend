@@ -32,7 +32,6 @@ import toast, { Toaster } from 'react-hot-toast'
 import Spinner from '@/components/Spinner'
 import { DeleteQuestion, UpdateQuestion } from '@/lib/patient/clientApi'
 import { useRouter } from 'next/navigation'
-import { redirect } from 'next/navigation'
 
 const formSchema = z.object({
       question: z.string().min(6,"Patient_Question_required")
