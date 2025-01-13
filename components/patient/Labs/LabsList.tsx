@@ -52,7 +52,7 @@ interface ILabData extends IProps {
 
 interface IResult  {
   handlePageChange:(newPage:number)=>void
-  isLoading:boolean
+  isSearching:boolean
   Tests:Test[]
   currentPage: number;
   totalPages: number;
@@ -103,12 +103,15 @@ const LabsData=({Labs,currentPage,totalPages,handlePageChange,isLoading}:ILabDat
   )
 
  }
- const Results = ({ Tests, currentPage, handlePageChange, isLoading, totalPages }: IResult) => {
+ const Results = ({ Tests, currentPage, handlePageChange, isSearching, totalPages }: IResult) => {
   const t = useTranslations('patient.labs')
   const tcommon = useTranslations('common')
   const { addToCart } = useCartStore()
+  const [isLoading, setIsLoading] = useState(false);
+  const [testId,setTestID] = useState<string|null>(null)
 
   const handleAddToCart = async (testId: string) => {
+    setIsLoading(true)
     const res = await addToCart({ testId })
     if (!res.success) {
       toast.error("You have added this test before.", {
@@ -121,6 +124,7 @@ const LabsData=({Labs,currentPage,totalPages,handlePageChange,isLoading}:ILabDat
         position: 'bottom-center',
       })
     }
+    setIsLoading(false)
   }
   return (
     <>
@@ -153,10 +157,23 @@ const LabsData=({Labs,currentPage,totalPages,handlePageChange,isLoading}:ILabDat
             
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
-              <Button className="w-full" onClick={() => handleAddToCart(test.id)}>
-                <ShoppingCart className="w-4 h-4 ltr:mr-2 rtl:ml-1" />
-                {t(`Add_to_Cart`)}
-              </Button>
+            <Button 
+              className="w-full" 
+              onClick={() => {
+                setTestID(test.id)
+                handleAddToCart(test.id)
+              }} 
+              disabled={isLoading}
+            >
+              {isLoading && testId === test.id ? (
+                <Spinner />
+              ) : (
+                <>
+                  <ShoppingCart className="w-4 h-4 ltr:mr-2 rtl:ml-1-2" />
+                  {t(`Add_to_Cart`)}
+                </>
+              )}
+            </Button>
               <Link href={`/patient/labs/${test.lab.id}`}   className="flex items-center gap-2 w-full  no-underline pt-2 border-t hover:text-teal-500">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={test.lab.profilePic} alt={test.lab.name} />
@@ -168,7 +185,7 @@ const LabsData=({Labs,currentPage,totalPages,handlePageChange,isLoading}:ILabDat
           </Card>
         ))}
       </div>
-     <Pagination currentPage={currentPage} handlePageChange={handlePageChange} totalPages={totalPages} isLoading={isLoading}/>
+     <Pagination currentPage={currentPage} handlePageChange={handlePageChange} totalPages={totalPages} isLoading={isSearching}/>
 
     </>
   )
@@ -291,7 +308,7 @@ console.log("hna")
       </div>
     ) : (SearchResult===null?<LabsData Labs={Labs} currentPage={currentPage} handlePageChange={handlePageChange} isLoading={isLoading} totalPages={totalPages} />
       :(SearchResult.type==='Lab'?<LabsData Labs={SearchResult.data} currentPage={SearchResult.currentPage} handlePageChange={handlePageChange} isLoading={isLoading} totalPages={SearchResult.totalPages} />
-        :(SearchResult.type==='Test'?<Results Tests={SearchResult.data} currentPage={SearchResult.currentPage} handlePageChange={handlePageChange} isLoading={isLoading} totalPages={SearchResult.totalPages} />:null)))}
+        :(SearchResult.type==='Test'?<Results Tests={SearchResult.data} currentPage={SearchResult.currentPage} handlePageChange={handlePageChange} isSearching={isLoading} totalPages={SearchResult.totalPages} />:null)))}
     <Toaster />
     </div>
   )
