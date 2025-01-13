@@ -44,7 +44,7 @@ const OrdersData=({orders,currentPage,totalPages,handlePageChange,isLoading}:IOr
   return(
     <>
           <CardContent className="flex flex-col gap-4 sm:gap-8">
-          {orders.length<=0?<div className="flex justify-center items-center">{t(`No-Orders`)}</div>
+          {orders.length<=0?<div className="flex justify-center items-center">{t(`No_Orders`)}</div>
         :orders.map((order) => (
             <div key={order.id} className="flex items-center gap-2 sm:gap-4">
               <Avatar className="max-[350px]:hidden sm:h-9 sm:w-9">

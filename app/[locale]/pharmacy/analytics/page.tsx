@@ -14,7 +14,7 @@ const monthNames = [
 
 async function StatData({year}:{year:string}) {
   const {data:stats}=await getOrdersStat(50000000,1);
-
+console.log(stats)
   
 
 
@@ -38,13 +38,12 @@ const Reservations = monthNames.map((key, index) => {
 });
   return (
 
-  <DashboardCharts chartsData={[Reservations,Revenues,[{pendingActors:TotalRevnue}]]} titles={['Orders',"REM"]} descriptions={[`Jan-Dec`,`Jan-Dec`,["Total_Revenue",`in`]]} role='Pharmacie'  />
+  <DashboardCharts chartsData={[Reservations,Revenues,[{pendingActors:TotalRevnue}]]} titles={['Orders',"REM"]} descriptions={[`Jan-Dec`,`Jan-Dec`,["Total_Revenue",`in`]]} role='Pharmacie'  year={parseInt(year)} />
 
   )
 }
 export default function PharmacyStats({ searchParams }: { searchParams: { year?: string } }) {
   const year = searchParams.year ||`${new Date().getFullYear()}`
-
   return (
     <ProtectedRoute allowedRoles={['pharmacy']}>
 
